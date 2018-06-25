@@ -1,10 +1,11 @@
 ![logo](./src/assets/logo.jpg "logo")
 
-my-project
+StayWoke Platform
 ===
 
-> Some Fun Project
+> StayWoke Platform
 
+### THIS IS A WORK IN PROGRESS
 
 Developer Scripts
 ---
