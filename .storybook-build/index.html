@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="storybook-version" content="4.0.0-alpha.9">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible" />
+    <title>Storybook</title>
+    <link rel="shortcut icon" href="favicon.ico?v=1" />
+    <!-- Twitter META Info -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:site" content="@staywoke">
+<meta property="twitter:title" content="StayWoke - UI Toolkit">
+<meta property="twitter:description" content="Vue.js UI Toolkit for Rapid Project Development of StayWoke Projects.">
+<meta property="twitter:creator" content="@staywoke">
+<meta property="twitter:image:src" content="https://staywoke-ui-toolkit.s3.amazonaws.com/ui-toolkit-card-image.jpg">
+<meta property="twitter:domain" content="staywoke.github.io">
+
+<!-- Open Graph protocol -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="website">
+<meta property="og:title" content="StayWoke - UI Toolkit">
+<meta property="og:url" content="https://staywoke.github.io/ui-toolkit">
+<meta property="og:image" content="https://staywoke-ui-toolkit.s3.amazonaws.com/ui-toolkit-card-image.jpg">
+<meta property="og:site_name" content="StayWoke">
+<meta property="og:description" content="Vue.js UI Toolkit for Rapid Project Development of StayWoke Projects.">
+
+<!-- Dublin Core Metadata -->
+<meta name="dc:language" content="en_US">
+<meta name="dc:title" content="StayWoke - UI Toolkit">
+<meta name="dc:source" content="https://staywoke.github.io/ui-toolkit">
+<meta name="dc:description" content="Vue.js UI Toolkit for Rapid Project Development of StayWoke Projects.">
+
+<link rel="stylesheet" href="assets/css/color-brewer.min.css">
+<script src="assets/js/highlight.min.js"></script>
+<script src="assets/js/beautify.min.js"></script>
+<script src="assets/js/beautify-css.min.js"></script>
+<script src="assets/js/beautify-html.min.js"></script>
+<script src="assets/js/site.js"></script>
+
+<style>
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+body {
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#storybook-preview-iframe {
+  border: none !important;
+  box-shadow: none !important;
+  background: #FFF;
+}
+.Pane.horizontal.Pane1 > div > div:nth-child(2) {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #333333 !important;
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAkCAQAAACtIJtXAAABc0lEQVRIx41VIZbFIBCL4z0Eaup21Ao0unf4YlUPwGE49or2FxgCLbjpPEgyaQAAfH7tBpDQL4Ecm+0rDsCxAYimHTlAoF1pB1upuLM9jt+K63AoJIehKQLFTe8orkOXauu9POJ9bA5QCCET2W312MfCja69rZVXu2oOECqqQiaHJyZfnOBQKqQfqF3y2a3wtE6RCXwOx9bvLyFS1zfcAECKY+05wFvijNs1zOIQx5GP2kVygDTDTNR6aWLUkVoO0JFMi06oddQMc+mOF9Zh8lV0U+v01an10jkwHa1jtSkOwD704VSDWMqkxZUYtuuy3rFNRxZJPk1TS6l1El6MvVafrJOo9bRNLaH/wRfdTjHsK9h9m9Cx20Am8lV0q/ifhK2VTLih6IRoavE6vU6Bvx/64PG6vuFW4//poVpwSw8PledPG7fOYyA8NCzS4k4tpdHbBPIqLeYYukC2YXtXPSLwofE/yFtcL1+LTrh1qPeYxeI/Pt5vuBkXfBQAAAAASUVORK5CYII=');
+  border: 1px solid #e5e5e5;
+  border-radius: 0;
+}
+.highlighted {
+  background: #fdfdfd;
+  padding: 14px;
+  border: 1px solid #eaeaea;
+}
+.Pane .Pane2 div[role="tabpanel"] {
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+}
+
+.Pane .Pane2 div[role="tabpanel"] h2 {
+  color: #333 !important;
+}
+.Pane .Pane2 div[role="tabpanel"] h4 {
+  margin-top: 40px;
+}
+.Pane .Pane2 div[role="tabpanel"] br {
+  display: none !important;
+  line-height: 0 !important;
+}
+.Pane .Pane2 div[role="tabpanel"] a {
+  color: #409dff;
+  text-decoration: none;
+  font-size: 14px;
+}
+.Pane .Pane2 div[role="tabpanel"] a:hover {
+  text-decoration: underline;
+}
+.Pane .Pane2 div[role="tabpanel"] p {
+  color: #666;
+  font-size: 16px;
+}
+
+.Pane .Pane2 div[role="tablist"] button:focus {
+  outline: none !important;
+}
+
+.Pane .Pane2 div[role="tabpanel"] form label {
+  width: 125px !important;
+}
+.Pane .Pane2 div[role="tabpanel"] form {
+  margin-top: 50px;
+}
+.Pane .Pane2 div[role="tabpanel"] form::before {
+  content: 'Use the Form below to Dynamically Generate Markup for this Component.';
+  position: absolute;
+  width: calc(100% - 50px);
+  left: 10px;
+  top: 10px;
+  background: #fdfdfd;
+  padding: 14px;
+  border: 1px solid #eaeaea;
+  text-align: center;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 12px;
+  font-weight: 300;
+}
+
+.Pane .Pane2 div[role="tabpanel"] h1,
+.Pane .Pane2 div[role="tabpanel"] h2,
+.Pane .Pane2 div[role="tabpanel"] h3,
+.Pane .Pane2 div[role="tabpanel"] h4,
+.Pane .Pane2 div[role="tabpanel"] h5,
+.Pane .Pane2 div[role="tabpanel"] h6 {
+  color: rgb(130, 130, 130);
+  -webkit-font-smoothing: antialiased;
+  text-transform: uppercase;
+  font-weight: normal;
+}
+
+.Pane .Pane2 div[role="tabpanel"] p:empty {
+  display: none !important;
+  line-height: 0 !important;
+}
+
+.Pane .Pane2 pre[class^='css-glamorous-pre'] > div[class^='css-glamorous-div'] > div[class^='css-glamorous-div'] > li {
+  opacity: 0.25;
+  filter: grayscale(1);
+}
+
+.Pane .Pane2 pre[class^='css-glamorous-pre'] > div[class^='css-glamorous-div']:first-of-type > div[class^='css-glamorous-div'] > li {
+  opacity: 1;
+  filter: grayscale(0);
+}
+
+.Pane .Pane2 select {
+  -webkit-appearance: none;
+}
+
+.Pane.horizontal.Pane2 pre {
+  opacity: 0;
+}
+
+.Pane.horizontal.Pane2 pre.highlighted,
+.Pane.horizontal.Pane2 pre[class^='css-'] {
+  opacity: 1;
+}
+
+.Pane.horizontal.Pane2 blockquote {
+  border: 1px solid #eaeaea;
+  border-left: 4px solid #d5d5d5;
+  margin: 0;
+  padding-left: 20px;
+  background: #fdfdfd;
+  color: #000;
+}
+
+.Pane.horizontal.Pane2 {
+  height: 300px;
+}
+
+.Pane.horizontal.Pane2 ul {
+  margin-left: 18px;
+  padding: 0;
+}
+
+.Pane.horizontal.Pane2 table {
+  border: 1px solid #eaeaea !important;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.Pane.horizontal.Pane2 table thead {
+  background-color: #f7f7f7;
+  font-size: 14px;
+  text-align: left;
+}
+
+.Pane.horizontal.Pane2 table th, .Pane.horizontal.Pane2 table td {
+  padding: 6px 12px;
+}
+
+.Pane.horizontal.Pane2 tr {
+  border-bottom: 1px solid #eaeaea !important;
+  font-size: 14px;
+}
+
+.Pane.horizontal.Pane2 tbody tr:nth-child(even) {
+  background: #fdfdfd;
+  color: #666;
+}
+.Pane.horizontal.Pane2 tbody tr:nth-child(odd) {
+  background: #ffffff;
+  color: #666;
+}
+
+.Pane.vertical.Pane1 ul li ul li ul li:first-child a:first-of-type {
+  color: #333;
+  font-weight: 500;
+}
+
+.Pane.vertical.Pane1 ul li ul li ul li:first-child a:first-of-type::before {
+  content: '\2606';
+  position: absolute;
+  left: -19px;
+  color: #cecece;
+}
+
+.Pane.vertical.Pane1 ul li ul li ul li a[class^='css-glamorous-routedlink'] {
+  background: #f7f7f7;
+  border-radius: 4px;
+  transition: all 0.25s ease-in-out;
+}
+
+.Pane.vertical.Pane1 ul li ul li ul li a[class^='css-glamorous-routedlink']:hover {
+  background: #FFF;
+}
+
+.css-glamorous-routedlink--1cigum0, .css-glamorous-routedlink--1cigum0:hover {
+  background: #444 !important;
+  color: #fff !important;
+  font-weight: 500 !important;
+}
+
+.collapse-all {
+  position: absolute;
+  color: #828282;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 10px;
+  font-weight: 500;
+  text-align: right;
+  width: 100%;
+  display: block;
+  top: 30px;
+  left: 0;
+  transition: color 0.25s ease-in-out;
+  padding: 10px 4px 10px 0;
+}
+.collapse-all:hover {
+  color: #333;
+}
+
+.Pane.vertical.Pane1 h4 {
+  cursor: pointer;
+  position: relative;
+}
+
+.Pane.vertical.Pane1 h4::before {
+  content: '\25BF';
+  position: absolute;
+  left: 0;
+  color: #595959;
+  transition: transform 0.1s ease-in-out;
+}
+
+.Pane.vertical.Pane1 h4.collapsed::before {
+  transform: rotate(-90deg);
+}
+</style>
+
+<script>
+var managerTimer = null;
+window.onload = function () {
+  clearInterval(managerTimer);
+  hljs.configure({ languages: ['xml', 'js', 'css'] });
+  managerTimer = setInterval(function() { checkUpdate('manager'); }, 100);
+
+  setTimeout(function () {
+    addCollapseLink();
+    addToggleLinks();
+  }, 500);
+};
+
+function addToggleLinks () {
+  var $groups = document.querySelectorAll('.Pane.vertical.Pane1 h4');
+  for (var i = 0; i < $groups.length; i++) {
+    $groups[i].addEventListener('click', function (evt) {
+      $list = evt.target.nextSibling;
+      if ($list.style.display !== 'none') {
+        $list.style.display = 'none';
+      } else {
+        $list.style.display = 'block';
+      }
+
+      evt.target.classList.toggle('collapsed');
+    });
+  }
+}
+
+function addCollapseLink () {
+  var $filter = document.querySelector('input[name="filter-text"]');
+
+  var a = document.createElement('a');
+  var linkText = document.createTextNode('Collapse All');
+  a.appendChild(linkText);
+  a.title = 'Collapse All Components';
+  a.href = '#';
+  a.className = 'collapse-all';
+  a.onclick = function (evt) {
+    evt.preventDefault();
+    collapseAll();
+    return false;
+  }
+
+  $filter.parentNode.insertBefore(a, $filter.nextSibling);
+}
+
+function collapseAll () {
+  var $menuItems = document.querySelectorAll('div[role="menuitem"]');
+  for (var i = 0; i < $menuItems.length; i++){
+    if ($menuItems[i].nextSibling.innerHTML !== '') {
+      $menuItems[i].click();
+    }
+  }
+
+  var $groups = document.querySelectorAll('.Pane.vertical.Pane1 h4');
+  for (var i = 0; i < $groups.length; i++) {
+    $groups[i].nextSibling.style.display = 'none';
+    $groups[i].classList.add('collapsed');
+  }
+}
+</script>
+
+
+</head>
+<body style="margin: 0;">
+    <style>
+        html, body {
+            overflow: hidden;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+    <div id="root"></div>
+<script type="text/javascript" src="static/runtime~manager.e92fd76fc0e1ef205464.bundle.js"></script><script type="text/javascript" src="static/manager.b219b6c177d656849221.bundle.js"></script></body>
+</html>
