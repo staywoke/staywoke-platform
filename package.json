@@ -12,7 +12,7 @@
     "lint": "eslint --ext .js,.vue src test/unit",
     "build": "node build/build.js",
     "storybook": "start-storybook -s ./.storybook/static -p 9001 -c .storybook",
-    "storybook:build": "build-storybook -s ./.storybook/static -c .storybook -o .storybook-build",
+    "storybook:build": "build-storybook -s ./.storybook/static -c .storybook -o docs",
     "storybook:web": "http-server ./.storybook-build -o -s -p8082 -c-1 --cors",
     "web": "http-server ./dist -o -s -p8081 -c-1 --cors"
   },
