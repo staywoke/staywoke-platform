@@ -50,6 +50,7 @@ export default {
     },
     myImpactClicked() {
       this.$emit('myImpactClicked')
+      this.$emit('hideDetails')
     }
   }
 }
@@ -133,7 +134,7 @@ export default {
       border-radius: 50%;
       display: block;
       position: absolute;
-      top: 52px;
+      top: 50px;
       left: calc(50% - 3px);
     }
   }

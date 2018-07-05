@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 
+import axios from 'axios'
 import VueMoment from 'vue-moment'
 import moment from 'moment-timezone'
 
@@ -17,6 +18,9 @@ fontawesome.library.add(solid, regular, light, brands)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.config.productionTip = false
+
+// Setup HTTP
+Vue.http = Vue.prototype.$http = axios
 
 // Use Moment with Timezone Support
 Vue.use(VueMoment, {

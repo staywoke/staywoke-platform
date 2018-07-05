@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueMoment from 'vue-moment'
 import moment from 'moment-timezone'
 
+import axios from 'axios'
+
 import fontawesome from '@fortawesome/fontawesome'
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
 import solid from '@fortawesome/fontawesome-pro-solid'
@@ -9,13 +11,16 @@ import regular from '@fortawesome/fontawesome-pro-regular'
 import light from '@fortawesome/fontawesome-pro-light'
 import brands from '@fortawesome/fontawesome-free-brands'
 
+import { configure } from '@storybook/vue'
+import { setOptions } from '@storybook/addon-options'
+import { setDefaults } from 'storybook-addon-vue-info'
+
 fontawesome.library.add(solid, regular, light, brands)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
-import { configure } from '@storybook/vue'
-import { setOptions } from '@storybook/addon-options'
-import { setDefaults } from 'storybook-addon-vue-info'
+// Setup HTTP
+Vue.http = Vue.prototype.$http = axios
 
 Vue.config.productionTip = false
 

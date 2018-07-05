@@ -1,8 +1,8 @@
 {
-  "name": "my-project",
+  "name": "staywoke-platform",
   "version": "1.0.0",
-  "description": "Some Fun Project",
-  "author": "Me",
+  "description": "StayWoke Platform",
+  "author": "Peter Schmalfeldt <me@peterschmalfeldt.com>",
   "license": "MIT",
   "scripts": {
     "dev": "webpack-dev-server --mode development --inline --progress --config build/webpack.dev.conf.js",
@@ -23,11 +23,13 @@
     "@fortawesome/fontawesome-pro-regular": "^5.0.13",
     "@fortawesome/fontawesome-pro-solid": "^5.0.13",
     "@fortawesome/vue-fontawesome": "0.0.22",
+    "axios": "^0.18.0",
     "moment-timezone": "^0.5.21",
     "ui-toolkit": "github:staywoke/ui-toolkit",
     "vue": "^2.5.16",
     "vue-moment": "^4.0.0",
     "vue-router": "^3.0.1",
+    "vue-tweet-embed": "^2.1.1",
     "vue2-animate": "^2.0.0"
   },
   "devDependencies": {

@@ -5,7 +5,7 @@ import { storiesOf } from '@storybook/vue'
 import { action } from '@storybook/addon-actions'
 import { withMarkdownNotes } from '@storybook/addon-notes'
 
-import Footer from '.'
+import Comp from '.'
 import README from './README.md'
 
 const stories = storiesOf('Organisms | Footer', module)
@@ -15,7 +15,7 @@ stories.addDecorator(Centered)
 stories.addDecorator((story, context) => withMarkdownNotes(README)(story)(context))
 
 stories.add('Component', () => ({
-  components: { Footer },
+  components: { Comp },
   template: `<sw-footer
     feed-updated
     @feedClicked="feedClicked"

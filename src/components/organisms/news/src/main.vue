@@ -3,7 +3,7 @@
     <h2>{{ title }}</h2>
     <ul class="news">
       <li v-for="(article, index) in articles" :key="index" v-if="index < max">
-        <sw-news-article :article="article" />
+        <sw-news-item :article="article" />
       </li>
     </ul>
   </div>
@@ -48,7 +48,7 @@ export default {
       text-align: left;
       padding: 10px;
       height: 85px;
-      border-bottom: 1px solid #EEE;
+      border-bottom: 1px solid #f2f2f2;
 
       &:last-child {
         border-bottom: none;

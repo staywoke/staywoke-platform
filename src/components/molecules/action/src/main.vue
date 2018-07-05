@@ -11,13 +11,15 @@
         {{ actionTitle }}
       </div>
       <div class='action-type'>
-        <font-awesome-icon color='#FFFFFF' :icon='actionIcon' class='button-icon'></font-awesome-icon>
+        <font-awesome-icon color='#FFFFFF' :icon='getIcon' class='button-icon'></font-awesome-icon>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { actionTypes, actionIcon, actionSummary, stateCodes, stateList } from '../../../../util'
+
 export default {
   name: 'Action',
   props: {
@@ -28,31 +30,7 @@ export default {
         title: null,
         national: false,
         state: null
-      }),
-      validator: function (action) {
-        const actionTypes = [
-          'call',
-          'donate',
-          'event',
-          'protest',
-          'sign-petition',
-          'signup-updates'
-        ]
-
-        const states = [
-          'AL','AK','AS','AZ','AR','CA','CO','CT','DE','DC',
-          'FM','FL','GA','GU','HI','ID','IL','IN','IA','KS',
-          'KY','LA','ME','MH','MD','MA','MI','MN','MS','MO',
-          'MT','NE','NV','NH','NJ','NM','NY','NC','ND','MP',
-          'OH','OK','OR','PW','PA','PR','RI','SC','SD','TN',
-          'TX','UT','VT','VI','VA','WA','WV','WI','WY'
-        ]
-
-        const validType = (actionTypes.indexOf(action.type) !== -1)
-        const validLocation = ((action.national && action.state) || (!action.national && states.indexOf(action.state) !== -1 ))
-
-        return (validType && validLocation)
-      }
+      })
     }
   },
   computed: {
@@ -60,69 +38,7 @@ export default {
       if (this.action.national) {
         return 'National'
       } else {
-        const states = {
-          'AL': 'Alabama',
-          'AK': 'Alaska',
-          'AS': 'American Samoa',
-          'AZ': 'Arizona',
-          'AR': 'Arkansas',
-          'CA': 'California',
-          'CO': 'Colorado',
-          'CT': 'Connecticut',
-          'DE': 'Delaware',
-          'DC': 'District Of Columbia',
-          'FM': 'Federated States Of Micronesia',
-          'FL': 'Florida',
-          'GA': 'Georgia',
-          'GU': 'Guam',
-          'HI': 'Hawaii',
-          'ID': 'Idaho',
-          'IL': 'Illinois',
-          'IN': 'Indiana',
-          'IA': 'Iowa',
-          'KS': 'Kansas',
-          'KY': 'Kentucky',
-          'LA': 'Louisiana',
-          'ME': 'Maine',
-          'MH': 'Marshall Islands',
-          'MD': 'Maryland',
-          'MA': 'Massachusetts',
-          'MI': 'Michigan',
-          'MN': 'Minnesota',
-          'MS': 'Mississippi',
-          'MO': 'Missouri',
-          'MT': 'Montana',
-          'NE': 'Nebraska',
-          'NV': 'Nevada',
-          'NH': 'New Hampshire',
-          'NJ': 'New Jersey',
-          'NM': 'New Mexico',
-          'NY': 'New York',
-          'NC': 'North Carolina',
-          'ND': 'North Dakota',
-          'MP': 'Northern Mariana Islands',
-          'OH': 'Ohio',
-          'OK': 'Oklahoma',
-          'OR': 'Oregon',
-          'PW': 'Palau',
-          'PA': 'Pennsylvania',
-          'PR': 'Puerto Rico',
-          'RI': 'Rhode Island',
-          'SC': 'South Carolina',
-          'SD': 'South Dakota',
-          'TN': 'Tennessee',
-          'TX': 'Texas',
-          'UT': 'Utah',
-          'VT': 'Vermont',
-          'VI': 'Virgin Islands',
-          'VA': 'Virginia',
-          'WA': 'Washington',
-          'WV': 'West Virginia',
-          'WI': 'Wisconsin',
-          'WY': 'Wyoming'
-        }
-
-        return states[this.action.state.toUpperCase()]
+        return stateList[this.action.state.toUpperCase()]
       }
     },
     locationIcon() {
@@ -132,29 +48,8 @@ export default {
         return 'stateface-' + this.action.state.toLowerCase()
       }
     },
-    actionIcon() {
-      let icon
-
-      if (this.action.type === 'call') {
-        icon = 'phone'
-      }
-      else if (this.action.type === 'donate') {
-        icon = 'dollar-sign'
-      }
-      else if (this.action.type === 'event') {
-        icon = 'clock'
-      }
-      else if (this.action.type === 'protest') {
-        icon = 'hand-rock'
-      }
-      else if (this.action.type === 'sign-petition') {
-        icon = 'pencil'
-      }
-      else if (this.action.type === 'signup-updates') {
-        icon = 'envelope-open'
-      }
-
-      return ['fas', icon]
+    getIcon() {
+      return actionIcon('fas', this.action.type)
     },
     actionTitle() {
       const max = 90

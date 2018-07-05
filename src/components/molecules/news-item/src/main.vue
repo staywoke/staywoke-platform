@@ -1,5 +1,5 @@
 <template>
-  <div class="news-article">
+  <a class="news-article" target="_blank" rel="noopener noreferrer" :href="getUrl">
     <div class="image" :style="{ backgroundImage: backgroundImage }"></div>
     <div class="summary">
       <div class="title">
@@ -14,7 +14,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </a>
 </template>
 
 <script>
@@ -27,11 +27,17 @@ export default {
         image: null,
         title: null,
         source: null,
-        date: null
+        summary: null,
+        author: null,
+        date: null,
+        url: '#'
       })
     }
   },
   computed: {
+    getUrl() {
+      return (this.article.url) ? this.article.url : '#'
+    },
     backgroundImage() {
       return `url('${this.article.image}')`
     },
@@ -56,6 +62,7 @@ export default {
     },
     myImpactClicked() {
       this.$emit('myImpactClicked')
+      this.$emit('hideDetails')
     }
   }
 }
@@ -63,6 +70,9 @@ export default {
 
 <style lang="scss" scoped>
 .news-article {
+  color: #000;
+  text-decoration: none;
+
   .image {
     width: 65px;
     height: 65px;

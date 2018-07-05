@@ -1,4 +1,4 @@
-Molecules › News Article
+Organism › News Article
 ---
 
 > StayWoke Platform News Article
