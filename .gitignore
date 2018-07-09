@@ -16,3 +16,4 @@ yarn-error.log*
 
 # Environmental Config
 .env
+.well-known
