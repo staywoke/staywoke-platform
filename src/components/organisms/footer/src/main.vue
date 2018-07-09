@@ -2,16 +2,20 @@
   <el-footer class="footer">
     <el-row>
       <el-col :span="8">
-        <el-button type="text" class="footer-button" @click="feedClicked">
-          <font-awesome-icon size="2x" :icon="['fal', 'list-alt']" class="button-icon"></font-awesome-icon>
-          <span class="button-label">Feed</span>
-          <span class="notification" v-if="feedUpdated"></span>
-        </el-button>
+        <router-link :to="{ name: 'index' }">
+          <el-button type="text" class="footer-button" @click="feedClicked">
+            <font-awesome-icon size="2x" :icon="['fal', 'list-alt']" class="button-icon"></font-awesome-icon>
+            <span class="button-label">Feed</span>
+            <span class="notification" v-if="feedUpdated"></span>
+          </el-button>
+        </router-link>
       </el-col>
       <el-col :span="8">
-        <el-button class="action-center" @click="actionCenterClicked">
-          Action Center
-        </el-button>
+        <router-link :to="{ name: 'action-center' }">
+          <el-button class="action-center" @click="actionCenterClicked">
+            Action Center
+          </el-button>
+        </router-link>
       </el-col>
       <el-col :span="8">
         <el-button type="text" class="footer-button" @click="myImpactClicked">
@@ -28,13 +32,6 @@ import { Button, Col, Footer, Icon, Row } from 'ui-toolkit'
 
 export default {
   name: 'Header',
-  components: {
-    Button,
-    Col,
-    Footer,
-    Icon,
-    Row
-  },
   props: {
     feedUpdated: {
       type: Boolean,
@@ -42,16 +39,23 @@ export default {
     }
   },
   methods: {
-    feedClicked() {
+    feedClicked () {
       this.$emit('feedClicked')
     },
-    actionCenterClicked() {
+    actionCenterClicked () {
       this.$emit('actionCenterClicked')
     },
-    myImpactClicked() {
+    myImpactClicked () {
       this.$emit('myImpactClicked')
       this.$emit('hideDetails')
     }
+  },
+  components: {
+    Button,
+    Col,
+    Footer,
+    Icon,
+    Row
   }
 }
 </script>

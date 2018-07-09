@@ -8,5 +8,9 @@ module.exports = (storybookBaseConfig, configType, defaultConfig) => {
     enforce: 'pre',
   });
 
+  if (typeof defaultConfig.resolve !== 'undefined') {
+    defaultConfig.resolve.alias['@'] = path.resolve(__dirname, '../src')
+  }
+
   return defaultConfig;
 };

@@ -1,5 +1,5 @@
 <template>
-  <a class="news-article" target="_blank" rel="noopener noreferrer" :href="getUrl">
+  <router-link :to="{ name: 'news', params: { slug: article.slug } }" class="news-article">
     <div class="image" :style="{ backgroundImage: backgroundImage }"></div>
     <div class="summary">
       <div class="title">
@@ -14,7 +14,7 @@
         </div>
       </div>
     </div>
-  </a>
+  </router-link>
 </template>
 
 <script>
@@ -26,6 +26,7 @@ export default {
       default: () => ({
         image: null,
         title: null,
+        slug: null,
         source: null,
         summary: null,
         author: null,
@@ -35,32 +36,32 @@ export default {
     }
   },
   computed: {
-    getUrl() {
+    getUrl () {
       return (this.article.url) ? this.article.url : '#'
     },
-    backgroundImage() {
+    backgroundImage () {
       return `url('${this.article.image}')`
     },
-    articleTitle() {
+    articleTitle () {
       const max = 90
 
       if (this.article.title.length <= max) {
-        return this.article.title;
+        return this.article.title
       }
 
-      var subString = this.article.title.substr(0, max-1);
+      var subString = this.article.title.substr(0, max - 1)
 
-      return subString.substr(0, subString.lastIndexOf(' ')) + ' ...';
+      return subString.substr(0, subString.lastIndexOf(' ')) + ' ...'
     }
   },
   methods: {
-    feedClicked() {
+    feedClicked () {
       this.$emit('feedClicked')
     },
-    actionCenterClicked() {
+    actionCenterClicked () {
       this.$emit('actionCenterClicked')
     },
-    myImpactClicked() {
+    myImpactClicked () {
       this.$emit('myImpactClicked')
       this.$emit('hideDetails')
     }
@@ -111,6 +112,14 @@ export default {
       right: 0;
       bottom: 0;
       color: #999;
+    }
+  }
+}
+
+@media only screen and (max-width: 320px) {
+  .news-article {
+    .summary {
+      font-size: 14px;
     }
   }
 }

@@ -2,7 +2,7 @@
   <div class='impact'>
     <div class="totals">
       {{ impact.total }}
-      <font-awesome-icon color='#000000' :icon='getIcon' class='icon'></font-awesome-icon>
+      <font-awesome-icon color='#000000' :icon='getIcon' class='icon' />
     </div>
     <div class="summary">
       {{ getSummary }}
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { Button } from 'ui-toolkit'
+import { Button, FontAwesomeIcon } from 'ui-toolkit'
 import { actionTypes, actionIcon, actionSummary } from '../../../../util'
 
 export default {
@@ -41,20 +41,24 @@ export default {
     }
   },
   computed: {
-    getIcon() {
+    getIcon () {
       return actionIcon('fas', this.impact.type)
     },
-    getSummary() {
+    getSummary () {
       return actionSummary(this.impact.type)
     },
-    getLastAction() {
+    getLastAction () {
       return `Latest:&nbsp; ${this.impact.lastTitle}`
     }
   },
   methods: {
-    moreClicked() {
+    moreClicked () {
       this.$emit('moreClicked', this.impact.type)
     }
+  },
+  components: {
+    Button,
+    FontAwesomeIcon
   }
 }
 </script>

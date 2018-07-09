@@ -30,6 +30,6 @@ stories.add('Component', () => ({
     accountClicked: action('Account Clicked'),
     logoClicked: action('Logo Clicked'),
     menuClicked: action('Menu Clicked'),
-    menuItemClicked: action('Menu Item Clicked'),
+    menuItemClicked: action('Menu Item Clicked')
   }
 }))

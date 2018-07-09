@@ -1,100 +1,82 @@
 <template>
-  <div class="take-action">
+  <div class="actions">
     <div class="head">
-      {{ getHeader }}:
+      From {{ article.source }}:
 
       <router-link :to="{ name: 'index', params: { back: true } }">
         <el-button class="back-button" size="mini" @click="backClicked">&lsaquo; Back</el-button>
       </router-link>
     </div>
 
-    <div class="image" :style="{ backgroundImage: backgroundImage }">
-      <div class="action-title">
-        {{ getAction }}
-        <font-awesome-icon color='#FFFFFF' :icon='getIcon' class='icon'></font-awesome-icon>
-      </div>
-    </div>
+    <div class="image" :style="{ backgroundImage: backgroundImage }"></div>
 
     <div class="content">
 
       <div class="title">
-        {{ action.title }}
+        {{ article.title }}
       </div>
 
       <div class="author">
-        By {{ action.organization }}
+        By {{ article.author }}
+
+        <span class="date">
+          {{ article.date | moment('MMM D') }}
+        </span>
       </div>
 
       <div class="summary">
-        {{ action.summary }}
-      </div>
-
-      <div class="call-to-action">
-        {{ action.callToAction }}
+        {{ article.summary }}
       </div>
     </div>
 
-    <a class="read-more" target="_blank" rel="noopener noreferrer" :href="getUrl" @click="actionClicked">
-      {{ getButton }}
-    </a>
+    <a class="read-more" target="_blank" rel="noopener noreferrer" :href="getUrl" @click="readMoreClicked">Read More</a>
   </div>
 </template>
 
 <script>
-import { Button, FontAwesomeIcon } from 'ui-toolkit'
-import { actionIcon, actionLabel, actionButton } from '../../../../util'
+import { Button } from 'ui-toolkit'
 
 export default {
-  name: 'TakeAction',
+  name: 'Actions',
   props: {
-    action: {
+    article: {
       type: Object,
       default: () => ({})
     }
   },
   computed: {
     backgroundImage () {
-      return `url('${this.action.image}')`
-    },
-    getIcon () {
-      return actionIcon('fas', this.action.type)
-    },
-    getHeader () {
-      return (this.action.national) ? 'Take Action' : 'Take Local Action'
+      return `url('${this.article.image}')`
     },
     getUrl () {
-      return (this.action.url) ? this.action.url : '#'
-    },
-    getAction () {
-      return actionLabel(this.action.type)
-    },
-    getButton () {
-      return actionButton(this.action.type)
+      return (this.article.url) ? this.article.url : '#'
     }
   },
   methods: {
     backClicked () {
       this.$emit('backClicked')
     },
-    actionClicked () {
-      this.$emit('actionClicked')
+    readMoreClicked () {
+      this.$emit('readMoreClicked')
     }
   },
   components: {
-    Button,
-    FontAwesomeIcon
+    Button
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.take-action {
+.actions {
+  height: 100%;
+
   .head {
     text-transform: uppercase;
     font-size: 12px;
     color: #666;
     margin-bottom: 14px;
     line-height: 20px;
+    margin-top: 0;
 
     .back-button {
       float: right;
@@ -119,23 +101,6 @@ export default {
     border-radius: 4px 4px 0 0;
     margin: 0;
     padding: 0;
-    position: relative;
-
-    .action-title {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      color: #FFF;
-      font-weight: 900;
-      text-transform: uppercase;
-      padding: 14px 20px;
-      text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
-
-      svg {
-        -webkit-filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.5));
-        filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.5));
-      }
-    }
   }
 
   .content {
@@ -167,13 +132,6 @@ export default {
       font-size: 14px;
       line-height: 18px;
     }
-
-    .call-to-action {
-      white-space: pre-line;
-      font-size: 14px;
-      line-height: 18px;
-      font-weight: 600;
-    }
   }
 
   .read-more {
@@ -188,6 +146,7 @@ export default {
     text-align: center;
     padding: 6px 0;
     border-radius: 4px;
+    margin-bottom: 10px;
   }
 }
 </style>

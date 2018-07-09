@@ -19,11 +19,23 @@
             <i class="el-icon-more"></i>
           </span>
           <el-dropdown-menu slot="dropdown" class="menu-actions">
-            <el-dropdown-item command="action-1">Action 1</el-dropdown-item>
-            <el-dropdown-item command="action-2">Action 2</el-dropdown-item>
-            <el-dropdown-item command="action-3">Action 3</el-dropdown-item>
-            <el-dropdown-item command="action-4">Action 4</el-dropdown-item>
-            <el-dropdown-item command="logout" divided>Logout</el-dropdown-item>
+            <router-link :to="{ name: 'login' }">
+              <el-dropdown-item command="login" v-if="!loggedIn">
+                Login
+              </el-dropdown-item>
+            </router-link>
+
+            <router-link :to="{ name: 'register' }">
+              <el-dropdown-item command="register" v-if="!loggedIn">
+                Register
+              </el-dropdown-item>
+            </router-link>
+
+            <router-link :to="{ name: 'logout' }">
+              <el-dropdown-item command="logout" divided v-if="loggedIn">
+                Logout
+              </el-dropdown-item>
+            </router-link>
           </el-dropdown-menu>
         </el-dropdown>
       </el-col>
@@ -36,17 +48,6 @@ import { Button, Col, Dropdown, DropdownMenu, DropdownItem, Icon, Logo, Header, 
 
 export default {
   name: 'Header',
-  components: {
-    Button,
-    Col,
-    Dropdown,
-    DropdownMenu,
-    DropdownItem,
-    Icon,
-    Logo,
-    Header,
-    Row
-  },
   props: {
     emailHash: {
       type: String
@@ -58,6 +59,11 @@ export default {
     actionCount: {
       type: Number,
       default: 0
+    }
+  },
+  data () {
+    return {
+      loggedIn: false
     }
   },
   computed: {
@@ -74,18 +80,29 @@ export default {
     }
   },
   methods: {
-    accountClicked() {
+    accountClicked () {
       this.$emit('accountClicked')
     },
-    logoClicked() {
+    logoClicked () {
       this.$emit('logoClicked')
     },
-    menuClicked() {
+    menuClicked () {
       this.$emit('menuClicked')
     },
-    menuItemClicked(command) {
+    menuItemClicked (command) {
       this.$emit('menuItemClicked', command)
     }
+  },
+  components: {
+    Button,
+    Col,
+    Dropdown,
+    DropdownMenu,
+    DropdownItem,
+    Icon,
+    Logo,
+    Header,
+    Row
   }
 }
 </script>

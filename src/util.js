@@ -17,100 +17,80 @@ export const actionTypes = [
  * @param  {string} action from actionTypes
  * @return {string}        [description]
  */
-export const actionIcon  = (style, action) => {
+export const actionIcon = (style, action) => {
   let icon
 
   if (action === 'call') {
     icon = 'phone'
-  }
-  else if (action === 'donate') {
+  } else if (action === 'donate') {
     icon = 'dollar-sign'
-  }
-  else if (action === 'event') {
+  } else if (action === 'event') {
     icon = 'clock'
-  }
-  else if (action === 'protest') {
+  } else if (action === 'protest') {
     icon = 'hand-rock'
-  }
-  else if (action === 'sign-petition') {
+  } else if (action === 'sign-petition') {
     icon = 'pencil'
-  }
-  else if (action === 'signup-updates') {
+  } else if (action === 'signup-updates') {
     icon = 'envelope-open'
   }
 
   return [style, icon]
 }
 
-export const actionSummary  = (action) => {
+export const actionSummary = (action) => {
   let summary
 
   if (action === 'call') {
     summary = 'Phone Calls Made'
-  }
-  else if (action === 'donate') {
+  } else if (action === 'donate') {
     summary = 'Donations Made'
-  }
-  else if (action === 'event') {
+  } else if (action === 'event') {
     summary = 'Events Attended'
-  }
-  else if (action === 'protest') {
+  } else if (action === 'protest') {
     summary = 'Protests Attended'
-  }
-  else if (action === 'sign-petition') {
+  } else if (action === 'sign-petition') {
     summary = 'Petitions Signed'
-  }
-  else if (action === 'signup-updates') {
+  } else if (action === 'signup-updates') {
     summary = 'Updates Requested'
   }
 
   return summary
 }
 
-export const actionLabel  = (action) => {
+export const actionLabel = (action) => {
   let summary
 
   if (action === 'call') {
     summary = 'Call'
-  }
-  else if (action === 'donate') {
+  } else if (action === 'donate') {
     summary = 'Donate'
-  }
-  else if (action === 'event') {
+  } else if (action === 'event') {
     summary = 'Event'
-  }
-  else if (action === 'protest') {
+  } else if (action === 'protest') {
     summary = 'Protest'
-  }
-  else if (action === 'sign-petition') {
+  } else if (action === 'sign-petition') {
     summary = 'Sign'
-  }
-  else if (action === 'signup-updates') {
+  } else if (action === 'signup-updates') {
     summary = 'Signup'
   }
 
   return summary
 }
 
-export const actionButton  = (action) => {
+export const actionButton = (action) => {
   let summary
 
   if (action === 'call') {
     summary = 'I\'m Ready to Call'
-  }
-  else if (action === 'donate') {
+  } else if (action === 'donate') {
     summary = 'I\'m Ready to Donate'
-  }
-  else if (action === 'event') {
+  } else if (action === 'event') {
     summary = 'Go to Event'
-  }
-  else if (action === 'protest') {
+  } else if (action === 'protest') {
     summary = 'Join Protest'
-  }
-  else if (action === 'sign-petition') {
+  } else if (action === 'sign-petition') {
     summary = 'Sign Petition'
-  }
-  else if (action === 'signup-updates') {
+  } else if (action === 'signup-updates') {
     summary = 'Signup for Updates'
   }
 
@@ -118,12 +98,12 @@ export const actionButton  = (action) => {
 }
 
 export const stateCodes = [
-  'AL','AK','AS','AZ','AR','CA','CO','CT','DE','DC',
-  'FM','FL','GA','GU','HI','ID','IL','IN','IA','KS',
-  'KY','LA','ME','MH','MD','MA','MI','MN','MS','MO',
-  'MT','NE','NV','NH','NJ','NM','NY','NC','ND','MP',
-  'OH','OK','OR','PW','PA','PR','RI','SC','SD','TN',
-  'TX','UT','VT','VI','VA','WA','WV','WI','WY'
+  'AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC',
+  'FM', 'FL', 'GA', 'GU', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS',
+  'KY', 'LA', 'ME', 'MH', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO',
+  'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'MP',
+  'OH', 'OK', 'OR', 'PW', 'PA', 'PR', 'RI', 'SC', 'SD', 'TN',
+  'TX', 'UT', 'VT', 'VI', 'VA', 'WA', 'WV', 'WI', 'WY'
 ]
 
 export const stateList = {

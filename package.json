@@ -7,14 +7,14 @@
   "scripts": {
     "dev": "webpack-dev-server --mode development --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
-    "unit": "jest --verbose --config test/unit/jest.conf.js --coverage",
-    "test": "npm run unit",
-    "lint": "eslint --ext .js,.vue src test/unit",
-    "build": "node build/build.js",
+    "test": "npm run -s test:lint",
+    "test:lint": "eslint --ext .js,.vue src test/unit --fix && echo '\n【ツ】CODE FORMATTING PERFECTION !!!\n'",
+    "test:unit": "jest --verbose --silent --config test/unit/jest.conf.js --coverage",
+    "build": "node build/build.js && echo '\n【ツ】BUILD COMPLETE !!!\n'",
     "storybook": "start-storybook -s ./.storybook/static -p 9001 -c .storybook",
     "storybook:build": "build-storybook -s ./.storybook/static -c .storybook -o docs",
     "storybook:web": "http-server ./.storybook-build -o -s -p8082 -c-1 --cors",
-    "web": "http-server ./dist -o -s -p8081 -c-1 --cors"
+    "web": "http-server ./dist -o -s -p8082 -c-1 --cors"
   },
   "dependencies": {
     "@fortawesome/fontawesome": "^1.1.8",
@@ -46,7 +46,7 @@
     "@storybook/vue": "4.0.0-alpha.9",
     "autoprefixer": "^8.2.0",
     "babel-core": "^6.26.0",
-    "babel-eslint": "^8.2.2",
+    "babel-eslint": "8.0.1",
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
     "babel-jest": "^22.4.3",
     "babel-loader": "^7.1.4",
@@ -62,7 +62,7 @@
     "chalk": "^2.3.2",
     "copy-webpack-plugin": "^4.5.1",
     "css-loader": "^0.28.11",
-    "eslint": "^4.19.1",
+    "eslint": "4.19.0",
     "eslint-config-standard": "^11.0.0",
     "eslint-friendly-formatter": "^4.0.1",
     "eslint-loader": "^2.0.0",

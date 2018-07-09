@@ -33,7 +33,11 @@
 </template>
 
 <script>
-import { trackEvent, trackPageView } from '../../../../analytics'
+import { trackEvent } from '../../../../analytics'
+
+import Header from '@/components/organisms/header'
+import Footer from '@/components/organisms/footer'
+import Drawer from '@/components/organisms/drawer'
 
 export default {
   name: 'PageTemplate',
@@ -57,39 +61,49 @@ export default {
     }
   },
   methods: {
-    accountClicked() {
+    accountClicked () {
+      this.drawerOpen = !this.drawerOpen
       trackEvent('Header Nav', 'Click', 'Account')
     },
-    logoClicked() {
+    logoClicked () {
+      this.drawerOpen = false
       document.querySelector('.main-content').scrollTop = 0
       trackEvent('Header Nav', 'Click', 'Logo')
     },
-    menuClicked() {
+    menuClicked () {
+      this.drawerOpen = false
       trackEvent('Header Nav', 'Click', 'Menu')
     },
-    menuItemClicked(item) {
+    menuItemClicked (item) {
       trackEvent('Menu Nav', 'Click', item)
     },
-    feedClicked() {
+    feedClicked () {
+      this.drawerOpen = false
       trackEvent('Footer Nav', 'Click', 'Feed')
     },
-    actionCenterClicked() {
+    actionCenterClicked () {
+      this.drawerOpen = false
       trackEvent('Footer Nav', 'Click', 'Action Center')
     },
-    myImpactClicked() {
+    myImpactClicked () {
       this.drawerOpen = !this.drawerOpen
       trackEvent('Footer Nav', 'Show', 'My Impact')
     },
-    closeDrawer() {
+    closeDrawer () {
       this.drawerOpen = false
       trackEvent('Footer Nav', 'Hide', 'My Impact')
     },
-    showDetails(impact) {
+    showDetails (impact) {
       trackEvent('Drawer', 'Show', `Impact Details ${impact.type}`)
     },
-    hideDetails(type) {
+    hideDetails (type) {
       trackEvent('Drawer', 'Hide', `Impact Details ${type}`)
     }
+  },
+  components: {
+    Header,
+    Footer,
+    Drawer
   }
 }
 </script>

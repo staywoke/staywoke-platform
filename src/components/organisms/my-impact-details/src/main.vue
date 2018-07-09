@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { Button } from 'ui-toolkit'
+import { Button, FontAwesomeIcon } from 'ui-toolkit'
 import { actionIcon, actionSummary } from '../../../../util'
 
 export default {
@@ -48,17 +48,21 @@ export default {
     }
   },
   computed: {
-    getIcon() {
+    getIcon () {
       return actionIcon('fas', this.type)
     },
-    getSummary() {
+    getSummary () {
       return actionSummary(this.type)
     }
   },
   methods: {
-    lessClicked() {
+    lessClicked () {
       this.$emit('hideDetails')
     }
+  },
+  components: {
+    Button,
+    FontAwesomeIcon
   }
 }
 </script>

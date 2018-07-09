@@ -1,33 +1,49 @@
 <template>
-  <transition name="fade" enter-active-class="fadeInLeft" leave-active-class="fadeOutRight">
-    <div class="router-view welcome">
-      <img src="../assets/logo.jpg">
-
-      <h1>UI Toolkit</h1>
-      <h2>Sample Project</h2>
-
-      <router-link :to="{ name: 'documentation' }">
-        <el-button round type="success">
-          Documentation
-          <i class="el-icon-arrow-right el-icon-right"></i>
-        </el-button>
-      </router-link>
+  <transition name="fade" enter-active-class="fadeInLeft" leave-active-class="fadeOutLeft">
+    <div class="router-view feed">
+      <sw-news :articles="news" />
+      <sw-featured-content :id="tweet" />
+      <sw-latest-actions :actions="actions" />
     </div>
   </transition>
 </template>
 
 <script>
-import { Button } from 'ui-toolkit'
+import { mockActions, mockNews } from '../mocks'
+
+import News from '@/components/organisms/news'
+import FeaturedContent from '@/components/molecules/featured-content'
+import LatestActions from '@/components/organisms/latest-actions'
 
 export default {
   name: 'Index',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      news: null,
+      tweet: null,
+      actions: null
+    }
+  },
+  created () {
+    this.getNews()
+    this.getFeaturedContent()
+    this.getLatestActions()
+  },
+  methods: {
+    getNews () {
+      this.news = mockNews
+    },
+    getFeaturedContent () {
+      this.tweet = '988889085958938633'
+    },
+    getLatestActions () {
+      this.actions = mockActions
     }
   },
   components: {
-    Button
+    News,
+    FeaturedContent,
+    LatestActions
   }
 }
 </script>

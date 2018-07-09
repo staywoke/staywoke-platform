@@ -3,7 +3,9 @@
     <div class="head">
       From {{ article.source }}:
 
-      <el-button class="back-button" size="mini" @click="backClicked">&lsaquo; Back</el-button>
+      <router-link :to="{ name: 'index', params: { back: true } }">
+        <el-button class="back-button" size="mini" @click="backClicked">&lsaquo; Back</el-button>
+      </router-link>
     </div>
 
     <div class="image" :style="{ backgroundImage: backgroundImage }"></div>
@@ -43,32 +45,38 @@ export default {
     }
   },
   computed: {
-    backgroundImage() {
+    backgroundImage () {
       return `url('${this.article.image}')`
     },
-    getUrl() {
+    getUrl () {
       return (this.article.url) ? this.article.url : '#'
     }
   },
   methods: {
-    backClicked() {
+    backClicked () {
       this.$emit('backClicked')
     },
-    readMoreClicked() {
+    readMoreClicked () {
       this.$emit('readMoreClicked')
     }
+  },
+  components: {
+    Button
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .news-article {
+  height: 100%;
+
   .head {
     text-transform: uppercase;
     font-size: 12px;
     color: #666;
     margin-bottom: 14px;
     line-height: 20px;
+    margin-top: 0;
 
     .back-button {
       float: right;
@@ -138,6 +146,7 @@ export default {
     text-align: center;
     padding: 6px 0;
     border-radius: 4px;
+    margin-bottom: 10px;
   }
 }
 </style>

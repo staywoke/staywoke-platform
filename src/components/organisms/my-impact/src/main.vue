@@ -9,6 +9,8 @@
 </template>
 
 <script>
+import Impact from '@/components/molecules/impact'
+
 export default {
   name: 'MyImpact',
   props: {
@@ -18,9 +20,12 @@ export default {
     }
   },
   methods: {
-    moreClicked(impact) {
+    moreClicked (impact) {
       this.$emit('showDetails', impact)
     }
+  },
+  components: {
+    Impact
   }
 }
 </script>

@@ -8,7 +8,7 @@ import { withMarkdownNotes } from '@storybook/addon-notes'
 import Comp from '.'
 import README from './README.md'
 
-import { mockActions, mockImpactList, mockNews } from '../../../mocks'
+import { mockImpactList } from '../../../mocks'
 
 const stories = storiesOf('Organisms | My Impact', module)
 

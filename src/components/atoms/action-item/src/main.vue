@@ -1,14 +1,16 @@
 <template>
   <div class='action-item'>
-    <el-button type="text" @click="handleClick" class="item-link">
-      <span>{{ item.title }}</span>
-      <font-awesome-icon color='#000000' :icon='["fas", "chevron-right"]' class='list-icon'></font-awesome-icon>
-    </el-button>
+    <router-link :to="{ name: 'actions', params: { slug: item.slug } }">
+      <el-button type="text" @click="handleClick" class="item-link">
+        <span>{{ item.title }}</span>
+        <font-awesome-icon color='#000000' :icon='["fas", "chevron-right"]' class='list-icon' />
+      </el-button>
+    </router-link>
   </div>
 </template>
 
 <script>
-import { Button } from 'ui-toolkit'
+import { Button, FontAwesomeIcon } from 'ui-toolkit'
 
 export default {
   name: 'ActionItem',
@@ -16,7 +18,8 @@ export default {
     item: {
       type: Object,
       default: () => ({
-        title: null
+        title: null,
+        slug: null
       }),
       validator: function (item) {
         return (item.title.length > 0)
@@ -24,9 +27,13 @@ export default {
     }
   },
   methods: {
-    handleClick() {
+    handleClick () {
       this.$emit('actionItemClicked')
     }
+  },
+  components: {
+    Button,
+    FontAwesomeIcon
   }
 }
 </script>

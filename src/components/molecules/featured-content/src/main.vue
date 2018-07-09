@@ -1,12 +1,9 @@
 <template>
   <div class='featured-content'>
     <h2>{{ title }}</h2>
-    <Tweet
-      :id="id"
-      :options="{ cards: 'hidden', conversation: 'none' }"
-      class="tweet"
-      error-message="THIS TWEET COULD NOT BE LOADED"
-    />
+    <tweet class="tweet" :id="id" :options="{ cards: 'hidden', conversation: 'none' }" error-message="THIS TWEET COULD NOT BE LOADED">
+      <div class="loading">Loading ...</div>
+    </tweet>
   </div>
 </template>
 
@@ -41,6 +38,21 @@ export default {
     text-align: center;
     color: #999;
     font-size: 12px;
+
+    .loading {
+      height: 200px;
+      background-color: rgb(255, 255, 255);
+      max-width: 520px;
+      overflow: hidden;
+      border-width: 1px;
+      border-style: solid;
+      border-color: rgb(225, 232, 237);
+      border-image: initial;
+      border-radius: 5px;
+      text-transform: uppercase;
+      line-height: 200px;
+      margin-top: 10px;
+    }
   }
 
   h2 {

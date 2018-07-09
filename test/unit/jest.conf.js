@@ -8,8 +8,8 @@ module.exports = {
     'vue'
   ],
   moduleNameMapper: {
-    "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/test/unit/fileMock.js",
-    "\\.(css|less)$": "<rootDir>/test/unit/styleMock.js",
+    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': '<rootDir>/test/unit/fileMock.js',
+    '\\.(css|less)$': '<rootDir>/test/unit/styleMock.js',
     '^@/(.*)$': '<rootDir>/src/$1'
   },
   transform: {
@@ -25,6 +25,6 @@ module.exports = {
     '!**/node_modules/**'
   ],
   transformIgnorePatterns: [
-    "node_modules/(?!(ui-toolkit)/)"
+    'node_modules/(?!(ui-toolkit)/)'
   ]
 }

@@ -1,24 +1,30 @@
 <template>
   <div class='action'>
-    <div class='location'>
-      <span class='stateface' :class='locationIcon'></span>
-      <span class='name'>
-        {{ locationName }}
-      </span>
-    </div>
-    <div class='summary'>
-      <div class='title'>
-        {{ actionTitle }}
-      </div>
-      <div class='action-type'>
-        <font-awesome-icon color='#FFFFFF' :icon='getIcon' class='button-icon'></font-awesome-icon>
-      </div>
-    </div>
+    <router-link :to="{ name: 'action', params: { type: action.type, slug: action.slug } }">
+      <el-button type="text" @click="handleClick" class="item-link">
+        <div class='location'>
+          <span class='stateface' :class='locationIcon'></span>
+          <span class='name'>
+            {{ locationName }}
+          </span>
+        </div>
+        <div class='summary'>
+          <div class='title'>
+            {{ actionTitle }}
+          </div>
+          <div class='action-type'>
+            <font-awesome-icon color='#FFFFFF' :icon='getIcon' class='button-icon' />
+          </div>
+        </div>
+      </el-button>
+    </router-link>
   </div>
 </template>
 
 <script>
-import { actionTypes, actionIcon, actionSummary, stateCodes, stateList } from '../../../../util'
+import { FontAwesomeIcon } from 'ui-toolkit'
+
+import { actionIcon, stateList } from '../../../../util'
 
 export default {
   name: 'Action',
@@ -26,6 +32,7 @@ export default {
     action: {
       type: Object,
       default: () => ({
+        slug: null,
         type: null,
         title: null,
         national: false,
@@ -34,37 +41,42 @@ export default {
     }
   },
   computed: {
-    locationName() {
+    locationName () {
       if (this.action.national) {
         return 'National'
       } else {
         return stateList[this.action.state.toUpperCase()]
       }
     },
-    locationIcon() {
+    locationIcon () {
       if (this.action.national) {
         return 'stateface-us'
       } else {
         return 'stateface-' + this.action.state.toLowerCase()
       }
     },
-    getIcon() {
+    getIcon () {
       return actionIcon('fas', this.action.type)
     },
-    actionTitle() {
+    actionTitle () {
       const max = 90
 
       if (this.action.title.length <= max) {
-        return this.action.title;
+        return this.action.title
       }
 
-      var subString = this.action.title.substr(0, max-1);
+      var subString = this.action.title.substr(0, max - 1)
 
-      return subString.substr(0, subString.lastIndexOf(' ')) + ' ...';
+      return subString.substr(0, subString.lastIndexOf(' ')) + ' ...'
     }
   },
   methods: {
-
+    handleClick () {
+      this.$emit('latestActionClicked', this.action)
+    }
+  },
+  components: {
+    FontAwesomeIcon
   }
 }
 </script>
@@ -72,6 +84,15 @@ export default {
 <style lang='scss' scoped>
 .action {
   position: relative;
+
+  .item-link {
+    width: 100%;
+    border: none;
+    text-align: left;
+    color: #000;
+    padding: 0;
+    margin: 0;
+  }
 
   .location {
     width: 90px;
@@ -107,6 +128,7 @@ export default {
     float: left;
     padding-left: 10px;
     position: relative;
+    white-space: normal;
 
     .title {
       font-weight: 900;
@@ -149,6 +171,14 @@ export default {
       right: 0;
       bottom: 0;
       color: #999;
+    }
+  }
+}
+
+@media only screen and (max-width: 320px) {
+  .action {
+    .summary .title {
+      font-size: 12px;
     }
   }
 }

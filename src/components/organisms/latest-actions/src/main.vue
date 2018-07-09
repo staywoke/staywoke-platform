@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import Action from '@/components/molecules/action'
+
 export default {
   name: 'LatestActions',
   props: {
@@ -25,6 +27,9 @@ export default {
       type: String,
       default: 'Latest Actions'
     }
+  },
+  components: {
+    Action
   }
 }
 </script>

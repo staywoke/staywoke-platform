@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import NewsItem from '@/components/molecules/news-item'
+
 export default {
   name: 'News',
   props: {
@@ -25,6 +27,9 @@ export default {
       type: String,
       default: 'News Worth Reading'
     }
+  },
+  components: {
+    NewsItem
   }
 }
 </script>

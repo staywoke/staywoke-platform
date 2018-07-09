@@ -1,16 +1,26 @@
 <template>
-  <transition name="fade">
-    <div class="drawer" v-if="opened">
-      <div class="drawer-content">
-        <sw-my-impact :impact-list="impactList" v-if="impactList.length > 0 && !showDetail" @showDetails="showDetails" />
-        <sw-my-impact-details :type="type" :total="total" :impact-details="impactDetails" v-if="showDetail" @hideDetails="hideDetails" />
+  <div class="drawer" v-show="drawerOpen">
+    <transition name="fade" enter-active-class="fadeInUp" leave-active-class="fadeOutDown">
+      <div class="drawer-content" v-if="opened">
+        <transition name="fade" enter-active-class="fadeIn" leave-active-class="fadeOut">
+          <sw-my-impact :impact-list="impactList" v-if="impactList.length > 0 && !showDetail" @showDetails="showDetails" />
+        </transition>
+        <transition name="fade" enter-active-class="fadeIn" leave-active-class="fadeOut">
+          <sw-my-impact-details :type="type" :total="total" :impact-details="impactDetails" v-if="showDetail" @hideDetails="hideDetails" />
+        </transition>
       </div>
-      <div class="backdrop" @click="closeDrawer"></div>
-    </div>
-  </transition>
+    </transition>
+
+    <transition name="fade" enter-active-class="fadeIn" leave-active-class="fadeOut">
+      <div class="backdrop" v-if="opened" @click="closeDrawer"></div>
+    </transition>
+  </div>
 </template>
 
 <script>
+import MyImpact from '@/components/organisms/my-impact'
+import MyImpactDetails from '@/components/organisms/my-impact-details'
+
 export default {
   name: 'Drawer',
   props: {
@@ -39,22 +49,38 @@ export default {
       total: 0
     }
   },
+  watch: {
+    opened (opening) {
+      this.drawerOpen = true
+
+      if (!opening) {
+        let self = this
+        setTimeout(() => {
+          self.drawerOpen = false
+        }, 250)
+      }
+    }
+  },
   methods: {
-    closeDrawer() {
+    closeDrawer () {
       this.showDetail = false
       this.$emit('closeDrawer')
       this.$emit('hideDetails', this.type)
     },
-    showDetails(item) {
+    showDetails (item) {
       this.type = item.type
       this.total = item.total
       this.showDetail = true
       this.$emit('showDetails', item)
     },
-    hideDetails() {
+    hideDetails () {
       this.showDetail = false
       this.$emit('hideDetails', this.type)
     }
+  },
+  components: {
+    MyImpact,
+    MyImpactDetails
   }
 }
 </script>
