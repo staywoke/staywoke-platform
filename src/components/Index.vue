@@ -11,6 +11,10 @@
 <script>
 import { mockActions, mockNews } from '../mocks'
 
+// @TODO: connect this to Vuex rather than tempStore
+import { AMZ } from '../aws'
+import { tempStore } from '../store/modules/store'
+
 import News from '@/components/organisms/news'
 import FeaturedContent from '@/components/molecules/featured-content'
 import LatestActions from '@/components/organisms/latest-actions'
@@ -21,15 +25,41 @@ export default {
     return {
       news: null,
       tweet: null,
-      actions: null
+      actions: null,
+      user: null
     }
   },
   created () {
     this.getNews()
     this.getFeaturedContent()
     this.getLatestActions()
+
+    // @TODO: This is just a test function that is called when the component is created
+    // it calls methods.testAWS
+    this.testAWS({
+      username: 'test',
+      password: 'abc123'
+    })
   },
   methods: {
+    testAWS (payload) {
+      let self = this
+
+      AMZ.initLogin()
+
+      AMZ.callLambda('login', payload).then(user => {
+        AMZ.setCredentials(user.rawCredentials)
+
+        // Save to Local Storage
+        tempStore.put('user', user)
+
+        // @TODO: this needs to be placed within the main load or init function, so that it runs on refresh, app open
+        // setInterval(AMZ.refreshCredentials, 300000)
+
+        // Store User Data locally
+        self.user = user
+      })
+    },
     getNews () {
       this.news = mockNews
     },

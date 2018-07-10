@@ -4,6 +4,8 @@ const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 
+const Dotenv = require('dotenv-webpack')
+
 function resolve(dir) {
   return path.join(__dirname, '..', dir)
 }
@@ -33,6 +35,12 @@ module.exports = {
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath
   },
+  plugins: [
+    new Dotenv({
+      path: path.join(__dirname, '../.env'),
+      safe: path.join(__dirname, '../.env.example')
+    })
+  ],
   resolve: {
     extensions: [
       '.js', '.vue', '.json'
