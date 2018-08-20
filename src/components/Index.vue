@@ -13,7 +13,7 @@ import { mockActions, mockNews } from '../mocks'
 
 // @TODO: connect this to Vuex rather than tempStore
 import { AMZ } from '../aws'
-import { tempStore } from '../store/modules/store'
+// import { tempStore } from '../store/modules/store'
 
 import News from '@/components/organisms/news'
 import FeaturedContent from '@/components/molecules/featured-content'
@@ -29,44 +29,36 @@ export default {
       user: null
     }
   },
-  created () {
-    this.getNews()
-    this.getFeaturedContent()
-    this.getLatestActions()
+  mounted () {
+    // Initialize Amazon
+    AMZ.init()
 
-    // @TODO: This is just a test function that is called when the component is created
-    // it calls methods.testAWS
-    this.testAWS({
-      username: 'test',
-      password: 'abc123'
-    })
+    // Fetch Data
+    this.getArticles()
+    this.getFeaturedContent()
+    this.getActions()
   },
   methods: {
-    testAWS (payload) {
-      let self = this
+    getArticles () {
+      // AMZ.callLambda('getArticles').then(news => {
+      //   console.log('getArticles', news)
+      // }, error => {
+      //   console.error('ERROR: getArticles()', error)
+      // })
 
-      AMZ.initLogin()
-
-      AMZ.callLambda('login', payload).then(user => {
-        AMZ.setCredentials(user.rawCredentials)
-
-        // Save to Local Storage
-        tempStore.put('user', user)
-
-        // @TODO: this needs to be placed within the main load or init function, so that it runs on refresh, app open
-        // setInterval(AMZ.refreshCredentials, 300000)
-
-        // Store User Data locally
-        self.user = user
-      })
-    },
-    getNews () {
       this.news = mockNews
     },
     getFeaturedContent () {
+      // @TODO: This should come from Amazon
       this.tweet = '988889085958938633'
     },
-    getLatestActions () {
+    getActions () {
+      // AMZ.callLambda('getActions').then(actions => {
+      //   console.log('actions', actions)
+      // }, error => {
+      //   console.error('ERROR: getActions()', error)
+      // })
+
       this.actions = mockActions
     }
   },
@@ -78,16 +70,36 @@ export default {
 }
 </script>
 
-<style scoped>
-.welcome {
-  text-align: center;
-  margin-top: 40px;
-}
-h1 {
-  font-weight: normal;
-}
-h2 {
-  color: #4cad1c;
-  font-weight: 300;
+<style lang="scss">
+@media (min-width: 1024px) {
+  body {
+    background-color: #f2f2f2;
+  }
+
+  .feed {
+    display: flex;
+    height: calc(100% - 60px);
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: auto;
+    align-content: top;
+
+    .news, .featured-content, .latest-actions {
+      flex: 1;
+      margin: 0 !important;
+      width: calc(100% / 3);
+
+      h2 {
+        margin: 10px 0 !important;
+        font-weight: 500 !important;
+        font-size: 14px !important;
+      }
+
+      ul {
+        padding: 0;
+      }
+    }
+  }
 }
 </style>

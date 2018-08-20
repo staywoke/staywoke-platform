@@ -8,6 +8,7 @@
       @logoClicked="logoClicked"
       @menuClicked="menuClicked"
       @menuItemClicked="menuItemClicked"
+      @myImpactClicked="myImpactClicked"
     />
 
     <div class="main-content">
@@ -140,6 +141,14 @@ export default {
     position: absolute;
     bottom: 0;
     left: 0;
+  }
+}
+@media (min-width: 1024px) {
+  .main-content {
+    height: calc(100% - 60px) !important;
+  }
+  .footer {
+    display: none;
   }
 }
 </style>

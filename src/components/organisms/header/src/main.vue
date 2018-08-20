@@ -1,20 +1,70 @@
 <template>
   <el-header class="header">
     <el-row>
-      <el-col :span="10" class="account">
-        <div class="user-avatar" @click="accountClicked">
-          <img class="avatar" :src="'https://www.gravatar.com/avatar/' + emailHash + '?s=44'" />
+      <el-col :span="10">
+        <div class="desktop-only logo" @click="logoClicked">
+          <router-link :to="{ name: 'index' }">
+            <sw-logo :size="50" />
+          </router-link>
         </div>
-        <div class="user-details" @click="accountClicked">
-          <strong>{{ username }}</strong>
-          <span v-html="actionsTaken"></span>
+
+        <div class="mobile-only account">
+          <div class="user-avatar" @click="accountClicked">
+            <img class="avatar" :src="'https://www.gravatar.com/avatar/' + emailHash + '?s=44'" />
+          </div>
+          <div class="user-details" @click="accountClicked">
+            <strong>{{ username }}</strong>
+            <span v-html="actionsTaken"></span>
+          </div>
         </div>
       </el-col>
-      <el-col :span="4" class="logo">
-        <div @click="logoClicked"><sw-logo :size="50" /></div>
+      <el-col :span="4">
+        <div class="desktop-only account">
+          <div class="user-avatar" @click="accountClicked">
+            <img class="avatar" :src="'https://www.gravatar.com/avatar/' + emailHash + '?s=44'" />
+          </div>
+          <div class="user-details" @click="accountClicked">
+            <strong>{{ username }}</strong>
+            <span v-html="actionsTaken"></span>
+          </div>
+        </div>
+
+        <div class="mobile-only logo" @click="logoClicked"><sw-logo :size="50" /></div>
       </el-col>
       <el-col :span="10" class="menu">
-        <el-dropdown trigger="click" size="medium" @command="menuItemClicked">
+        <div class="desktop-only">
+          <router-link class="action-center" :to="{ name: 'action-center' }">
+            <span>
+              Action Center
+            </span>
+          </router-link>
+
+          <a @click="myImpactClicked">
+            <span>
+              My Impact
+            </span>
+          </a>
+
+          <router-link :to="{ name: 'login' }">
+            <span v-if="!loggedIn">
+              Login
+            </span>
+          </router-link>
+
+          <router-link :to="{ name: 'register' }">
+            <span v-if="!loggedIn">
+              Register
+            </span>
+          </router-link>
+
+          <router-link :to="{ name: 'logout' }">
+            <span v-if="loggedIn">
+              Logout
+            </span>
+          </router-link>
+        </div>
+
+        <el-dropdown class="mobile-only" trigger="click" size="medium" @command="menuItemClicked">
           <span class="el-dropdown-link menu-button" @click="menuClicked">
             <i class="el-icon-more"></i>
           </span>
@@ -91,6 +141,10 @@ export default {
     },
     menuItemClicked (command) {
       this.$emit('menuItemClicked', command)
+    },
+    myImpactClicked () {
+      this.$emit('myImpactClicked')
+      this.$emit('hideDetails')
     }
   },
   components: {
@@ -108,6 +162,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.desktop-only {
+  display: none;
+}
+
 .header {
   height: 60px;
   padding: 0;
@@ -186,6 +244,48 @@ export default {
   .el-dropdown-menu__item:not(.is-disabled):hover {
     background-color: #222;
     color: #FFF;
+  }
+}
+
+@media (min-width: 1024px) {
+  .desktop-only {
+    display: block;
+  }
+  .mobile-only {
+    display: none;
+  }
+  .header {
+    position: relative;
+
+    .account {
+      position: absolute;
+      left: 80px;
+    }
+
+    .logo {
+      margin-left: 14px;
+    }
+
+    .menu {
+      text-align: right;
+      position: absolute;
+      right: 0;
+
+      a {
+        display: inline-block;
+        color: #000;
+        text-decoration: none;
+        text-transform: uppercase;
+        margin-left: 16px;
+        font-size: 14px;
+        transition: color 0.25s;
+        cursor: pointer;
+
+        &.router-link-exact-active, &:hover {
+          color: #de0000;
+        }
+      }
+    }
   }
 }
 </style>

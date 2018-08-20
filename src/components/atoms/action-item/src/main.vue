@@ -38,7 +38,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .action-item {
   padding: 0 15px;
 
@@ -49,6 +49,10 @@ export default {
     font-size: 20px;
     font-weight: 600;
     color: #000;
+
+    span {
+      float: left;
+    }
 
     .list-icon {
       float: right;

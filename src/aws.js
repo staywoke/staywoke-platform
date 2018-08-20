@@ -47,7 +47,7 @@ export const AMZ = {
     AWS.config.credentials = sts.credentialsFrom(rawCredentials)
   },
 
-  initLogin () {
+  init () {
     AWS.config.region = process.env.STAYWOKE_AWS_REGION
     AWS.config.credentials = new AWS.CognitoIdentityCredentials({
       IdentityPoolId: process.env.STAYWOKE_AWS_UNAUTH_IDENTITY_POOL_ID

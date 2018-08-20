@@ -2,7 +2,7 @@
   <div class="news">
     <h2>{{ title }}</h2>
     <ul class="news">
-      <li v-for="(article, index) in articles" :key="index" v-if="index < max">
+      <li v-for="(article, index) in articles" :key="index" v-if="index < maxNews">
         <sw-news-item :article="article" />
       </li>
     </ul>
@@ -28,6 +28,14 @@ export default {
       default: 'News Worth Reading'
     }
   },
+  data () {
+    return {
+      maxNews: this.max
+    }
+  },
+  mounted () {
+    this.maxNews = (document.body.clientWidth < 1024) ? 3 : Math.floor((document.body.clientHeight - 100) / 85)
+  },
   components: {
     NewsItem
   }
@@ -48,6 +56,7 @@ export default {
     list-style: none;
     margin: 0;
     padding: 0;
+    display: table-cell;
 
     li {
       text-align: left;

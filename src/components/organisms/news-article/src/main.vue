@@ -149,4 +149,14 @@ export default {
     margin-bottom: 10px;
   }
 }
+@media (min-width: 1024px) {
+  .news-article {
+    max-width: 800px;
+    margin: 0 auto;
+
+    .image {
+      height: 300px;
+    }
+  }
+}
 </style>

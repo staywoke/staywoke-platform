@@ -117,4 +117,15 @@ export default {
 .fade-enter, .fade-leave-to {
   opacity: 0;
 }
+
+@media (min-width: 1024px) {
+  .drawer {
+    height: calc(100% - 60px) !important;
+
+    .drawer-content {
+      max-width: 600px;
+      left: calc(50% - 300px);
+    }
+  }
+}
 </style>

@@ -25,23 +25,6 @@ export default {
     this.getImpactList()
     this.getImpactDetails()
   },
-  mounted () {
-    // @TODO: Remove this when we have a working desktop & tablet design
-    // The page loads, checks the browser user agent to see if it is a mobile device, if it's not,
-    // it injects a script to reload the page in an iframe that is the size of a mobile device,
-    // with a custom menu bar for people to test different sizes
-    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) === false) {
-      setTimeout(function () {
-        (function (d) {
-          if (self !== top || (d.getElementById('toolbar') && d.getElementById('toolbar').getAttribute('data-resizer'))) {
-            return false
-          }
-
-          d.write('<!DOCTYPE HTML><html style="opacity:0;"><head><meta charset="utf-8"/><scr' + 'ipt>setTimeout(function(){ document.getElementById("default-view").click(); }, 1000);</scr' + 'ipt></head><body><a data-viewport="320x480" data-icon="mobile">Apple iPhone, iPod Touch</a><a data-viewport="320x568" data-icon="mobile" data-version="5">Apple iPhone 5</a><a data-viewport="360x640" data-icon="mobile" id="default-view">Samsung Nexus</a><a data-viewport="480x800" data-icon="mobile">Samsung Galaxy S</a><a data-viewport="768x1024" data-icon="tablet">Apple iPad (2-3rd, mini)</a><a data-viewport="600x960" data-icon="tablet">Asus Google Nexus 7</a><a data-viewport="400x683" data-icon="small-tablet">Samsung Galaxy Tab</a><scr' + 'ipt src="https://lab.maltewassermann.com/viewport-resizer/resizer.min.js"></scr' + 'ipt></body></html>')
-        })(document)
-      }, 10)
-    }
-  },
   methods: {
     getImpactList () {
       this.impactList = mockImpactList
@@ -127,7 +110,9 @@ body, html, #app {
   height: 100%;
   width: 100%;
 }
-
+body {
+  background-color: #f2f2f2;
+}
 .page-wrapper {
   height: 100%;
 

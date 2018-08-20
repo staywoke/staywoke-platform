@@ -2,7 +2,7 @@
   <div class="latest-actions">
     <h2>{{ title }}</h2>
     <ul>
-      <li v-for="(action, index) in actions" :key="index" v-if="index < max">
+      <li v-for="(action, index) in actions" :key="index" v-if="index < maxAction">
         <sw-action :action="action" />
       </li>
     </ul>
@@ -27,6 +27,14 @@ export default {
       type: String,
       default: 'Latest Actions'
     }
+  },
+  data () {
+    return {
+      maxAction: this.max
+    }
+  },
+  mounted () {
+    this.maxAction = (document.body.clientWidth < 1024) ? 3 : Math.floor((document.body.clientHeight - 100) / 75)
   },
   components: {
     Action
