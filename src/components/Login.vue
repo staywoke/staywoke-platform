@@ -1,38 +1,47 @@
 <template>
   <transition name="fade" enter-active-class="fadeInLeft" leave-active-class="fadeOutLeft">
     <sw-login-form class="login"
+      :error-message="errorMessage"
       @signUp="signUp"
-      @hideLoginError="hideLoginError"
-      @showLoginError="showLoginError"
       @forgotPassword="forgotPassword"
-      @loginSuccess="loginSuccess"
-      @loginError="loginError"
+      @loginValid="loginValid"
     />
   </transition>
 </template>
 
 <script>
+import { AMZ } from '../aws'
 import { LoginForm } from 'ui-toolkit'
 
 export default {
   name: 'Login',
   data () {
-    return {}
+    return {
+      errorMessage: null
+    }
   },
-  created () {
-    // @TODO: Check Login Status
+  mounted () {
+    AMZ.init()
+
+    // @TODO: Check if user is already logged in and redirect to home page if so
   },
   methods: {
     signUp () {
       this.$router.push({ name: 'register' })
     },
-    hideLoginError () {},
-    showLoginError () {},
     forgotPassword () {
       this.$router.push({ name: 'forgot-password' })
     },
-    loginSuccess () {},
-    loginError () {}
+    loginValid (form) {
+      let self = this
+      this.errorMessage = null
+
+      AMZ.callLambda('login', { username: form.username, password: form.password }).then(auth => {
+        // @TODO: Store `auth` data into Vuex store
+      }, error => {
+        self.errorMessage = error.message
+      })
+    }
   },
   components: {
     LoginForm

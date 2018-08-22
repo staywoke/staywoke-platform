@@ -23,6 +23,7 @@
     "@fortawesome/fontawesome-pro-regular": "^5.0.13",
     "@fortawesome/fontawesome-pro-solid": "^5.0.13",
     "@fortawesome/vue-fontawesome": "0.0.22",
+    "aws-sdk": "^2.296.0",
     "axios": "^0.18.0",
     "dotenv": "^6.0.0",
     "dotenv-webpack": "^1.5.7",

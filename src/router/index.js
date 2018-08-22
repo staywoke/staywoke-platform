@@ -5,6 +5,8 @@ import ActionCenter from '@/components/ActionCenter'
 import NewsArticle from '@/components/NewsArticle'
 import ActionItem from '@/components/ActionItem'
 import Login from '@/components/Login'
+import Register from '@/components/Register'
+import ForgotPassword from '@/components/ForgotPassword'
 import Actions from '@/components/Actions'
 
 Vue.use(Router)
@@ -24,7 +26,7 @@ export default new Router({
     {
       path: '/register',
       name: 'register',
-      component: null
+      component: Register
     },
     {
       path: '/logout',
@@ -34,7 +36,7 @@ export default new Router({
     {
       path: '/forgot-password',
       name: 'forgot-password',
-      component: null
+      component: ForgotPassword
     },
     {
       path: '/action-center',
