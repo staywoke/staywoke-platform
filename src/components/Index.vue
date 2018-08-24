@@ -1,9 +1,9 @@
 <template>
   <transition name="fade" enter-active-class="fadeInLeft" leave-active-class="fadeOutLeft">
     <div class="router-view feed">
-      <sw-news :articles="news" />
-      <sw-featured-content :id="tweet" />
-      <sw-latest-actions :actions="actions" />
+      <sw-news :articles="news" v-if="news" />
+      <sw-featured-content :id="tweet" v-if="tweet" />
+      <sw-latest-actions :actions="actions" v-if="actions" />
     </div>
   </transition>
 </template>
@@ -23,16 +23,13 @@ export default {
   name: 'Index',
   data () {
     return {
-      news: null,
+      news: [],
       tweet: null,
-      actions: null,
+      actions: [],
       user: null
     }
   },
   mounted () {
-    // Initialize Amazon
-    AMZ.init()
-
     // Fetch Data
     this.getArticles()
     this.getFeaturedContent()
@@ -40,26 +37,36 @@ export default {
   },
   methods: {
     getArticles () {
-      // AMZ.callLambda('getArticles').then(news => {
-      //   console.log('getArticles', news)
-      // }, error => {
-      //   console.error('ERROR: getArticles()', error)
-      // })
+      let self = this
 
-      this.news = mockNews
+      AMZ.Lambda.callPublic('getArticles').then(news => {
+        console.log('getArticles', news)
+        self.news = news // @TODO: Store results in Vuex
+      }, error => {
+        console.error('ERROR: getArticles', error) // @TODO: Get this working with AWS ( currently failing )
+        self.news = mockNews
+      })
     },
     getFeaturedContent () {
-      // @TODO: This should come from Amazon
-      this.tweet = '988889085958938633'
+      let self = this
+
+      AMZ.Lambda.callPublic('getTweets').then(tweets => {
+        console.log('getTweets', tweets) // @TODO: Store results in Vuex
+      }, error => {
+        console.error('ERROR: getTweets', error) // @TODO: Get this working with AWS ( currently failing )
+        self.tweet = '988889085958938633'
+      })
     },
     getActions () {
-      // AMZ.callLambda('getActions').then(actions => {
-      //   console.log('actions', actions)
-      // }, error => {
-      //   console.error('ERROR: getActions()', error)
-      // })
+      let self = this
 
-      this.actions = mockActions
+      AMZ.Lambda.callPublic('getActions').then(actions => {
+        console.log('getActions', actions)
+        self.actions = actions // @TODO: Store results in Vuex
+      }, error => {
+        console.error('ERROR: getActions', error)
+        self.actions = mockActions
+      })
     }
   },
   components: {
@@ -89,6 +96,7 @@ export default {
       flex: 1;
       margin: 0 !important;
       width: calc(100% / 3);
+      padding-top: 0 !important;
 
       h2 {
         margin: 10px 0 !important;

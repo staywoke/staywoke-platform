@@ -21,8 +21,6 @@ export default {
     }
   },
   mounted () {
-    AMZ.init()
-
     // @TODO: Check if user is already logged in and redirect to home page if so
   },
   methods: {
@@ -36,8 +34,9 @@ export default {
       let self = this
       this.errorMessage = null
 
-      AMZ.callLambda('login', { username: form.username, password: form.password }).then(auth => {
+      AMZ.Lambda.callPublic('login', { username: form.username, password: form.password }).then(auth => {
         // @TODO: Store `auth` data into Vuex store
+        console.log('auth', auth)
       }, error => {
         self.errorMessage = error.message
       })

@@ -1,11 +1,12 @@
 <template>
   <transition name="fade" enter-active-class="fadeInRight" leave-active-class="fadeOutRight">
-    <sw-take-action class="action" :action="action" @backClicked="backClicked" @actionClicked="actionClicked" />
+    <sw-take-action class="action" v-if="action" :action="action" />
   </transition>
 </template>
 
 <script>
-import { mockActions } from '../mocks'
+import slugify from 'slugify'
+import { AMZ } from '../aws'
 
 import TakeAction from '@/components/organisms/take-action'
 
@@ -21,18 +22,24 @@ export default {
   },
   methods: {
     getArticle () {
-      for (let i = 0; i < mockActions.length; i++) {
-        if (mockActions[i].slug === this.$route.params.slug) {
-          this.action = mockActions[i]
-          break
+      let self = this
+
+      // @TODO: Get specific action from AWS rather than looping for a match
+      AMZ.Lambda.callPublic('getActions').then(actions => {
+        for (let i = 0; i < actions.length; i++) {
+          let slug = slugify(actions[i].assignment, {
+            replacement: '-',
+            lower: true
+          })
+
+          if (this.$route.params.slug === slug) {
+            self.action = actions[i] // @TODO: Store result in Vuex
+            break
+          }
         }
-      }
-    },
-    backClicked () {
-
-    },
-    actionClicked () {
-
+      }, error => {
+        console.error('ERROR: getActions', error)
+      })
     }
   },
   components: {
