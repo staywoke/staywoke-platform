@@ -1,11 +1,12 @@
 <template>
   <transition name="fade" enter-active-class="fadeInLeft" leave-active-class="fadeOutLeft">
     <sw-register-form class="register"
+      request-email
+      :request-phone="false"
+      :invite-only="false"
+      :error-message="errorMessage"
       @login="login"
-      @hideLoginError="hideLoginError"
-      @showLoginError="showLoginError"
-      @loginSuccess="loginSuccess"
-      @loginError="loginError"
+      @registerValid="registerValid"
     />
   </transition>
 </template>
@@ -13,22 +14,47 @@
 <script>
 import { RegisterForm } from 'ui-toolkit'
 
+import { AMZ } from '../aws'
+import { EventBus } from '../event-bus'
+
 export default {
   name: 'Register',
   data () {
-    return {}
+    return {
+      errorMessage: null
+    }
   },
-  created () {
-    // @TODO: Check Login Status
+  mounted () {
+    if (this.$store.getters.isLoggedIn) {
+      this.$router.push({ name: 'index' })
+    }
   },
   methods: {
     login () {
       this.$router.push({ name: 'login' })
     },
-    hideLoginError () {},
-    showLoginError () {},
-    loginSuccess () {},
-    loginError () {}
+    registerValid (form) {
+      let self = this
+      this.errorMessage = null
+
+      const payload = {
+        email: form.email,
+        firstName: form.firstname,
+        inviteCode: form.inviteCode,
+        lastName: form.lastname,
+        password: form.password,
+        phone: form.phone,
+        username: form.username
+      }
+
+      AMZ.Lambda.callPublic('register', payload).then(resp => {
+        console.log('REGISTER:', resp)
+        EventBus.$emit('USER_REGISTER', resp)
+      }, error => {
+        console.error('REGISTER:', error)
+        self.errorMessage = error.message
+      })
+    }
   },
   components: {
     RegisterForm

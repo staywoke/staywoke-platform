@@ -1,9 +1,9 @@
 <template>
   <div class="page">
     <sw-header
-      email-hash="e1d91ee5412c6334f2123b747ca0f1d2"
-      username="Peter"
-      :action-count="18"
+      :email-hash="emailHash"
+      :username="firstName"
+      :action-count="actionCount"
       @accountClicked="accountClicked"
       @logoClicked="logoClicked"
       @menuClicked="menuClicked"
@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import { EventBus } from '../../../../event-bus'
 import { trackEvent } from '../../../../analytics'
 
 import Header from '@/components/organisms/header'
@@ -58,8 +59,19 @@ export default {
   },
   data () {
     return {
-      drawerOpen: false
+      drawerOpen: false,
+      emailHash: this.$store.getters.getUserEmailHash,
+      firstName: this.$store.getters.getFirstName,
+      actionCount: 0 // @TODO: Fetch this from AWS
     }
+  },
+  created () {
+    let self = this
+
+    EventBus.$on('USER_LOGIN', () => {
+      self.emailHash = this.$store.getters.getUserEmailHash
+      self.firstName = this.$store.getters.getFirstName
+    })
   },
   methods: {
     accountClicked () {

@@ -10,8 +10,10 @@
 </template>
 
 <script>
-import { AMZ } from '../aws'
 import { LoginForm } from 'ui-toolkit'
+
+import { AMZ } from '../aws'
+import { EventBus } from '../event-bus'
 
 export default {
   name: 'Login',
@@ -21,7 +23,9 @@ export default {
     }
   },
   mounted () {
-    // @TODO: Check if user is already logged in and redirect to home page if so
+    if (this.$store.getters.isLoggedIn) {
+      this.$router.push({ name: 'index' })
+    }
   },
   methods: {
     signUp () {
@@ -35,8 +39,10 @@ export default {
       this.errorMessage = null
 
       AMZ.Lambda.callPublic('login', { username: form.username, password: form.password }).then(auth => {
-        // @TODO: Store `auth` data into Vuex store
-        console.log('auth', auth)
+        EventBus.$emit('USER_LOGIN', auth)
+
+        this.$store.dispatch('userLogin', auth)
+        this.$router.push({ name: 'index' })
       }, error => {
         self.errorMessage = error.message
       })

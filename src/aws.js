@@ -1,6 +1,8 @@
 import AWS from 'aws-sdk'
 
-import { tempStore } from './store/modules/store'
+import store from './store'
+
+import { EventBus } from './event-bus'
 
 // @TODO import store module
 const lambdaConfig = {
@@ -67,19 +69,11 @@ export const AMZ = {
      * @return {Promise}
      */
     callPrivate: (fn, data, callback) => {
-      console.log('fn', fn)
-      console.log('data', data)
-      console.log('callback', typeof callback)
-
       if (typeof data !== 'string') {
         data = JSON.stringify(data)
       }
 
-      console.log('data', data)
-
-      const user = tempStore.get('user')
-
-      console.log('user', user)
+      const user = store.getters.getUserAccount
 
       if (!user) {
         return
@@ -101,9 +95,6 @@ export const AMZ = {
             FunctionName: fn,
             Payload: data
           }, (err, response) => {
-            console.log('err', err)
-            console.log('response', response)
-
             if (err || !response || !response.Payload) {
               return callback(err || 'unknown error executing lambda function')
             }
@@ -131,7 +122,7 @@ export const AMZ = {
       if (AWS.config && AWS.config.credentials && AWS.config.credentials.expireTime) {
         expireTime = AWS.config.credentials.expireTime
       } else {
-        user = tempStore.get('user')
+        user = store.getters.getUserAccount
 
         if (!user) {
           return
@@ -145,14 +136,14 @@ export const AMZ = {
       const timeSinceLastLogin = (new Date() - new Date(lastLogin)) / 60000
 
       if (timeSinceLastLogin > minutesInThreeWeeks) {
-        // TODO: remove user from localStorage and direct user to login page
+        EventBus.$emit('SESSION_EXPIRED')
       }
 
       const expiresIn = (new Date(expireTime) - new Date()) / 60000
       return expiresIn < 0
     },
     refresh (user, callback) {
-      user = user || tempStore.get('user')
+      user = user || store.getters.getUserAccount
 
       if (!user) {
         return
@@ -174,7 +165,7 @@ export const AMZ = {
 
         const stsRefresh = new AWS.STS()
         AWS.config.credentials = stsRefresh.credentialsFrom(user.rawCredentials)
-        tempStore.put('user', user)
+        store.dispatch('userLogin', user)
 
         return callback(null)
       })

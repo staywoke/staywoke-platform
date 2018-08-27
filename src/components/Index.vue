@@ -1,19 +1,16 @@
 <template>
   <transition name="fade" enter-active-class="fadeInLeft" leave-active-class="fadeOutLeft">
     <div class="router-view feed">
-      <sw-news :articles="news" v-if="news" />
-      <sw-featured-content :id="tweet" v-if="tweet" />
-      <sw-latest-actions :actions="actions" v-if="actions" />
+      <sw-news :articles="news" :error-message="newsError" v-if="news || newsError" />
+      <sw-featured-content :id="tweet" :error-message="tweetError" v-if="tweet || tweetError"/>
+      <sw-latest-actions :error-message="actionsError" :actions="actions" v-if="actions || actionsError" />
     </div>
   </transition>
 </template>
 
 <script>
-import { mockActions, mockNews } from '../mocks'
-
-// @TODO: connect this to Vuex rather than tempStore
 import { AMZ } from '../aws'
-// import { tempStore } from '../store/modules/store'
+import { EventBus } from '../event-bus'
 
 import News from '@/components/organisms/news'
 import FeaturedContent from '@/components/molecules/featured-content'
@@ -23,14 +20,21 @@ export default {
   name: 'Index',
   data () {
     return {
-      news: [],
+      news: null,
+      newsError: null,
       tweet: null,
-      actions: [],
+      tweetError: null,
+      actions: null,
+      actionsError: null,
       user: null
     }
   },
+  created () {
+    EventBus.$on('SESSION_EXPIRED', () => {
+      this.$router.push({ name: 'logout' })
+    })
+  },
   mounted () {
-    // Fetch Data
     this.getArticles()
     this.getFeaturedContent()
     this.getActions()
@@ -39,34 +43,73 @@ export default {
     getArticles () {
       let self = this
 
-      AMZ.Lambda.callPublic('getArticles').then(news => {
-        console.log('getArticles', news)
-        self.news = news // @TODO: Store results in Vuex
-      }, error => {
-        console.error('ERROR: getArticles', error) // @TODO: Get this working with AWS ( currently failing )
-        self.news = mockNews
-      })
+      if (this.$store.getters.isLoggedIn) {
+        AMZ.Lambda.callPrivate('getArticles').then(news => {
+          console.log('getArticles', news)
+          self.news = news // @TODO: Store results in Vuex
+        }, error => {
+          console.error('Private getArticles', error)
+          self.newsError = '403 Error: Permission Denied'
+        })
+      } else {
+        AMZ.Lambda.callPublic('getArticles').then(news => {
+          self.news = news // @TODO: Store results in Vuex
+        }, error => {
+          console.error('Public getArticles', error)
+          self.newsError = '403 Error: Permission Denied'
+        })
+      }
     },
     getFeaturedContent () {
       let self = this
 
-      AMZ.Lambda.callPublic('getTweets').then(tweets => {
-        console.log('getTweets', tweets) // @TODO: Store results in Vuex
-      }, error => {
-        console.error('ERROR: getTweets', error) // @TODO: Get this working with AWS ( currently failing )
-        self.tweet = '988889085958938633'
-      })
+      if (this.$store.getters.isLoggedIn) {
+        AMZ.Lambda.callPrivate('getTweets').then(tweets => {
+          console.log('getTweets', tweets)
+          if (tweets && tweets.length > 0) {
+            // @TODO: There is currently no response from AWS
+            // @TODO: Store results in Vuex
+          } else {
+            self.tweetError = 'No Featured Content'
+          }
+        }, error => {
+          console.error('Private getTweets', error)
+          self.tweetError = '403 Error: Permission Denied'
+        })
+      } else {
+        AMZ.Lambda.callPublic('getTweets').then(tweets => {
+          console.log('getTweets', tweets)
+          if (tweets && tweets.length > 0) {
+            // @TODO: There is currently no response from AWS
+            // @TODO: Store results in Vuex
+          } else {
+            self.tweetError = 'No Featured Content'
+          }
+        }, error => {
+          console.error('Public getTweets', error)
+          self.tweetError = '403 Error: Permission Denied'
+        })
+      }
     },
     getActions () {
       let self = this
 
-      AMZ.Lambda.callPublic('getActions').then(actions => {
-        console.log('getActions', actions)
-        self.actions = actions // @TODO: Store results in Vuex
-      }, error => {
-        console.error('ERROR: getActions', error)
-        self.actions = mockActions
-      })
+      if (this.$store.getters.isLoggedIn) {
+        AMZ.Lambda.callPrivate('getActions').then(actions => {
+          console.log('Private getActions', actions)
+          self.actions = actions // @TODO: Store results in Vuex
+        }, error => {
+          console.error('Private getActions', error)
+          this.actionsError = '403 Error: Permission Denied'
+        })
+      } else {
+        AMZ.Lambda.callPublic('getActions').then(actions => {
+          self.actions = actions // @TODO: Store results in Vuex
+        }, error => {
+          console.error('Public getActions', error)
+          this.actionsError = '403 Error: Permission Denied'
+        })
+      }
     }
   },
   components: {

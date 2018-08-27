@@ -8,7 +8,7 @@
           </router-link>
         </div>
 
-        <div class="mobile-only account">
+        <div class="mobile-only account" v-if="loggedIn">
           <div class="user-avatar" @click="accountClicked">
             <img class="avatar" :src="'https://www.gravatar.com/avatar/' + emailHash + '?s=44'" />
           </div>
@@ -19,7 +19,7 @@
         </div>
       </el-col>
       <el-col :span="4">
-        <div class="desktop-only account">
+        <div class="desktop-only account" v-if="loggedIn">
           <div class="user-avatar" @click="accountClicked">
             <img class="avatar" :src="'https://www.gravatar.com/avatar/' + emailHash + '?s=44'" />
           </div>
@@ -33,32 +33,32 @@
       </el-col>
       <el-col :span="10" class="menu">
         <div class="desktop-only">
-          <router-link class="action-center" :to="{ name: 'action-center' }">
+          <router-link class="action-center" :to="{ name: 'action-center' }" v-if="loggedIn">
             <span>
               Action Center
             </span>
           </router-link>
 
-          <a @click="myImpactClicked">
+          <a @click="myImpactClicked" v-if="loggedIn">
             <span>
               My Impact
             </span>
           </a>
 
-          <router-link :to="{ name: 'login' }">
-            <span v-if="!loggedIn">
+          <router-link :to="{ name: 'login' }" v-if="!loggedIn">
+            <span>
               Login
             </span>
           </router-link>
 
-          <router-link :to="{ name: 'register' }">
-            <span v-if="!loggedIn">
+          <router-link :to="{ name: 'register' }" v-if="!loggedIn">
+            <span>
               Register
             </span>
           </router-link>
 
-          <router-link :to="{ name: 'logout' }">
-            <span v-if="loggedIn">
+          <router-link :to="{ name: 'logout' }" v-if="loggedIn">
+            <span>
               Logout
             </span>
           </router-link>
@@ -69,20 +69,20 @@
             <i class="el-icon-more"></i>
           </span>
           <el-dropdown-menu slot="dropdown" class="menu-actions">
-            <router-link :to="{ name: 'login' }">
-              <el-dropdown-item command="login" v-if="!loggedIn">
+            <router-link :to="{ name: 'login' }" v-if="!loggedIn">
+              <el-dropdown-item command="login">
                 Login
               </el-dropdown-item>
             </router-link>
 
-            <router-link :to="{ name: 'register' }">
-              <el-dropdown-item command="register" v-if="!loggedIn">
+            <router-link :to="{ name: 'register' }" v-if="!loggedIn">
+              <el-dropdown-item command="register">
                 Register
               </el-dropdown-item>
             </router-link>
 
-            <router-link :to="{ name: 'logout' }">
-              <el-dropdown-item command="logout" divided v-if="loggedIn">
+            <router-link :to="{ name: 'logout' }" v-if="loggedIn">
+              <el-dropdown-item command="logout" divided>
                 Logout
               </el-dropdown-item>
             </router-link>
@@ -95,6 +95,8 @@
 
 <script>
 import { Button, Col, Dropdown, DropdownMenu, DropdownItem, Icon, Logo, Header, Row } from 'ui-toolkit'
+
+import { EventBus } from '../../../../event-bus'
 
 export default {
   name: 'Header',
@@ -113,7 +115,7 @@ export default {
   },
   data () {
     return {
-      loggedIn: false
+      loggedIn: this.$store.getters.isLoggedIn
     }
   },
   computed: {
@@ -128,6 +130,17 @@ export default {
         return `${count.toLocaleString()} Actions <br /> Taken`
       }
     }
+  },
+  created () {
+    let self = this
+
+    EventBus.$on('USER_LOGIN', () => {
+      self.loggedIn = true
+    })
+
+    EventBus.$on('USER_LOGOUT', () => {
+      self.loggedIn = false
+    })
   },
   methods: {
     accountClicked () {
@@ -250,6 +263,7 @@ export default {
 @media (min-width: 1024px) {
   .desktop-only {
     display: block;
+    padding-right: 14px;
   }
   .mobile-only {
     display: none;
