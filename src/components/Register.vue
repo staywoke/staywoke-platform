@@ -1,9 +1,7 @@
 <template>
   <transition name="fade" enter-active-class="fadeInLeft" leave-active-class="fadeOutLeft">
     <sw-register-form class="register"
-      request-email
-      :request-phone="false"
-      :invite-only="false"
+      invite-only
       :error-message="errorMessage"
       @login="login"
       @registerValid="registerValid"
@@ -43,7 +41,7 @@ export default {
         inviteCode: form.inviteCode,
         lastName: form.lastname,
         password: form.password,
-        phone: form.phone,
+        mobile: form.phone,
         username: form.username
       }
 

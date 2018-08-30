@@ -13,6 +13,23 @@ const lambdaConfig = {
 export const AMZ = {
   Lambda: {
     /**
+     * Single method to fetch lambda function
+     *
+     * @param {Function} fn Name of Lambda Function
+     * @param {Mixed} data Either an Object or JSON Stringified String of Lambda Payload
+     * @param {Function} callback Callback Function
+     *
+     * @return {Promise}
+     */
+    fetch: (fn, data, callback) => {
+      const user = store.getters.getUserAccount
+
+      return (user)
+        ? AMZ.Lambda.callPrivate(fn, data, callback)
+        : AMZ.Lambda.callPublic(fn, data, callback)
+    },
+
+    /**
      * Call named lambda function that does not require user specific data
      *
      * @param {Function} fn Name of Lambda Function

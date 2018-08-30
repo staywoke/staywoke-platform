@@ -30,83 +30,60 @@ export default {
     }
   },
   created () {
+    this.getArticles()
+    this.getFeaturedContent()
+    this.getActions()
+
     EventBus.$on('SESSION_EXPIRED', () => {
       this.$router.push({ name: 'logout' })
     })
   },
-  mounted () {
-    this.getArticles()
-    this.getFeaturedContent()
-    this.getActions()
-  },
   methods: {
     getArticles () {
-      let self = this
+      const cached = this.$store.getters.getNewsArticles
 
-      if (this.$store.getters.isLoggedIn) {
-        AMZ.Lambda.callPrivate('getArticles').then(news => {
-          console.log('getArticles', news)
-          self.news = news // @TODO: Store results in Vuex
+      if (cached) {
+        this.news = cached
+      } else {
+        AMZ.Lambda.fetch('getArticles').then(news => {
+          this.news = news
+          this.$store.dispatch('saveNews', news)
         }, error => {
           console.error('Private getArticles', error)
-          self.newsError = '403 Error: Permission Denied'
-        })
-      } else {
-        AMZ.Lambda.callPublic('getArticles').then(news => {
-          self.news = news // @TODO: Store results in Vuex
-        }, error => {
-          console.error('Public getArticles', error)
-          self.newsError = '403 Error: Permission Denied'
+          this.newsError = '403 Error: Permission Denied'
         })
       }
     },
     getFeaturedContent () {
-      let self = this
+      const cached = this.$store.getters.getFeaturedContent
 
-      if (this.$store.getters.isLoggedIn) {
-        AMZ.Lambda.callPrivate('getTweets').then(tweets => {
-          console.log('getTweets', tweets)
+      if (cached) {
+        this.tweet = cached[0].id_str
+      } else {
+        AMZ.Lambda.fetch('getTweets').then(tweets => {
           if (tweets && tweets.length > 0) {
-            // @TODO: There is currently no response from AWS
-            // @TODO: Store results in Vuex
+            this.tweet = tweets[0].id_str
+            this.$store.dispatch('saveFeatured', tweets)
           } else {
-            self.tweetError = 'No Featured Content'
+            this.tweetError = 'No Featured Content'
           }
         }, error => {
           console.error('Private getTweets', error)
-          self.tweetError = '403 Error: Permission Denied'
-        })
-      } else {
-        AMZ.Lambda.callPublic('getTweets').then(tweets => {
-          console.log('getTweets', tweets)
-          if (tweets && tweets.length > 0) {
-            // @TODO: There is currently no response from AWS
-            // @TODO: Store results in Vuex
-          } else {
-            self.tweetError = 'No Featured Content'
-          }
-        }, error => {
-          console.error('Public getTweets', error)
-          self.tweetError = '403 Error: Permission Denied'
+          this.tweetError = '403 Error: Permission Denied'
         })
       }
     },
     getActions () {
-      let self = this
+      const cached = this.$store.getters.getLatestActions
 
-      if (this.$store.getters.isLoggedIn) {
-        AMZ.Lambda.callPrivate('getActions').then(actions => {
-          console.log('Private getActions', actions)
-          self.actions = actions // @TODO: Store results in Vuex
+      if (cached) {
+        this.actions = cached
+      } else {
+        AMZ.Lambda.fetch('getActions').then(actions => {
+          this.actions = actions
+          this.$store.dispatch('saveLatestActions', actions)
         }, error => {
           console.error('Private getActions', error)
-          this.actionsError = '403 Error: Permission Denied'
-        })
-      } else {
-        AMZ.Lambda.callPublic('getActions').then(actions => {
-          self.actions = actions // @TODO: Store results in Vuex
-        }, error => {
-          console.error('Public getActions', error)
           this.actionsError = '403 Error: Permission Denied'
         })
       }

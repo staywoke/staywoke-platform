@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import slugify from 'slugify'
 import { AMZ } from '../aws'
 
 import TakeAction from '@/components/organisms/take-action'
@@ -18,27 +17,17 @@ export default {
     }
   },
   created () {
-    this.getArticle()
-  },
-  methods: {
-    getArticle () {
-      let self = this
+    const action = this.$store.getters.getLatestAction(this.$route.params.slug)
 
-      // @TODO: Get specific action from AWS rather than looping for a match
-      AMZ.Lambda.callPublic('getActions').then(actions => {
-        for (let i = 0; i < actions.length; i++) {
-          let slug = slugify(actions[i].assignment, {
-            replacement: '-',
-            lower: true
-          })
-
-          if (this.$route.params.slug === slug) {
-            self.action = actions[i] // @TODO: Store result in Vuex
-            break
-          }
-        }
+    if (action) {
+      this.action = action
+    } else {
+      AMZ.Lambda.fetch('getActions').then(actions => {
+        this.$store.dispatch('saveLatestActions', actions)
+        this.action = this.$store.getters.getLatestAction(this.$route.params.slug)
       }, error => {
-        console.error('ERROR: getActions', error)
+        console.error('Private getActions', error)
+        this.actionsError = '403 Error: Permission Denied'
       })
     }
   },

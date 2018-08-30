@@ -1,12 +1,12 @@
 <template>
   <transition name="fade" enter-active-class="fadeInRight" leave-active-class="fadeOutRight">
-    <sw-news-article class="article" :article="article" @backClicked="backClicked" @readMoreClicked="readMoreClicked" />
+    <sw-news-article class="article" :article="article" v-if="article" />
   </transition>
 </template>
 
 <script>
-import { mockNews } from '../mocks'
 import { Button } from 'ui-toolkit'
+import { AMZ } from '../aws'
 
 import NewsArticle from '@/components/organisms/news-article'
 
@@ -18,22 +18,18 @@ export default {
     }
   },
   created () {
-    this.getArticle()
-  },
-  methods: {
-    getArticle () {
-      for (let i = 0; i < mockNews.length; i++) {
-        if (mockNews[i].slug === this.$route.params.slug) {
-          this.article = mockNews[i]
-          break
-        }
-      }
-    },
-    backClicked () {
+    const article = this.$store.getters.getNewsArticle(this.$route.params.slug)
 
-    },
-    readMoreClicked () {
-
+    if (article) {
+      this.article = article
+    } else {
+      AMZ.Lambda.fetch('getArticles').then(news => {
+        this.$store.dispatch('saveNews', news)
+        this.article = this.$store.getters.getNewsArticle(this.$route.params.slug)
+      }, error => {
+        console.error(error)
+        this.$router.push({ name: 'index' })
+      })
     }
   },
   components: {
