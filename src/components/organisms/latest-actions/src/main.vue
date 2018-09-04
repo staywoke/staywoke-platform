@@ -1,11 +1,16 @@
 <template>
   <div class="latest-actions">
     <h2>{{ title }}</h2>
+
     <ul>
-      <li v-for="(action, index) in actions" :key="index" v-if="index < max">
+      <li v-for="(action, index) in actions" :key="index" v-if="!errorMessage && index < maxAction">
         <sw-action :action="action" />
       </li>
     </ul>
+
+    <div class="error-message" v-if="errorMessage">
+      {{ errorMessage }}
+    </div>
   </div>
 </template>
 
@@ -26,7 +31,19 @@ export default {
     title: {
       type: String,
       default: 'Latest Actions'
+    },
+    errorMessage: {
+      type: String,
+      default: null
     }
+  },
+  data () {
+    return {
+      maxAction: this.max
+    }
+  },
+  mounted () {
+    this.maxAction = (document.body.clientWidth < 1024) ? 3 : Math.floor((document.body.clientHeight - 100) / 75)
   },
   components: {
     Action
@@ -62,6 +79,23 @@ export default {
         margin-bottom: 0;
       }
     }
+  }
+
+  .error-message {
+    height: 200px;
+    background-color: rgb(255, 255, 255);
+    max-width: 520px;
+    overflow: hidden;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(225, 232, 237);
+    border-image: initial;
+    border-radius: 5px;
+    text-transform: uppercase;
+    line-height: 200px;
+    margin-top: 10px;
+    text-align: center;
+    color: #999;
   }
 }
 </style>

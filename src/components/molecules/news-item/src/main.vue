@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{ name: 'news', params: { slug: article.slug } }" class="news-article">
+  <router-link :to="{ name: 'news', params: { slug: getSlug() } }" class="news-article">
     <div class="image" :style="{ backgroundImage: backgroundImage }"></div>
     <div class="summary">
       <div class="title">
@@ -18,6 +18,8 @@
 </template>
 
 <script>
+import slugify from 'slugify'
+
 export default {
   name: 'NewsArticle',
   props: {
@@ -31,25 +33,28 @@ export default {
         summary: null,
         author: null,
         date: null,
-        url: '#'
+        articleUrl: '#'
       })
     }
   },
   computed: {
     getUrl () {
-      return (this.article.url) ? this.article.url : '#'
+      return (this.article.articleUrl) ? this.article.articleUrl : '#'
     },
     backgroundImage () {
-      return `url('${this.article.image}')`
+      return `url('${this.article.imageUrl}')`
     },
     articleTitle () {
       const max = 90
+      let title = (this.article.title)
+        ? this.article.title
+        : 'No Title Provided'
 
-      if (this.article.title.length <= max) {
-        return this.article.title
+      if (title.length <= max) {
+        return title
       }
 
-      var subString = this.article.title.substr(0, max - 1)
+      var subString = title.substr(0, max - 1)
 
       return subString.substr(0, subString.lastIndexOf(' ')) + ' ...'
     }
@@ -64,6 +69,11 @@ export default {
     myImpactClicked () {
       this.$emit('myImpactClicked')
       this.$emit('hideDetails')
+    },
+    getSlug () {
+      return (this.article.title)
+        ? slugify(this.article.title, { replacement: '-', lower: true })
+        : this.article.id
     }
   }
 }

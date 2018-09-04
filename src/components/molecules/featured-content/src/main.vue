@@ -1,9 +1,14 @@
 <template>
   <div class='featured-content'>
     <h2>{{ title }}</h2>
-    <tweet class="tweet" :id="id" :options="{ cards: 'hidden', conversation: 'none' }" error-message="THIS TWEET COULD NOT BE LOADED">
+
+    <tweet class="tweet" v-if="!errorMessage && id" :id="id" :options="{ cards: 'hidden', conversation: 'none' }" error-message="THIS TWEET COULD NOT BE LOADED" error-message-class="loading">
       <div class="loading">Loading ...</div>
     </tweet>
+
+    <div class="error-message" v-if="errorMessage">
+      {{ errorMessage }}
+    </div>
   </div>
 </template>
 
@@ -24,6 +29,10 @@ export default {
     title: {
       type: String,
       default: 'Featured Content'
+    },
+    errorMessage: {
+      type: String,
+      default: null
     }
   },
   components: {
@@ -32,27 +41,35 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .featured-content {
   .tweet {
     text-align: center;
     color: #999;
     font-size: 12px;
+    margin: 0 auto;
 
-    .loading {
-      height: 200px;
-      background-color: rgb(255, 255, 255);
-      max-width: 520px;
-      overflow: hidden;
-      border-width: 1px;
-      border-style: solid;
-      border-color: rgb(225, 232, 237);
-      border-image: initial;
-      border-radius: 5px;
-      text-transform: uppercase;
-      line-height: 200px;
-      margin-top: 10px;
+    .twitter-tweet {
+      max-width: 100% !important;
+      width: 100% !important;
     }
+  }
+
+  .loading, .error-message {
+    height: 200px;
+    background-color: rgb(255, 255, 255);
+    max-width: 520px;
+    overflow: hidden;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(225, 232, 237);
+    border-image: initial;
+    border-radius: 5px;
+    text-transform: uppercase;
+    line-height: 200px;
+    margin-top: 10px;
+    text-align: center;
+    color: #999;
   }
 
   h2 {

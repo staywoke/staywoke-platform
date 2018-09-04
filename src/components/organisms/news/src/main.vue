@@ -1,11 +1,16 @@
 <template>
   <div class="news">
     <h2>{{ title }}</h2>
+
     <ul class="news">
-      <li v-for="(article, index) in articles" :key="index" v-if="index < max">
+      <li v-for="(article, index) in articles" :key="index" v-if="!errorMessage && index < maxNews">
         <sw-news-item :article="article" />
       </li>
     </ul>
+
+    <div class="error-message" v-if="errorMessage">
+      {{ errorMessage }}
+    </div>
   </div>
 </template>
 
@@ -26,7 +31,19 @@ export default {
     title: {
       type: String,
       default: 'News Worth Reading'
+    },
+    errorMessage: {
+      type: String,
+      default: null
     }
+  },
+  data () {
+    return {
+      maxNews: this.max
+    }
+  },
+  mounted () {
+    this.maxNews = (document.body.clientWidth < 1024) ? 3 : Math.floor((document.body.clientHeight - 100) / 85)
   },
   components: {
     NewsItem
@@ -48,6 +65,8 @@ export default {
     list-style: none;
     margin: 0;
     padding: 0;
+    width: 100%;
+    display: block;
 
     li {
       text-align: left;
@@ -59,6 +78,23 @@ export default {
         border-bottom: none;
       }
     }
+  }
+
+  .error-message {
+    height: 200px;
+    background-color: rgb(255, 255, 255);
+    max-width: 520px;
+    overflow: hidden;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(225, 232, 237);
+    border-image: initial;
+    border-radius: 5px;
+    text-transform: uppercase;
+    line-height: 200px;
+    margin-top: 10px;
+    text-align: center;
+    color: #999;
   }
 }
 </style>

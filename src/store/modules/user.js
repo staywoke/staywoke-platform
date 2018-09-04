@@ -1,3 +1,5 @@
+import md5 from 'md5'
+
 const state = {
   account: {}
 }
@@ -21,6 +23,11 @@ const getters = {
       ? state.account
       : null
   },
+  getFirstName: state => {
+    return (state.account.firstName)
+      ? state.account.firstName
+      : null
+  },
   getUserFullName: state => {
     return (state.account.firstName && state.account.lastName)
       ? `${state.account.firstName} ${state.account.lastName}`
@@ -29,6 +36,11 @@ const getters = {
   getUserEmail: state => {
     return (state.account.email)
       ? state.account.email
+      : null
+  },
+  getUserEmailHash: state => {
+    return (state.account.email)
+      ? md5(state.account.email)
       : null
   },
   getUserRole: state => {
@@ -42,10 +54,10 @@ const getters = {
       : null
   },
   isLoggedIn: state => {
-    return (typeof state.account.token !== 'undefined')
+    return (typeof state.account !== 'undefined' && typeof state.account.token !== 'undefined')
   },
   isSuperUser: state => {
-    return (typeof state.account.role !== 'undefined' && state.account.role === 'superuser')
+    return (typeof state.account !== 'undefined' && typeof state.account.role !== 'undefined' && state.account.role === 'superuser')
   }
 }
 

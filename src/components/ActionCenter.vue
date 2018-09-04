@@ -70,4 +70,18 @@ export default {
     }
   }
 }
+@media (min-width: 1024px) {
+  .action-center {
+    background-color: #f2f2f2;
+  }
+
+  .action-center ul {
+    max-width: 800px;
+    margin: 0 auto;
+    border-left: 1px solid #DDD;
+    border-right: 1px solid #DDD;
+    border-bottom: 1px solid #DDD;
+    background: #FFF;
+  }
+}
 </style>

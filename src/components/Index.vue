@@ -1,19 +1,16 @@
 <template>
   <transition name="fade" enter-active-class="fadeInLeft" leave-active-class="fadeOutLeft">
     <div class="router-view feed">
-      <sw-news :articles="news" />
-      <sw-featured-content :id="tweet" />
-      <sw-latest-actions :actions="actions" />
+      <sw-news :articles="news" :error-message="newsError" v-if="news || newsError" />
+      <sw-featured-content :id="tweet" :error-message="tweetError" v-if="tweet || tweetError"/>
+      <sw-latest-actions :error-message="actionsError" :actions="actions" v-if="actions || actionsError" />
     </div>
   </transition>
 </template>
 
 <script>
-import { mockActions, mockNews } from '../mocks'
-
-// @TODO: connect this to Vuex rather than tempStore
 import { AMZ } from '../aws'
-import { tempStore } from '../store/modules/store'
+import { EventBus } from '../event-bus'
 
 import News from '@/components/organisms/news'
 import FeaturedContent from '@/components/molecules/featured-content'
@@ -24,50 +21,76 @@ export default {
   data () {
     return {
       news: null,
+      newsError: null,
       tweet: null,
+      tweetError: null,
       actions: null,
+      actionsError: null,
       user: null
     }
   },
   created () {
-    this.getNews()
+    this.getArticles()
     this.getFeaturedContent()
-    this.getLatestActions()
+    this.getActions()
 
-    // @TODO: This is just a test function that is called when the component is created
-    // it calls methods.testAWS
-    this.testAWS({
-      username: 'test',
-      password: 'abc123'
+    EventBus.$on('SESSION_EXPIRED', () => {
+      this.$router.push({ name: 'logout' })
     })
   },
   methods: {
-    testAWS (payload) {
-      let self = this
+    getArticles () {
+      const cached = this.$store.getters.getNewsArticles
 
-      AMZ.initLogin()
-
-      AMZ.callLambda('login', payload).then(user => {
-        AMZ.setCredentials(user.rawCredentials)
-
-        // Save to Local Storage
-        tempStore.put('user', user)
-
-        // @TODO: this needs to be placed within the main load or init function, so that it runs on refresh, app open
-        // setInterval(AMZ.refreshCredentials, 300000)
-
-        // Store User Data locally
-        self.user = user
-      })
-    },
-    getNews () {
-      this.news = mockNews
+      if (cached) {
+        this.news = cached
+      } else {
+        AMZ.Lambda.fetch('getArticles').then(news => {
+          this.news = news
+          this.$store.dispatch('saveNews', news)
+        }, error => {
+          console.error('getArticles', error)
+          this.newsError = '403 Error: Permission Denied'
+          this.$store.dispatch('flushNews')
+        })
+      }
     },
     getFeaturedContent () {
-      this.tweet = '988889085958938633'
+      const cached = this.$store.getters.getFeaturedContent
+
+      if (cached) {
+        this.tweet = cached.id_str
+      } else {
+        AMZ.Lambda.fetch('getTweet').then(tweet => {
+          if (tweet) {
+            this.tweet = tweet.id_str
+            this.$store.dispatch('saveFeatured', tweet)
+          } else {
+            this.tweetError = 'No Featured Content'
+            this.$store.dispatch('flushFeatured')
+          }
+        }, error => {
+          console.error('getTweets', error)
+          this.tweetError = '403 Error: Permission Denied'
+          this.$store.dispatch('flushFeatured')
+        })
+      }
     },
-    getLatestActions () {
-      this.actions = mockActions
+    getActions () {
+      const cached = this.$store.getters.getLatestActions
+
+      if (cached) {
+        this.actions = cached
+      } else {
+        AMZ.Lambda.fetch('getActions').then(actions => {
+          this.actions = actions
+          this.$store.dispatch('saveLatestActions', actions)
+        }, error => {
+          console.error('getActions', error)
+          this.actionsError = '403 Error: Permission Denied'
+          this.$store.dispatch('flushLatestActions')
+        })
+      }
     }
   },
   components: {
@@ -78,16 +101,37 @@ export default {
 }
 </script>
 
-<style scoped>
-.welcome {
-  text-align: center;
-  margin-top: 40px;
-}
-h1 {
-  font-weight: normal;
-}
-h2 {
-  color: #4cad1c;
-  font-weight: 300;
+<style lang="scss">
+@media (min-width: 1024px) {
+  body {
+    background-color: #f2f2f2;
+  }
+
+  .feed {
+    display: flex;
+    height: calc(100% - 60px);
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: auto;
+    align-content: top;
+
+    .news, .featured-content, .latest-actions {
+      flex: 1;
+      margin: 0 !important;
+      width: calc(100% / 3);
+      padding-top: 0 !important;
+
+      h2 {
+        margin: 10px 0 !important;
+        font-weight: 500 !important;
+        font-size: 14px !important;
+      }
+
+      ul {
+        padding: 0;
+      }
+    }
+  }
 }
 </style>

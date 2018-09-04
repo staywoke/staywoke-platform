@@ -1,7 +1,7 @@
 <template>
   <div class="news-article">
     <div class="head">
-      From {{ article.source }}:
+      <span>{{ getSource }}</span>
 
       <router-link :to="{ name: 'index', params: { back: true } }">
         <el-button class="back-button" size="mini" @click="backClicked">&lsaquo; Back</el-button>
@@ -17,10 +17,10 @@
       </div>
 
       <div class="author">
-        By {{ article.author }}
+        By {{ getSource }}
 
         <span class="date">
-          {{ article.date | moment('MMM D') }}
+          {{ article.addedDate | moment('MMM D') }}
         </span>
       </div>
 
@@ -46,10 +46,19 @@ export default {
   },
   computed: {
     backgroundImage () {
-      return `url('${this.article.image}')`
+      return `url('${this.article.imageUrl}')`
     },
     getUrl () {
       return (this.article.url) ? this.article.url : '#'
+    },
+    getSource () {
+      if (this.article.source) {
+        return this.article.source
+      } else if (this.article.resourceUrl) {
+        return (new URL(this.article.articleUrl)).hostname.replace('www.', '')
+      } else {
+        return 'Unknown'
+      }
     }
   },
   methods: {
@@ -76,10 +85,10 @@ export default {
     color: #666;
     margin-bottom: 14px;
     line-height: 20px;
-    margin-top: 0;
+    height: 16px;
 
     .back-button {
-      float: right;
+      float: left;
       background-color: #000;
       color: #FFF;
       border: none;
@@ -89,6 +98,11 @@ export default {
       border-radius: none;
       font-size: 12px;
       line-height: 13px;
+    }
+
+    span {
+      float: right;
+      line-height: 24px;
     }
   }
 
@@ -147,6 +161,16 @@ export default {
     padding: 6px 0;
     border-radius: 4px;
     margin-bottom: 10px;
+  }
+}
+@media (min-width: 1024px) {
+  .news-article {
+    max-width: 800px;
+    margin: 0 auto;
+
+    .image {
+      height: 300px;
+    }
   }
 }
 </style>

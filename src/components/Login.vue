@@ -1,12 +1,10 @@
 <template>
   <transition name="fade" enter-active-class="fadeInLeft" leave-active-class="fadeOutLeft">
     <sw-login-form class="login"
+      :error-message="errorMessage"
       @signUp="signUp"
-      @hideLoginError="hideLoginError"
-      @showLoginError="showLoginError"
       @forgotPassword="forgotPassword"
-      @loginSuccess="loginSuccess"
-      @loginError="loginError"
+      @loginValid="loginValid"
     />
   </transition>
 </template>
@@ -14,25 +12,41 @@
 <script>
 import { LoginForm } from 'ui-toolkit'
 
+import { AMZ } from '../aws'
+import { EventBus } from '../event-bus'
+
 export default {
   name: 'Login',
   data () {
-    return {}
+    return {
+      errorMessage: null
+    }
   },
-  created () {
-    // @TODO: Check Login Status
+  mounted () {
+    if (this.$store.getters.isLoggedIn) {
+      this.$router.push({ name: 'index' })
+    }
   },
   methods: {
     signUp () {
       this.$router.push({ name: 'register' })
     },
-    hideLoginError () {},
-    showLoginError () {},
     forgotPassword () {
       this.$router.push({ name: 'forgot-password' })
     },
-    loginSuccess () {},
-    loginError () {}
+    loginValid (form) {
+      let self = this
+      this.errorMessage = null
+
+      AMZ.Lambda.callPublic('login', { userId: form.username, password: form.password }).then(auth => {
+        EventBus.$emit('USER_LOGIN', auth)
+
+        this.$store.dispatch('userLogin', auth)
+        this.$router.push({ name: 'index' })
+      }, error => {
+        self.errorMessage = error.message
+      })
+    }
   },
   components: {
     LoginForm

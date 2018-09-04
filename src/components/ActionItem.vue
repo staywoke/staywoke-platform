@@ -1,11 +1,11 @@
 <template>
   <transition name="fade" enter-active-class="fadeInRight" leave-active-class="fadeOutRight">
-    <sw-take-action class="action" :action="action" @backClicked="backClicked" @actionClicked="actionClicked" />
+    <sw-take-action class="action" v-if="action" :action="action" />
   </transition>
 </template>
 
 <script>
-import { mockActions } from '../mocks'
+import { AMZ } from '../aws'
 
 import TakeAction from '@/components/organisms/take-action'
 
@@ -17,22 +17,18 @@ export default {
     }
   },
   created () {
-    this.getArticle()
-  },
-  methods: {
-    getArticle () {
-      for (let i = 0; i < mockActions.length; i++) {
-        if (mockActions[i].slug === this.$route.params.slug) {
-          this.action = mockActions[i]
-          break
-        }
-      }
-    },
-    backClicked () {
+    const action = this.$store.getters.getLatestAction(this.$route.params.slug)
 
-    },
-    actionClicked () {
-
+    if (action) {
+      this.action = action
+    } else {
+      AMZ.Lambda.fetch('getActions').then(actions => {
+        this.$store.dispatch('saveLatestActions', actions)
+        this.action = this.$store.getters.getLatestAction(this.$route.params.slug)
+      }, error => {
+        console.error('Private getActions', error)
+        this.actionsError = '403 Error: Permission Denied'
+      })
     }
   },
   components: {

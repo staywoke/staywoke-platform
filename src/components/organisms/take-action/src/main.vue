@@ -1,7 +1,7 @@
 <template>
   <div class="take-action">
     <div class="head">
-      {{ getHeader }}:
+      <span>{{ getHeader }}</span>
 
       <router-link :to="{ name: 'index', params: { back: true } }">
         <el-button class="back-button" size="mini" @click="backClicked">&lsaquo; Back</el-button>
@@ -17,24 +17,24 @@
 
     <div class="content">
 
-      <div class="title">
-        {{ action.title }}
+      <div class="title" v-if="action.name">
+        {{ action.name }}
       </div>
 
       <div class="author">
-        By {{ action.organization }}
+        By {{ getOrganization }}
       </div>
 
-      <div class="summary">
+      <div class="summary" v-if="action.summary">
         {{ action.summary }}
       </div>
 
-      <div class="call-to-action">
-        {{ action.callToAction }}
+      <div class="call-to-action" v-if="action.assignment">
+        {{ action.assignment }}
       </div>
     </div>
 
-    <a class="read-more" target="_blank" rel="noopener noreferrer" :href="getUrl" @click="actionClicked">
+    <a class="read-more" target="_blank" rel="noopener noreferrer" :href="getUrl" @click="actionClicked" v-if="this.action.resourceUrl">
       {{ getButton }}
     </a>
   </div>
@@ -54,7 +54,9 @@ export default {
   },
   computed: {
     backgroundImage () {
-      return `url('${this.action.image}')`
+      // TODO: Make sure our images are secured over HTTPS to prevent SSL invalidation
+      const secureImage = this.action.imageUrl.replace('http://', 'https://')
+      return `url('${secureImage}')`
     },
     getIcon () {
       return actionIcon('fas', this.action.type)
@@ -63,13 +65,22 @@ export default {
       return (this.action.national) ? 'Take Action' : 'Take Local Action'
     },
     getUrl () {
-      return (this.action.url) ? this.action.url : '#'
+      return (this.action.resourceUrl) ? this.action.resourceUrl : '#'
     },
     getAction () {
       return actionLabel(this.action.type)
     },
     getButton () {
       return actionButton(this.action.type)
+    },
+    getOrganization () {
+      if (this.action.organization) {
+        return this.action.organization
+      } else if (this.action.resourceUrl) {
+        return (new URL(this.action.resourceUrl)).hostname.replace('www.', '')
+      } else {
+        return 'Unknown'
+      }
     }
   },
   methods: {
@@ -95,9 +106,10 @@ export default {
     color: #666;
     margin-bottom: 14px;
     line-height: 20px;
+    height: 16px;
 
     .back-button {
-      float: right;
+      float: left;
       background-color: #000;
       color: #FFF;
       border: none;
@@ -108,11 +120,17 @@ export default {
       font-size: 12px;
       line-height: 13px;
     }
+
+    span {
+      float: right;
+      line-height: 24px;
+    }
   }
 
   .image {
     width: 100%;
     height: 130px;
+    background-color: #999;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
@@ -188,6 +206,16 @@ export default {
     text-align: center;
     padding: 6px 0;
     border-radius: 4px;
+  }
+}
+@media (min-width: 1024px) {
+  .take-action {
+    max-width: 800px;
+    margin: 0 auto;
+
+    .image {
+      height: 300px;
+    }
   }
 }
 </style>

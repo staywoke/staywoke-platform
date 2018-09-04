@@ -1,6 +1,8 @@
 import AWS from 'aws-sdk'
 
-import { tempStore } from './store/modules/store'
+import store from './store'
+
+import { EventBus } from './event-bus'
 
 // @TODO import store module
 const lambdaConfig = {
@@ -9,105 +11,192 @@ const lambdaConfig = {
 }
 
 export const AMZ = {
-  callLambda (functionName, data, callback) {
-    if (typeof data !== 'string') {
-      data = JSON.stringify(data)
-    }
+  Lambda: {
+    /**
+     * Single method to fetch lambda function
+     *
+     * @param {Function} fn Name of Lambda Function
+     * @param {Mixed} data Either an Object or JSON Stringified String of Lambda Payload
+     * @param {Function} callback Callback Function
+     *
+     * @return {Promise}
+     */
+    fetch: (fn, data, callback) => {
+      const user = store.getters.getUserAccount
 
-    const lambda = new AWS.Lambda(lambdaConfig)
-    const promise = new Promise((resolve, reject) => {
-      lambda.invoke({
-        FunctionName: functionName,
-        Payload: data
-      }, (err, response) => {
-        if (err || !response || !response.Payload) {
-          console.log(err || 'unknown error executing lambda function')
-          return reject(new Error(err || 'unknown error executing lambda function'))
-        }
+      return (user)
+        ? AMZ.Lambda.callPrivate(fn, data, callback)
+        : AMZ.Lambda.callPublic(fn, data, callback)
+    },
 
-        response = JSON.parse(response.Payload)
-
-        if (response && response.errorMessage) {
-          return reject(new Error(response.errorMessage))
-        }
-
-        return resolve(response)
-      })
-    })
-
-    if (callback && typeof callback === 'function') {
-      return promise.then(callback.bind(null, null), callback)
-    }
-
-    return promise
-  },
-
-  setCredentials (rawCredentials) {
-    var sts = new AWS.STS()
-    AWS.config.credentials = sts.credentialsFrom(rawCredentials)
-  },
-
-  initLogin () {
-    AWS.config.region = process.env.STAYWOKE_AWS_REGION
-    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-      IdentityPoolId: process.env.STAYWOKE_AWS_UNAUTH_IDENTITY_POOL_ID
-    })
-    AWS.config.credentials.params.IdentityId = null
-    AWS.config.credentials.params.Logins = null
-  },
-
-  refreshCredentials () {
-    var expireTime
-
-    if (AWS.config && AWS.config.credentials && AWS.config.credentials.expireTime) {
-      expireTime = AWS.config.credentials.expireTime
-    } else {
-      var user = tempStore.get('user')
-
-      if (!user) {
-        return // @TODO: send user to login page
+    /**
+     * Call named lambda function that does not require user specific data
+     *
+     * @param {Function} fn Name of Lambda Function
+     * @param {Mixed} data Either an Object or JSON Stringified String of Lambda Payload
+     * @param {Function} callback Callback Function
+     *
+     * @return {Promise}
+     */
+    callPublic: (fn, data, callback) => {
+      if (typeof data !== 'string') {
+        data = JSON.stringify(data)
       }
 
-      expireTime = user.rawCredentials.Credentials.Expiration
-    }
+      AWS.config.region = process.env.STAYWOKE_AWS_REGION
+      AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: process.env.STAYWOKE_AWS_UNAUTH_IDENTITY_POOL_ID
+      })
+      AWS.config.credentials.params.IdentityId = null
+      AWS.config.credentials.params.Logins = null
 
-    var expiresIn = (new Date(expireTime) - new Date()) / 60000 // in minutes
-    if (expiresIn < 30) {
-      AMZ.getCredentials(user)
+      const lambda = new AWS.Lambda(lambdaConfig)
+
+      const promise = new Promise((resolve, reject) => {
+        lambda.invoke({
+          FunctionName: fn,
+          Payload: data
+        }, (err, response) => {
+          if (err || !response || !response.Payload) {
+            return reject(new Error(err || 'unknown error executing lambda function'))
+          }
+
+          const payload = JSON.parse(response.Payload)
+
+          return (payload && !payload.errorMessage)
+            ? resolve(payload)
+            : reject(new Error(payload.errorMessage))
+        })
+      })
+
+      if (callback && typeof callback === 'function') {
+        return promise.then(callback.bind(null, null), callback)
+      }
+
+      return promise
+    },
+
+    /**
+     * Call named lambda function that may have user specific data
+     *
+     * @param {Function} fn Name of Lambda Function
+     * @param {Mixed} data Either an Object or JSON Stringified String of Lambda Payload
+     * @param {Function} callback Callback Function
+     *
+     * @return {Promise}
+     */
+    callPrivate: (fn, data, callback) => {
+      if (typeof data !== 'string') {
+        data = JSON.stringify(data)
+      }
+
+      const user = store.getters.getUserAccount
+
+      if (!user) {
+        return
+      }
+
+      const refreshFunction = AMZ.Credentials.needsRefresh()
+        ? AMZ.Credentials.refresh.bind(AMZ)
+        : AMZ.Credentials.set.bind(AMZ)
+
+      const promise = new Promise((resolve, reject) => {
+        refreshFunction(user, (err) => {
+          if (err) {
+            return reject(new Error(err || 'unknown error executing lambda function'))
+          }
+
+          const lambda = new AWS.Lambda(lambdaConfig)
+
+          lambda.invoke({
+            FunctionName: fn,
+            Payload: data
+          }, (err, response) => {
+            if (err || !response || !response.Payload) {
+              return callback(err || 'unknown error executing lambda function')
+            }
+
+            const payload = JSON.parse(response.Payload)
+
+            return (payload && !payload.errorMessage)
+              ? resolve(payload)
+              : reject(new Error(payload.errorMessage))
+          })
+        })
+      })
+
+      if (callback && typeof callback === 'function') {
+        return promise.then(callback.bind(null, null), callback)
+      }
+
+      return promise
     }
   },
+  Credentials: {
+    needsRefresh () {
+      let expireTime, user, lastLogin
 
-  getCredentials (user) {
-    user = user || tempStore.get('user')
-    if (!user) {
-      return // @TODO: send user to login page
-    }
+      if (AWS.config && AWS.config.credentials && AWS.config.credentials.expireTime) {
+        expireTime = AWS.config.credentials.expireTime
+      } else {
+        user = store.getters.getUserAccount
 
-    var payload = {
-      userId: user.id
-    }
+        if (!user) {
+          return
+        }
 
-    return AMZ.callLambda('refreshCredentials', payload).then(user => {
-      var sts = new AWS.STS()
+        expireTime = user.rawCredentials.Credentials.Expiration
+        lastLogin = user.lastLoginDate
+      }
+
+      const minutesInThreeWeeks = 30240
+      const timeSinceLastLogin = (new Date() - new Date(lastLogin)) / 60000
+
+      if (timeSinceLastLogin > minutesInThreeWeeks) {
+        EventBus.$emit('SESSION_EXPIRED')
+      }
+
+      const expiresIn = (new Date(expireTime) - new Date()) / 60000
+      return expiresIn < 0
+    },
+    refresh (user, callback) {
+      user = user || store.getters.getUserAccount
+
+      if (!user) {
+        return
+      }
+
+      AWS.config.region = process.env.STAYWOKE_AWS_REGION
+      AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: process.env.STAYWOKE_AWS_UNAUTH_IDENTITY_POOL_ID
+      })
+
+      const sts = new AWS.STS()
       AWS.config.credentials = sts.credentialsFrom(user.rawCredentials)
-      tempStore.put('user', user)
-    })
-  },
+      const payload = { userId: user.id }
 
-  // @TODO: invoke fn on index plage - reinstantiate aws & cognito config on refresh using user creds from localStorage
-  initIndex () {
-    var user = tempStore.get('user')
-    if (!user) {
-      return // @TODO: send user to login page
+      AMZ.Lambda.callPublic('refreshCredentials', payload, (err, user) => {
+        if (err) {
+          return callback(err)
+        }
+
+        const stsRefresh = new AWS.STS()
+        AWS.config.credentials = stsRefresh.credentialsFrom(user.rawCredentials)
+        store.dispatch('userLogin', user)
+
+        return callback(null)
+      })
+    },
+    set (user, callback) {
+      AWS.config.region = process.env.STAYWOKE_AWS_REGION
+      AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: process.env.STAYWOKE_AWS_UNAUTH_IDENTITY_POOL_ID
+      })
+
+      const sts = new AWS.STS()
+      AWS.config.credentials = sts.credentialsFrom(user.rawCredentials)
+
+      return callback(null)
     }
-
-    AWS.config.region = process.env.STAYWOKE_AWS_REGION
-    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-      IdentityPoolId: process.env.STAYWOKE_AWS_UNAUTH_IDENTITY_POOL_ID
-    })
-
-    var sts = new AWS.STS()
-
-    AWS.config.credentials = sts.credentialsFrom(user.rawCredentials)
   }
 }
