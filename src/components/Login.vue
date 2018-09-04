@@ -38,7 +38,7 @@ export default {
       let self = this
       this.errorMessage = null
 
-      AMZ.Lambda.callPublic('login', { username: form.username, password: form.password }).then(auth => {
+      AMZ.Lambda.callPublic('login', { userId: form.username, password: form.password }).then(auth => {
         EventBus.$emit('USER_LOGIN', auth)
 
         this.$store.dispatch('userLogin', auth)

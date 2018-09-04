@@ -49,8 +49,9 @@ export default {
           this.news = news
           this.$store.dispatch('saveNews', news)
         }, error => {
-          console.error('Private getArticles', error)
+          console.error('getArticles', error)
           this.newsError = '403 Error: Permission Denied'
+          this.$store.dispatch('flushNews')
         })
       }
     },
@@ -58,18 +59,20 @@ export default {
       const cached = this.$store.getters.getFeaturedContent
 
       if (cached) {
-        this.tweet = cached[0].id_str
+        this.tweet = cached.id_str
       } else {
-        AMZ.Lambda.fetch('getTweets').then(tweets => {
-          if (tweets && tweets.length > 0) {
-            this.tweet = tweets[0].id_str
-            this.$store.dispatch('saveFeatured', tweets)
+        AMZ.Lambda.fetch('getTweet').then(tweet => {
+          if (tweet) {
+            this.tweet = tweet.id_str
+            this.$store.dispatch('saveFeatured', tweet)
           } else {
             this.tweetError = 'No Featured Content'
+            this.$store.dispatch('flushFeatured')
           }
         }, error => {
-          console.error('Private getTweets', error)
+          console.error('getTweets', error)
           this.tweetError = '403 Error: Permission Denied'
+          this.$store.dispatch('flushFeatured')
         })
       }
     },
@@ -83,8 +86,9 @@ export default {
           this.actions = actions
           this.$store.dispatch('saveLatestActions', actions)
         }, error => {
-          console.error('Private getActions', error)
+          console.error('getActions', error)
           this.actionsError = '403 Error: Permission Denied'
+          this.$store.dispatch('flushLatestActions')
         })
       }
     }

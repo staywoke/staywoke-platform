@@ -13,6 +13,10 @@ export default {
       EventBus.$emit('USER_LOGOUT')
 
       this.$store.dispatch('userLogout')
+      this.$store.dispatch('flushNews')
+      this.$store.dispatch('flushFeatured')
+      this.$store.dispatch('flushLatestActions')
+
       this.$router.push({ name: 'index' })
     }, error => {
       console.log('Logout Error:', error.message)
@@ -20,6 +24,10 @@ export default {
       EventBus.$emit('USER_LOGOUT')
 
       this.$store.dispatch('userLogout')
+      this.$store.dispatch('flushNews')
+      this.$store.dispatch('flushFeatured')
+      this.$store.dispatch('flushLatestActions')
+
       this.$router.push({ name: 'index' })
     })
   }

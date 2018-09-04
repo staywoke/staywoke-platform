@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import { AMZ } from './aws'
 import { mockImpactList, mockImpactDetails } from './mocks'
 
 import PageTemplate from '@/components/templates/page'
@@ -28,6 +29,12 @@ export default {
   methods: {
     getImpactList () {
       this.impactList = mockImpactList
+
+      AMZ.Lambda.callPrivate('getUserImpact').then(impact => {
+        console.log('impact', impact)
+      }, error => {
+        console.error('getUserImpact Error', error)
+      })
     },
     getImpactDetails () {
       this.impactDetails = mockImpactDetails

@@ -1,16 +1,30 @@
 <template>
-  <transition name="fade" enter-active-class="fadeInLeft" leave-active-class="fadeOutLeft">
-    <sw-register-form class="register"
-      invite-only
-      :error-message="errorMessage"
-      @login="login"
-      @registerValid="registerValid"
-    />
-  </transition>
+  <div>
+    <transition name="fade" enter-active-class="fadeInLeft" leave-active-class="fadeOutLeft">
+      <el-alert
+        class="success"
+        type="success"
+        title="Account Created"
+        description="Redirecting to login page ..."
+        :closable="false"
+        show-icon
+        v-if="registerSuccess"
+      />
+    </transition>
+    <transition name="fade" enter-active-class="fadeInLeft" leave-active-class="fadeOutLeft">
+      <sw-register-form class="register"
+        invite-only
+        :error-message="errorMessage"
+        @login="login"
+        @registerValid="registerValid"
+        v-if="!registerSuccess"
+      />
+    </transition>
+  </div>
 </template>
 
 <script>
-import { RegisterForm } from 'ui-toolkit'
+import { Alert, RegisterForm } from 'ui-toolkit'
 
 import { AMZ } from '../aws'
 import { EventBus } from '../event-bus'
@@ -19,7 +33,8 @@ export default {
   name: 'Register',
   data () {
     return {
-      errorMessage: null
+      errorMessage: null,
+      registerSuccess: false
     }
   },
   mounted () {
@@ -46,8 +61,12 @@ export default {
       }
 
       AMZ.Lambda.callPublic('register', payload).then(resp => {
-        console.log('REGISTER:', resp)
-        EventBus.$emit('USER_REGISTER', resp)
+        if (resp && resp.success) {
+          setTimeout(() => {
+            self.$router.push({ name: 'login' })
+            EventBus.$emit('USER_REGISTER', resp)
+          }, 3000)
+        }
       }, error => {
         console.error('REGISTER:', error)
         self.errorMessage = error.message
@@ -55,12 +74,18 @@ export default {
     }
   },
   components: {
+    Alert,
     RegisterForm
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.success {
+  margin: 0 auto;
+  max-width: 300px;
+  margin-top: 15px;
+}
 .register {
   margin: 0 auto;
   padding: 10px;

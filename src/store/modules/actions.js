@@ -10,7 +10,7 @@ const mutations = {
     state.expires = new Date().getTime() + 3600000
     state.actions = data
   },
-  FLUSH_LATEST_ACTIONS (state, data) {
+  FLUSH_LATEST_ACTIONS (state) {
     state.expires = null
     state.actions = []
   }
@@ -51,8 +51,8 @@ const actions = {
   saveLatestActions ({ commit }, data) {
     commit('SAVE_LATEST_ACTIONS', data)
   },
-  flushLatestActions ({ commit }, data) {
-    commit('FLUSH_LATEST_ACTIONS', data)
+  flushLatestActions ({ commit }) {
+    commit('FLUSH_LATEST_ACTIONS')
   }
 }
 

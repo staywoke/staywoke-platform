@@ -8,7 +8,7 @@ const mutations = {
     state.expires = new Date().getTime() + 3600000
     state.featured = data
   },
-  FLUSH_FEATURED (state, data) {
+  FLUSH_FEATURED (state) {
     state.expires = null
     state.featured = []
   }
@@ -35,8 +35,8 @@ const actions = {
   saveFeatured ({ commit }, data) {
     commit('SAVE_FEATURED', data)
   },
-  flushFeatured ({ commit }, data) {
-    commit('FLUSH_FEATURED', data)
+  flushFeatured ({ commit }) {
+    commit('FLUSH_FEATURED')
   }
 }
 
