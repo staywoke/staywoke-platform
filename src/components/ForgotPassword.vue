@@ -14,9 +14,14 @@
 
 <script>
 import { ForgotPasswordForm } from 'ui-toolkit'
+import { metaInfo } from '../util'
 
 export default {
   name: 'ForgotPassword',
+  metaInfo: metaInfo({
+    title: 'Forgot Password',
+    description: 'Forgot Password to StayWoke'
+  }),
   data () {
     return {}
   },

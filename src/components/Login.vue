@@ -14,9 +14,14 @@ import { LoginForm } from 'ui-toolkit'
 
 import { AMZ } from '../aws'
 import { EventBus } from '../event-bus'
+import { metaInfo } from '../util'
 
 export default {
   name: 'Login',
+  metaInfo: metaInfo({
+    title: 'Login',
+    description: 'Login to StayWoke'
+  }),
   data () {
     return {
       errorMessage: null

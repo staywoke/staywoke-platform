@@ -1,6 +1,6 @@
 <template>
   <div class='action'>
-    <router-link :to="{ name: 'action', params: { type: action.type, slug: getSlug() } }">
+    <router-link :to="{ name: 'action', params: { type: action.type, slug: action.slug } }">
       <el-button type="text" @click="handleClick" class="item-link">
         <div class='location'>
           <span class='stateface' :class='locationIcon'></span>
@@ -22,7 +22,6 @@
 </template>
 
 <script>
-import slugify from 'slugify'
 import { FontAwesomeIcon } from 'ui-toolkit'
 import { actionIcon, stateList } from '../../../../util'
 
@@ -73,12 +72,6 @@ export default {
   methods: {
     handleClick () {
       this.$emit('latestActionClicked', this.action)
-    },
-    getSlug () {
-      return slugify(this.action.assignment, {
-        replacement: '-',
-        lower: true
-      })
     }
   },
   components: {

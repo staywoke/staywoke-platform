@@ -1,11 +1,26 @@
-import slugify from 'slugify'
-
 const state = {
   expires: null,
   news: []
 }
 
 const mutations = {
+  SAVE_ARTICLE (state, data) {
+    let found = false
+    for (let i = 0; i < state.news.length; i++) {
+      if (state.news[i].slug === data.slug) {
+        found = true
+        break
+      }
+    }
+
+    if (!found) {
+      state.news.push(data)
+
+      if (!state.expires) {
+        state.expires = new Date().getTime() + 3600000
+      }
+    }
+  },
   SAVE_NEWS (state, data) {
     state.expires = new Date().getTime() + 3600000
     state.news = data
@@ -23,12 +38,7 @@ const mutations = {
 const getters = {
   getNewsArticle: (state) => (key) => {
     for (let i = 0; i < state.news.length; i++) {
-      let slug = slugify(state.news[i].title, {
-        replacement: '-',
-        lower: true
-      })
-
-      if (slug === key) {
+      if (state.news[i].slug === key) {
         return state.news[i]
       }
     }
@@ -48,6 +58,9 @@ const getters = {
  * @example this.$store.dispatch('saveNews', data)
  */
 const actions = {
+  saveArticle ({ commit }, data) {
+    commit('SAVE_ARTICLE', data)
+  },
   saveNews ({ commit }, data) {
     commit('SAVE_NEWS', data)
   },

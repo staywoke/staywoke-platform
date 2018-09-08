@@ -6,6 +6,8 @@ import store from './store'
 import axios from 'axios'
 import VueMoment from 'vue-moment'
 import moment from 'moment-timezone'
+import vuescroll from 'vue-scroll'
+import Meta from 'vue-meta'
 
 import fontawesome from '@fortawesome/fontawesome'
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
@@ -27,6 +29,14 @@ Vue.http = Vue.prototype.$http = axios
 Vue.use(VueMoment, {
   moment
 })
+
+// Support Scroll Watch
+Vue.use(vuescroll, {
+  debounce: 600
+})
+
+// Support META Data
+Vue.use(Meta)
 
 /* eslint-disable no-new */
 new Vue({

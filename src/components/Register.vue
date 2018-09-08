@@ -28,9 +28,14 @@ import { Alert, RegisterForm } from 'ui-toolkit'
 
 import { AMZ } from '../aws'
 import { EventBus } from '../event-bus'
+import { metaInfo } from '../util'
 
 export default {
   name: 'Register',
+  metaInfo: metaInfo({
+    title: 'Register',
+    description: 'Register with StayWoke'
+  }),
   data () {
     return {
       errorMessage: null,

@@ -1,11 +1,26 @@
-import slugify from 'slugify'
-
 const state = {
   expires: null,
   actions: []
 }
 
 const mutations = {
+  SAVE_LATEST_ACTION (state, data) {
+    let found = false
+    for (let i = 0; i < state.actions.length; i++) {
+      if (state.actions[i].slug === data.slug) {
+        found = true
+        break
+      }
+    }
+
+    if (!found) {
+      state.actions.push(data)
+
+      if (!state.expires) {
+        state.expires = new Date().getTime() + 3600000
+      }
+    }
+  },
   SAVE_LATEST_ACTIONS (state, data) {
     state.expires = new Date().getTime() + 3600000
     state.actions = data
@@ -23,12 +38,7 @@ const mutations = {
 const getters = {
   getLatestAction: (state) => (key) => {
     for (let i = 0; i < state.actions.length; i++) {
-      let slug = slugify(state.actions[i].assignment, {
-        replacement: '-',
-        lower: true
-      })
-
-      if (slug === key) {
+      if (state.actions[i].slug === key) {
         return state.actions[i]
       }
     }
@@ -48,6 +58,9 @@ const getters = {
  * @example this.$store.dispatch('saveFeatured', data)
  */
 const actions = {
+  saveLatestAction ({ commit }, data) {
+    commit('SAVE_LATEST_ACTION', data)
+  },
   saveLatestActions ({ commit }, data) {
     commit('SAVE_LATEST_ACTIONS', data)
   },

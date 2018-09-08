@@ -11,6 +11,7 @@
 <script>
 import { AMZ } from '../aws'
 import { EventBus } from '../event-bus'
+import { metaInfo } from '../util'
 
 import News from '@/components/organisms/news'
 import FeaturedContent from '@/components/molecules/featured-content'
@@ -18,6 +19,7 @@ import LatestActions from '@/components/organisms/latest-actions'
 
 export default {
   name: 'Index',
+  metaInfo: metaInfo(),
   data () {
     return {
       news: null,

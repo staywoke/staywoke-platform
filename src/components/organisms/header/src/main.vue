@@ -197,6 +197,10 @@ export default {
     height: 60px;
     overflow: hidden;
 
+    &.mobile-only {
+      margin-left: 10px;
+    }
+
     svg {
       margin: 5px 0;
     }
@@ -235,6 +239,11 @@ export default {
 
   .menu {
     text-align: right;
+
+    .mobile-only.el-dropdown {
+      position: absolute;
+      right: 0;
+    }
   }
 
   .menu-button {

@@ -15,11 +15,16 @@
 
 <script>
 import { mockActionItems } from '../mocks'
+import { metaInfo } from '../util'
 
 import ActionItem from '@/components/atoms/action-item'
 
 export default {
   name: 'Documentation',
+  metaInfo: metaInfo({
+    title: 'Action Center',
+    description: 'StayWoke Action Center'
+  }),
   data () {
     return {
       actions: []

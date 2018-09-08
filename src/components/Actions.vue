@@ -5,8 +5,14 @@
 </template>
 
 <script>
+import { metaInfo } from '../util'
+
 export default {
   name: 'ActionsPage',
+  metaInfo: metaInfo({
+    title: 'Actions',
+    description: 'StayWoke Actions'
+  }),
   data () {
     return {}
   },

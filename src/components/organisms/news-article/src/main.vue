@@ -1,5 +1,19 @@
 <template>
-  <div class="news-article">
+  <article class="news-article" itemscope itemtype="http://schema.org/NewsArticle">
+    <meta itemprop="image" :content="article.imageUrl" />
+    <meta itemprop="author" :content="article.source" />
+    <meta itemprop="dateModified" :content="article.addedDate" />
+    <meta itemprop="datePublished" :content="article.addedDate" />
+    <meta itemprop="mainEntityOfPage" :content="article.articleUrl" />
+    <meta itemprop="url" :content="getShareUrl" />
+
+    <span itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" :content="article.source" />
+      <span itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+        <meta itemprop="url" content="https://staywoke-platform.s3.amazonaws.com/icons/icon-72.png" />
+      </span>
+    </span>
+
     <div class="head">
       <span>{{ getSource }}</span>
 
@@ -12,7 +26,7 @@
 
     <div class="content">
 
-      <div class="title">
+      <div class="title" itemprop="headline">
         {{ article.title }}
       </div>
 
@@ -30,7 +44,7 @@
     </div>
 
     <a class="read-more" target="_blank" rel="noopener noreferrer" :href="getUrl" @click="readMoreClicked">Read More</a>
-  </div>
+  </article>
 </template>
 
 <script>
@@ -50,6 +64,9 @@ export default {
     },
     getUrl () {
       return (this.article.url) ? this.article.url : '#'
+    },
+    getShareUrl () {
+      return `${window.location.protocol}//${window.location.host}/news/${this.article.slug}`
     },
     getSource () {
       if (this.article.source) {

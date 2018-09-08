@@ -167,3 +167,52 @@ export const stateList = {
   'WI': 'Wisconsin',
   'WY': 'Wyoming'
 }
+
+export const metaInfo = (meta) => {
+  if (!meta) {
+    meta = {}
+  }
+
+  const title = (meta.title) ? meta.title : 'StayWoke: Learn | Build | Resist'
+  const description = (meta.description) ? meta.description : 'There are more of us who support equality and justice than who oppose it. Join a community of learners, builders, and activists to create solutions to advance equality and justice in America.'
+  const keywords = (meta.keywords) ? meta.keywords : 'StayWoke, Resist, Equality, Justice, Community, Activist, America'
+  const image = (meta.image) ? meta.image : 'https://staywoke-platform.s3.amazonaws.com/staywoke-card.jpg'
+
+  let url = (meta.url) ? meta.url : 'https://app.staywoke.org'
+
+  if (url.length > 1 && url.charAt(0) === '/') {
+    url = `${window.location.protocol}//${window.location.host}${url}`
+  }
+
+  return {
+    title: title,
+    meta: [
+      { name: 'description', content: description },
+      { name: 'keywords', content: keywords },
+
+      /* Twitter META Info */
+      { name: 'twitter:card', content: 'summary_large_image' },
+      { name: 'twitter:site', content: '@staywoke' },
+      { name: 'twitter:title', content: title },
+      { name: 'twitter:description', content: description },
+      { name: 'twitter:creator', content: '@staywoke' },
+      { name: 'twitter:image:src', content: image },
+      { name: 'twitter:domain', content: 'app.staywoke.org' },
+
+      /* Open Graph protocol */
+      { name: 'og:locale', content: 'en_US' },
+      { name: 'og:type', content: 'website' },
+      { name: 'og:title', content: title },
+      { name: 'og:url', content: url },
+      { name: 'og:image', content: image },
+      { name: 'og:site_name', content: 'StayWoke' },
+      { name: 'og:description', content: description },
+
+      /* Dublin Core Metadata */
+      { name: 'dc:language', content: 'en_US' },
+      { name: 'dc:title', content: title },
+      { name: 'dc:source', content: url },
+      { name: 'dc:description', content: description }
+    ]
+  }
+}

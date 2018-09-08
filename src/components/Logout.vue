@@ -5,9 +5,14 @@
 <script>
 import { AMZ } from '../aws'
 import { EventBus } from '../event-bus'
+import { metaInfo } from '../util'
 
 export default {
   name: 'Logout',
+  metaInfo: metaInfo({
+    title: 'Logout',
+    description: 'Logout of StayWoke'
+  }),
   created () {
     AMZ.Lambda.callPrivate('logout').then(resp => {
       EventBus.$emit('USER_LOGOUT')

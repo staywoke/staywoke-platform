@@ -1,45 +1,61 @@
 <template>
-  <router-link :to="{ name: 'news', params: { slug: getSlug() } }" class="news-article">
-    <div class="image" :style="{ backgroundImage: backgroundImage }"></div>
-    <div class="summary">
-      <div class="title">
-        {{ articleTitle }}
-      </div>
-      <div class="details">
-        <div class="source">
-          From {{ article.source }}
+  <article itemscope itemtype="http://schema.org/NewsArticle">
+    <meta itemprop="image" :content="article.imageUrl" />
+    <meta itemprop="author" :content="article.source" />
+    <meta itemprop="dateModified" :content="article.addedDate" />
+    <meta itemprop="datePublished" :content="article.addedDate" />
+    <meta itemprop="mainEntityOfPage" :content="article.articleUrl" />
+    <meta itemprop="url" :content="getShareUrl" />
+
+    <span itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" :content="article.source" />
+      <span itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+        <meta itemprop="url" content="https://staywoke-platform.s3.amazonaws.com/icons/icon-72.png" />
+      </span>
+    </span>
+
+    <router-link :to="{ name: 'news', params: { slug: article.slug } }" class="news-article" itemprop="url">
+      <div class="image" :style="{ backgroundImage: backgroundImage }"></div>
+      <div class="summary">
+        <div class="title" itemprop="headline">
+          {{ articleTitle }}
         </div>
-        <div class="date">
-          {{ article.date | moment('MMMM Do') }}
+        <div class="details">
+          <div class="source">
+            From {{ article.source }}
+          </div>
+          <div class="date">
+            {{ article.addedDate | moment('MMMM Do') }}
+          </div>
         </div>
       </div>
-    </div>
-  </router-link>
+    </router-link>
+  </article>
 </template>
 
 <script>
-import slugify from 'slugify'
-
 export default {
   name: 'NewsArticle',
   props: {
     article: {
       type: Object,
       default: () => ({
-        image: null,
-        title: null,
+        addedDate: null,
+        articleUrl: '#',
+        imageUrl: null,
         slug: null,
         source: null,
         summary: null,
-        author: null,
-        date: null,
-        articleUrl: '#'
+        title: null
       })
     }
   },
   computed: {
     getUrl () {
       return (this.article.articleUrl) ? this.article.articleUrl : '#'
+    },
+    getShareUrl () {
+      return `${window.location.protocol}//${window.location.host}/news/${this.article.slug}`
     },
     backgroundImage () {
       return `url('${this.article.imageUrl}')`
@@ -69,11 +85,6 @@ export default {
     myImpactClicked () {
       this.$emit('myImpactClicked')
       this.$emit('hideDetails')
-    },
-    getSlug () {
-      return (this.article.title)
-        ? slugify(this.article.title, { replacement: '-', lower: true })
-        : this.article.id
     }
   }
 }

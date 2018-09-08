@@ -5,31 +5,108 @@
 </template>
 
 <script>
+import readingTime from 'reading-time'
+import keywordExtractor from 'keyword-extractor'
 import { Button } from 'ui-toolkit'
+
 import { AMZ } from '../aws'
+import { EventBus } from '../event-bus'
+import { metaInfo } from '../util'
 
 import NewsArticle from '@/components/organisms/news-article'
 
 export default {
   name: 'Documentation',
+  metaInfo () {
+    return this.meta
+  },
   data () {
     return {
-      article: null
+      article: null,
+      readStart: null,
+      readTime: null,
+      articleRead: false,
+      scrollPercent: null,
+      interval: null,
+      meta: {}
     }
   },
   created () {
-    const article = this.$store.getters.getNewsArticle(this.$route.params.slug)
+    const slug = this.$route.params.slug
+    const article = this.$store.getters.getNewsArticle(slug)
 
     if (article) {
-      this.article = article
+      this.setData(article)
     } else {
-      AMZ.Lambda.fetch('getArticles').then(news => {
-        this.$store.dispatch('saveNews', news)
-        this.article = this.$store.getters.getNewsArticle(this.$route.params.slug)
+      AMZ.Lambda.fetch('getArticle', { slug: slug }).then(article => {
+        this.$store.dispatch('saveArticle', article)
+        this.setData(article)
       }, error => {
         console.error(error)
         this.$router.push({ name: 'index' })
       })
+    }
+  },
+  mounted () {
+    EventBus.$off('SCROLLED')
+    EventBus.$on('SCROLLED', (scroll) => {
+      if (this.readStart) {
+        this.checkReadStatus(scroll)
+      }
+    })
+
+    clearInterval(this.interval)
+    this.interval = setInterval(() => {
+      this.checkReadStatus()
+    }, 1000)
+  },
+  methods: {
+    setData (article) {
+      this.article = article
+      this.startReadChecker(article)
+
+      const keywords = keywordExtractor.extract(`${article.source} ${article.title} ${article.summary}`, {
+        language: 'english',
+        remove_digits: true,
+        return_changed_case: true,
+        return_chained_words: false,
+        remove_duplicates: false,
+        return_max_ngrams: 50
+      })
+
+      this.meta = metaInfo({
+        title: article.title,
+        keywords: keywords.sort().join(', '),
+        description: article.summary,
+        image: article.imageUrl,
+        url: `${window.location.protocol}//${window.location.host}/news/${article.slug}`
+      })
+    },
+    startReadChecker (article) {
+      const reading = readingTime(`${article.source} ${article.title} ${article.summary}`)
+
+      this.readStart = new Date().getTime()
+      this.readTime = reading.time
+    },
+    checkReadStatus (scroll) {
+      if (this.readStart && this.readTime && !this.articleRead) {
+        const now = new Date().getTime()
+        const enoughtTime = ((now - this.readStart >= this.readTime) * 0.75)
+
+        if (typeof scroll !== 'undefined' && scroll.nearBottom && enoughtTime) {
+          this.articleRead = true
+        } else if (typeof scroll !== 'undefined' && scroll.percentScrolled) {
+          this.scrollPercent = scroll.percentScrolled
+        } else if (!scroll && this.scrollPercent && this.scrollPercent > 75 && enoughtTime) {
+          this.articleRead = true
+        } else if (!scroll && !this.scrollPercent && enoughtTime) {
+          this.articleRead = true
+        }
+
+        if (this.articleRead) {
+          console.log('ARTICLE_READ')
+        }
+      }
     }
   },
   components: {

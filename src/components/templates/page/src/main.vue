@@ -11,7 +11,7 @@
       @myImpactClicked="myImpactClicked"
     />
 
-    <div class="main-content">
+    <div class="main-content" v-scroll="onScroll">
       <slot name="content"></slot>
     </div>
 
@@ -111,6 +111,26 @@ export default {
     },
     hideDetails (type) {
       trackEvent('Drawer', 'Hide', `Impact Details ${type}`)
+    },
+    onScroll (evt, position) {
+      const nearOffset = 60
+      const clientHeight = evt.target.clientHeight
+      const scrollHeight = evt.target.scrollHeight
+      const scrollTop = position.scrollTop
+
+      const atBottom = (clientHeight + scrollTop === scrollHeight)
+      const atTop = (scrollTop === 0)
+      const nearBottom = (clientHeight + scrollTop > scrollHeight - nearOffset)
+      const nearTop = (scrollTop <= nearOffset)
+      const percentScrolled = Math.round((scrollTop / (scrollHeight - clientHeight)) * 100)
+
+      EventBus.$emit('SCROLLED', {
+        atBottom: atBottom,
+        atTop: atTop,
+        nearBottom: nearBottom,
+        nearTop: nearTop,
+        percentScrolled: percentScrolled
+      })
     }
   },
   components: {
