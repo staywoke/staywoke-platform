@@ -1,5 +1,7 @@
 <template>
-  <div class="actions">COMING SOON</div>
+  <transition name="fade" enter-active-class="fadeInRight" leave-active-class="fadeOutRight">
+    <div class="actions">COMING SOON</div>
+  </transition>
 </template>
 
 <script>

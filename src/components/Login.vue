@@ -1,10 +1,12 @@
 <template>
-  <sw-login-form class="login"
-    :error-message="errorMessage"
-    @signUp="signUp"
-    @forgotPassword="forgotPassword"
-    @loginValid="loginValid"
-  />
+  <transition name="fade" enter-active-class="fadeInLeft" leave-active-class="fadeOutLeft">
+    <sw-login-form class="login"
+      :error-message="errorMessage"
+      @signUp="signUp"
+      @forgotPassword="forgotPassword"
+      @loginValid="loginValid"
+    />
+  </transition>
 </template>
 
 <script>

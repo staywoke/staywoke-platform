@@ -1,14 +1,16 @@
 <template>
-  <div class="action-center">
-    <h2 :style="{ backgroundImage: 'url(' + require('@/assets/action-center.jpg') + ')' }">
-      Take Action<br />on Policy.
-    </h2>
-    <ul class="actions">
-      <li v-for="(action, index) in actions" :key="index">
-        <sw-action-item :item="action" @actionItemClicked="actionItemClicked" />
-      </li>
-    </ul>
-  </div>
+  <transition name="fade" enter-active-class="fadeInLeft" leave-active-class="fadeOutLeft">
+    <div class="action-center">
+      <h2 :style="{ backgroundImage: 'url(' + require('@/assets/action-center.jpg') + ')' }">
+        Take Action<br />on Policy.
+      </h2>
+      <ul class="actions">
+        <li v-for="(action, index) in actions" :key="index">
+          <sw-action-item :item="action" @actionItemClicked="actionItemClicked" />
+        </li>
+      </ul>
+    </div>
+  </transition>
 </template>
 
 <script>

@@ -44,7 +44,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       parallel: true
     }),
     new ExtractTextPlugin({
-      filename: utils.assetsPath('css/[name].css'),
+      filename: utils.assetsPath('css/[name].[chunkhash].css'),
       allChunks: true,
     }),
     new OptimizeCSSPlugin({
