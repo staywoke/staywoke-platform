@@ -1,7 +1,5 @@
 <template>
-  <transition name="fade" enter-active-class="fadeInRight" leave-active-class="fadeOutRight">
-    <sw-news-article class="article" :article="article" v-if="article" />
-  </transition>
+  <sw-news-article class="article" :article="article" v-if="article" />
 </template>
 
 <script>

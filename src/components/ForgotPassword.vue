@@ -1,15 +1,13 @@
 <template>
-  <transition name="fade" enter-active-class="fadeInLeft" leave-active-class="fadeOutLeft">
-    <sw-forgot-password-form class="forgot-password"
-      @signUp="signUp"
-      @login="login"
-      @hideLoginError="hideLoginError"
-      @showLoginError="showLoginError"
-      @forgotPassword="forgotPassword"
-      @loginSuccess="loginSuccess"
-      @loginError="loginError"
-    />
-  </transition>
+  <sw-forgot-password-form class="forgot-password"
+    @signUp="signUp"
+    @login="login"
+    @hideLoginError="hideLoginError"
+    @showLoginError="showLoginError"
+    @forgotPassword="forgotPassword"
+    @loginSuccess="loginSuccess"
+    @loginError="loginError"
+  />
 </template>
 
 <script>

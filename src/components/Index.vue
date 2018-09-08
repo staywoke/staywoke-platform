@@ -1,11 +1,9 @@
 <template>
-  <transition name="fade" enter-active-class="fadeInLeft" leave-active-class="fadeOutLeft">
-    <div class="router-view feed">
-      <sw-news :articles="news" :error-message="newsError" v-if="news || newsError" />
-      <sw-featured-content :id="tweet" :error-message="tweetError" v-if="tweet || tweetError"/>
-      <sw-latest-actions :error-message="actionsError" :actions="actions" v-if="actions || actionsError" />
-    </div>
-  </transition>
+  <div class="router-view feed">
+    <sw-news :articles="news" :error-message="newsError" v-if="news || newsError" />
+    <sw-featured-content :id="tweet" :error-message="tweetError" v-if="tweet || tweetError"/>
+    <sw-latest-actions :error-message="actionsError" :actions="actions" v-if="actions || actionsError" />
+  </div>
 </template>
 
 <script>
