@@ -1,5 +1,5 @@
 <template>
-  <transition name="fade" enter-active-class="fadeInRight" leave-active-class="fadeOutRight">
+  <transition name="fade" mode="out-in" enter-active-class="fadeInRight" leave-active-class="hide">
     <sw-news-article class="article" :article="article" v-if="article" />
   </transition>
 </template>
@@ -63,7 +63,12 @@ export default {
   methods: {
     setData (article) {
       this.article = article
-      this.startReadChecker(article)
+
+      if (!article.read) {
+        this.startReadChecker(article)
+      } else {
+        this.articleRead = true
+      }
 
       const keywords = keywordExtractor.extract(`${article.source} ${article.title} ${article.summary}`, {
         language: 'english',
@@ -104,7 +109,14 @@ export default {
         }
 
         if (this.articleRead) {
-          console.log('ARTICLE_READ')
+          this.$store.dispatch('markArticleRead', this.article)
+
+          if (this.$store.getters.isLoggedIn) {
+            AMZ.Lambda.fetch('updateUserImpact', {
+              type: 'addArticle',
+              resourceId: this.article.id
+            })
+          }
         }
       }
     }

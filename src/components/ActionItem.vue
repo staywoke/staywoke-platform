@@ -1,5 +1,5 @@
 <template>
-  <transition name="fade" enter-active-class="fadeInRight" leave-active-class="fadeOutRight">
+  <transition name="fade" enter-active-class="fadeInRight" leave-active-class="hide">
     <sw-take-action class="action" v-if="action" :action="action" />
   </transition>
 </template>

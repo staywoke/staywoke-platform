@@ -15,7 +15,12 @@
     </span>
 
     <router-link :to="{ name: 'news', params: { slug: article.slug } }" class="news-article" itemprop="url">
-      <div class="image" :style="{ backgroundImage: backgroundImage }"></div>
+      <div class="image" :style="{ backgroundImage: backgroundImage }">
+        <div class="read" v-if="article.read">
+          <i class="el-icon-check"></i>
+        </div>
+      </div>
+
       <div class="summary">
         <div class="title" itemprop="headline">
           {{ articleTitle }}
@@ -103,6 +108,27 @@ export default {
     background-size: cover;
     background-position: center center;
     float: left;
+    position: relative;
+
+    .read {
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 0 30px 30px 0;
+      border-color: transparent rgba(0,0,0,0.75) transparent transparent;
+      position: absolute;
+      top: 0;
+      right: 0;
+      color: #FFF;
+
+      i {
+        position: absolute;
+        left: 15px;
+        top: 4px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+    }
   }
 
   .summary {

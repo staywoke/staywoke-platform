@@ -9,7 +9,7 @@
 </template>
 
 <script>
-// import { AMZ } from './aws'
+import { AMZ } from './aws'
 import { mockImpactList, mockImpactDetails } from './mocks'
 
 import PageTemplate from '@/components/templates/page'
@@ -29,6 +29,14 @@ export default {
   methods: {
     getImpactList () {
       this.impactList = mockImpactList
+
+      if (this.$store.getters.isLoggedIn) {
+        AMZ.Lambda.fetch('getUserImpact').then(impact => {
+          console.log('getUserImpact', impact)
+        }, error => {
+          console.error('getUserImpact', error)
+        })
+      }
     },
     getImpactDetails () {
       this.impactDetails = mockImpactDetails
@@ -177,5 +185,8 @@ body {
       }
     }
   }
+}
+.hide {
+  display: none;
 }
 </style>

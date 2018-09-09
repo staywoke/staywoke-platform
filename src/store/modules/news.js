@@ -4,6 +4,14 @@ const state = {
 }
 
 const mutations = {
+  ARTICLE_READ (state, data) {
+    for (let i = 0; i < state.news.length; i++) {
+      if (state.news[i].slug === data.slug) {
+        state.news[i].read = new Date().getTime()
+        break
+      }
+    }
+  },
   SAVE_ARTICLE (state, data) {
     let found = false
     for (let i = 0; i < state.news.length; i++) {
@@ -58,6 +66,9 @@ const getters = {
  * @example this.$store.dispatch('saveNews', data)
  */
 const actions = {
+  markArticleRead ({ commit }, data) {
+    commit('ARTICLE_READ', data)
+  },
   saveArticle ({ commit }, data) {
     commit('SAVE_ARTICLE', data)
   },

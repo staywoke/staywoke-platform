@@ -1,5 +1,5 @@
 <template>
-  <transition name="fade" enter-active-class="fadeInLeft" leave-active-class="fadeOutLeft">
+  <transition name="fade" enter-active-class="fadeInLeft" leave-active-class="hide">
     <div class="action-center">
       <h2 :style="{ backgroundImage: 'url(' + require('@/assets/action-center.jpg') + ')' }">
         Take Action<br />on Policy.

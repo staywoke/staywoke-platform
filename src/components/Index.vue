@@ -1,5 +1,5 @@
 <template>
-  <transition name="fade" enter-active-class="fadeInLeft" leave-active-class="fadeOutLeft">
+  <transition name="fade" enter-active-class="fadeInLeft" leave-active-class="hide">
     <div class="router-view feed">
       <sw-news :articles="news" :error-message="newsError" v-if="news || newsError" />
       <sw-featured-content :id="tweet" :error-message="tweetError" v-if="tweet || tweetError"/>

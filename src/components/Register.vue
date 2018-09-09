@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <transition name="fade" enter-active-class="fadeInLeft" leave-active-class="fadeOutLeft">
+  <transition name="fade" mode="in-out" enter-active-class="fadeInLeft" leave-active-class="hide">
+    <div>
       <el-alert
         class="success"
         type="success"
@@ -10,8 +10,6 @@
         show-icon
         v-if="registerSuccess"
       />
-    </transition>
-    <transition name="fade" enter-active-class="fadeInLeft" leave-active-class="fadeOutLeft">
       <sw-register-form class="register"
         invite-only
         :error-message="errorMessage"
@@ -19,8 +17,8 @@
         @registerValid="registerValid"
         v-if="!registerSuccess"
       />
-    </transition>
-  </div>
+    </div>
+  </transition>
 </template>
 
 <script>

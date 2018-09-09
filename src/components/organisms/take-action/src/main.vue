@@ -30,18 +30,29 @@
       </div>
 
       <div class="call-to-action" v-if="action.assignment">
-        {{ action.assignment }}
+        <b>TAKE ACTION:</b>&nbsp; {{ action.assignment }}
+      </div>
+
+      <div class="summary" v-if="action.why">
+        {{ action.why }}
       </div>
     </div>
 
-    <a class="read-more" target="_blank" rel="noopener noreferrer" :href="getUrl" @click="actionClicked" v-if="this.action.resourceUrl">
-      {{ getButton }}
-    </a>
+    <div class="action-buttons">
+      <a class="read-more" target="_blank" rel="noopener noreferrer" :href="action.resourceUrl" @click="readMoreClicked" v-if="this.action.resourceUrl">
+        Read More
+      </a>
+      <a class="read-more" :href="'tel:' + action.phoneNumber" @click="actionClicked" v-if="this.action.phoneNumber" >
+        {{ getButton }}
+      </a>
+    </div>
   </div>
 </template>
 
 <script>
 import { Button, FontAwesomeIcon } from 'ui-toolkit'
+
+import { AMZ } from '../../../../aws'
 import { actionIcon, actionLabel, actionButton } from '../../../../util'
 
 export default {
@@ -87,8 +98,18 @@ export default {
     backClicked () {
       this.$emit('backClicked')
     },
+    readMoreClicked () {
+      this.$emit('readMoreClicked')
+    },
     actionClicked () {
       this.$emit('actionClicked')
+
+      if (this.$store.getters.isLoggedIn) {
+        AMZ.Lambda.fetch('updateUserImpact', {
+          type: 'addArticle',
+          resourceId: this.action.id
+        })
+      }
     }
   },
   components: {
@@ -187,10 +208,33 @@ export default {
     }
 
     .call-to-action {
+      margin-top: 14px;
       white-space: pre-line;
       font-size: 14px;
       line-height: 18px;
       font-weight: 600;
+
+      b {
+        color: #de0000;
+      }
+    }
+  }
+
+  .action-buttons {
+    height: 30px;
+
+    a {
+      width: calc(50% - 5px);
+      display: inline-block;
+      float: left;
+
+      &:nth-child(1) {
+        margin-right: 5px;
+      }
+
+      &:nth-child(2) {
+        margin-left: 5px;
+      }
     }
   }
 

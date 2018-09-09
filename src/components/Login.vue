@@ -1,5 +1,5 @@
 <template>
-  <transition name="fade" enter-active-class="fadeInLeft" leave-active-class="fadeOutLeft">
+  <transition name="fade" mode="in-out" enter-active-class="fadeInLeft" leave-active-class="hide">
     <sw-login-form class="login"
       :error-message="errorMessage"
       @signUp="signUp"

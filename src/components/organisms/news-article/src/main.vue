@@ -22,7 +22,11 @@
       </router-link>
     </div>
 
-    <div class="image" :style="{ backgroundImage: backgroundImage }"></div>
+    <div class="image" :style="{ backgroundImage: backgroundImage }">
+      <div class="read" v-if="article.read">
+        <i class="el-icon-check"></i>
+      </div>
+    </div>
 
     <div class="content">
 
@@ -132,6 +136,27 @@ export default {
     border-radius: 4px 4px 0 0;
     margin: 0;
     padding: 0;
+    position: relative;
+
+    .read {
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 0 50px 50px 0;
+      border-color: transparent rgba(0,0,0,0.75) transparent transparent;
+      position: absolute;
+      top: 0;
+      right: 0;
+      color: #FFF;
+
+      i {
+        position: absolute;
+        left: 25px;
+        top: 8px;
+        font-size: 18px;
+        font-weight: 600;
+      }
+    }
   }
 
   .content {

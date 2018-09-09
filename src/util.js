@@ -81,9 +81,9 @@ export const actionButton = (action) => {
   let summary
 
   if (action === 'call') {
-    summary = 'I\'m Ready to Call'
+    summary = 'Ready to Call'
   } else if (action === 'donate') {
-    summary = 'I\'m Ready to Donate'
+    summary = 'Ready to Donate'
   } else if (action === 'event') {
     summary = 'Go to Event'
   } else if (action === 'protest') {
