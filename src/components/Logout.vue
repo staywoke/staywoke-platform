@@ -14,27 +14,31 @@ export default {
     description: 'Logout of StayWoke'
   }),
   created () {
-    AMZ.Lambda.callPrivate('logout').then(resp => {
-      EventBus.$emit('USER_LOGOUT')
-
-      this.$store.dispatch('userLogout')
-      this.$store.dispatch('flushNews')
-      this.$store.dispatch('flushFeatured')
-      this.$store.dispatch('flushLatestActions')
-
+    if (!this.$store.getters.isLoggedIn) {
       this.$router.push({ name: 'index' })
-    }, error => {
-      console.log('Logout Error:', error.message)
+    } else {
+      AMZ.Lambda.callPrivate('logout').then(resp => {
+        EventBus.$emit('USER_LOGOUT')
 
-      EventBus.$emit('USER_LOGOUT')
+        this.$store.dispatch('userLogout')
+        this.$store.dispatch('flushNews')
+        this.$store.dispatch('flushFeatured')
+        this.$store.dispatch('flushLatestActions')
 
-      this.$store.dispatch('userLogout')
-      this.$store.dispatch('flushNews')
-      this.$store.dispatch('flushFeatured')
-      this.$store.dispatch('flushLatestActions')
+        window.location.href = '/'
+      }, error => {
+        console.log('Logout Error:', error.message)
 
-      this.$router.push({ name: 'index' })
-    })
+        EventBus.$emit('USER_LOGOUT')
+
+        this.$store.dispatch('userLogout')
+        this.$store.dispatch('flushNews')
+        this.$store.dispatch('flushFeatured')
+        this.$store.dispatch('flushLatestActions')
+
+        window.location.href = '/'
+      })
+    }
   }
 }
 </script>

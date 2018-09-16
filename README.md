@@ -5,8 +5,6 @@ StayWoke Platform
 
 > StayWoke Platform
 
-### THIS IS A WORK IN PROGRESS
-
 Developer Scripts
 ---
 

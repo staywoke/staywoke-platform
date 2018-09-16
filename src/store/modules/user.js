@@ -15,7 +15,7 @@ const mutations = {
 
 /**
  * Vuex Actions
- * @example this.$store.getters.getUserFullName()
+ * @example this.$store.getters.getUserFullName
  */
 const getters = {
   getUserAccount: state => {
@@ -33,6 +33,11 @@ const getters = {
       ? `${state.account.firstName} ${state.account.lastName}`
       : null
   },
+  getUserInitials: state => {
+    return (state.account.firstName && state.account.lastName)
+      ? `${state.account.firstName.charAt(0)}${state.account.lastName.charAt(0)}`
+      : 'SW'
+  },
   getUserEmail: state => {
     return (state.account.email)
       ? state.account.email
@@ -49,7 +54,7 @@ const getters = {
       : null
   },
   getUserToken: state => {
-    return (state.account.token)
+    return (state.account.firstName)
       ? state.account.token
       : null
   },

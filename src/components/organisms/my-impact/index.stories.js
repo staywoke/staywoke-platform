@@ -8,8 +8,6 @@ import { withMarkdownNotes } from '@storybook/addon-notes'
 import Comp from '.'
 import README from './README.md'
 
-import { mockImpactList } from '../../../mocks'
-
 const stories = storiesOf('Organisms | My Impact', module)
 
 stories.addDecorator(VueInfoAddon)
@@ -25,7 +23,26 @@ stories.add('Component', () => {
     },
     data () {
       return {
-        impactList: mockImpactList
+        impactList: [
+          {
+            type: 'call',
+            total: 123,
+            lastTitle: 'Rep. Terri Sewell',
+            lastDate: new Date()
+          },
+          {
+            type: 'event',
+            total: 22,
+            lastTitle: 'Birmingham Indivisible',
+            lastDate: new Date()
+          },
+          {
+            type: 'sign-petition',
+            total: 38,
+            lastTitle: 'Sec. of State Merrill',
+            lastDate: new Date()
+          }
+        ]
       }
     }
   }

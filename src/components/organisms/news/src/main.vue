@@ -3,7 +3,7 @@
     <h2>{{ title }}</h2>
 
     <ul class="news">
-      <li v-for="(article, index) in articles" :key="index" v-if="!errorMessage && index < maxNews">
+      <li v-for="(article, index) in articles" :key="index" v-if="!errorMessage && index < max">
         <sw-news-item :article="article" />
       </li>
     </ul>
@@ -26,7 +26,7 @@ export default {
     },
     max: {
       type: Number,
-      default: 3
+      default: 20
     },
     title: {
       type: String,
@@ -36,14 +36,6 @@ export default {
       type: String,
       default: null
     }
-  },
-  data () {
-    return {
-      maxNews: this.max
-    }
-  },
-  mounted () {
-    this.maxNews = (document.body.clientWidth < 1024) ? 3 : Math.floor((document.body.clientHeight - 100) / 85)
   },
   components: {
     NewsItem

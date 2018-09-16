@@ -3,7 +3,7 @@
     <h2>{{ title }}</h2>
 
     <ul>
-      <li v-for="(action, index) in actions" :key="index" v-if="!errorMessage && index < maxAction">
+      <li v-for="(action, index) in actions" :key="index" v-if="!errorMessage && index < max">
         <sw-action :action="action" />
       </li>
     </ul>
@@ -26,7 +26,7 @@ export default {
     },
     max: {
       type: Number,
-      default: 3
+      default: 20
     },
     title: {
       type: String,
@@ -36,14 +36,6 @@ export default {
       type: String,
       default: null
     }
-  },
-  data () {
-    return {
-      maxAction: this.max
-    }
-  },
-  mounted () {
-    this.maxAction = (document.body.clientWidth < 1024) ? 3 : Math.floor((document.body.clientHeight - 100) / 75)
   },
   components: {
     Action

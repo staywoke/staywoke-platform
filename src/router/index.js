@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Index from '@/components/Index'
-import ActionCenter from '@/components/ActionCenter'
 import NewsArticle from '@/components/NewsArticle'
 import ActionItem from '@/components/ActionItem'
 import Login from '@/components/Login'
@@ -33,17 +32,21 @@ export default new Router({
     {
       path: '/logout',
       name: 'logout',
-      component: Logout
+      component: Logout,
+      beforeEnter: (to, from, next) => {
+        const answer = window.confirm('Are you sure you want to logout?')
+
+        if (answer) {
+          next()
+        } else {
+          next(false)
+        }
+      }
     },
     {
       path: '/forgot-password',
       name: 'forgot-password',
       component: ForgotPassword
-    },
-    {
-      path: '/action-center',
-      name: 'action-center',
-      component: ActionCenter
     },
     {
       path: '/news/:slug',

@@ -53,6 +53,7 @@
 
 <script>
 import { Button } from 'ui-toolkit'
+import { AMZ } from '../../../../aws'
 
 export default {
   name: 'NewsArticle',
@@ -88,6 +89,13 @@ export default {
     },
     readMoreClicked () {
       this.$emit('readMoreClicked')
+
+      if (this.$store.getters.isLoggedIn) {
+        AMZ.Lambda.fetch('updateUserImpact', {
+          type: 'addArticle',
+          resourceId: this.article.id
+        })
+      }
     }
   },
   components: {
@@ -137,6 +145,7 @@ export default {
     margin: 0;
     padding: 0;
     position: relative;
+    background-color: #999;
 
     .read {
       width: 0;

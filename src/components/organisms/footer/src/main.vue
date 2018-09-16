@@ -11,17 +11,24 @@
         </router-link>
       </el-col>
       <el-col :span="8">
-        <router-link :to="{ name: 'action-center' }">
-          <el-button class="action-center" @click="actionCenterClicked">
-            Action Center
-          </el-button>
-        </router-link>
+        <el-button class="action-center" @click="myImpactClicked">
+          My Impact
+        </el-button>
       </el-col>
       <el-col :span="8">
-        <el-button type="text" class="footer-button" @click="myImpactClicked">
-          <font-awesome-icon size="2x" :icon="['fal', 'check-square']" class="button-icon"></font-awesome-icon>
-          <span class="button-label">My Impact</span>
-        </el-button>
+        <router-link :to="{ name: 'logout' }" v-if="loggedIn">
+          <el-button type="text" class="footer-button">
+            <font-awesome-icon size="2x" :icon="['fal', 'sign-out']" class="button-icon"></font-awesome-icon>
+            <span class="button-label">Logout</span>
+          </el-button>
+        </router-link>
+
+        <router-link :to="{ name: 'login' }" v-if="!loggedIn">
+          <el-button type="text" class="footer-button">
+            <font-awesome-icon size="2x" :icon="['fal', 'sign-in']" class="button-icon"></font-awesome-icon>
+            <span class="button-label">Login</span>
+          </el-button>
+        </router-link>
       </el-col>
     </el-row>
   </el-footer>
@@ -36,6 +43,11 @@ export default {
     feedUpdated: {
       type: Boolean,
       default: false
+    }
+  },
+  data () {
+    return {
+      loggedIn: this.$store.getters.isLoggedIn
     }
   },
   methods: {

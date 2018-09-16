@@ -10,7 +10,6 @@
 
 <script>
 import { AMZ } from './aws'
-import { mockImpactList, mockImpactDetails } from './mocks'
 
 import PageTemplate from '@/components/templates/page'
 
@@ -24,27 +23,29 @@ export default {
   },
   created () {
     this.getImpactList()
-    this.getImpactDetails()
+    // this.getImpactDetails()
   },
   methods: {
     getImpactList () {
-      this.impactList = mockImpactList
-
       if (this.$store.getters.isLoggedIn) {
         AMZ.Lambda.fetch('getUserImpact').then(impact => {
-          console.log('getUserImpact', impact)
+          this.impactList = (typeof impact !== 'undefined' && impact.impactList) ? impact.impactList : []
+          this.$store.dispatch('saveImpact', this.impactList)
         }, error => {
           console.error('getUserImpact', error)
         })
       }
     },
     getImpactDetails () {
-      this.impactDetails = mockImpactDetails
+      // @TODO: Update this one Lambda Function Exists
     }
   },
   watch: {
     $route (route) {
       let $content = document.querySelector('.main-content')
+
+      // refetch impact on page change
+      this.getImpactList()
 
       if (route.params && route.params.back) {
         // @TODO: scroll back item that user clicked on before hitting back button
@@ -188,5 +189,10 @@ body {
 }
 .hide {
   display: none;
+}
+
+// @TODO remove this once Forgot Password is working
+.el-button.forgot-password, .el-button.forgot-password + span {
+  display: none !important;
 }
 </style>

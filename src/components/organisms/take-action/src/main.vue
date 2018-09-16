@@ -39,10 +39,10 @@
     </div>
 
     <div class="action-buttons">
-      <a class="read-more" target="_blank" rel="noopener noreferrer" :href="action.resourceUrl" @click="readMoreClicked" v-if="this.action.resourceUrl">
+      <a class="read-more" :class="{ 'full-width': !this.action.phoneNumber }" target="_blank" rel="noopener noreferrer" :href="action.resourceUrl" @click="readMoreClicked" v-if="this.action.resourceUrl">
         Read More
       </a>
-      <a class="read-more" :href="'tel:' + action.phoneNumber" @click="actionClicked" v-if="this.action.phoneNumber" >
+      <a class="read-more" :class="{ 'full-width': !this.action.resourceUrl }" :href="'tel:' + action.phoneNumber" @click="actionClicked" v-if="this.action.phoneNumber" >
         {{ getButton }}
       </a>
     </div>
@@ -228,11 +228,15 @@ export default {
       display: inline-block;
       float: left;
 
-      &:nth-child(1) {
+      &.full-width {
+        width: 100%;
+      }
+
+      &:not(.full-width):nth-child(1) {
         margin-right: 5px;
       }
 
-      &:nth-child(2) {
+      &:not(.full-width):nth-child(2) {
         margin-left: 5px;
       }
     }

@@ -8,8 +8,6 @@ import { withMarkdownNotes } from '@storybook/addon-notes'
 import Comp from '.'
 import README from './README.md'
 
-import { mockActions } from '../../../mocks'
-
 const stories = storiesOf('Organisms | Take Action', module)
 
 stories.addDecorator(VueInfoAddon)
@@ -27,7 +25,18 @@ stories.add('Component', () => {
     />`,
     data () {
       return {
-        action: mockActions[2]
+        action: {
+          type: 'event',
+          slug: 'justice-for-sandra-bland',
+          title: 'Justice for Sandra Bland and all Black Women',
+          national: false,
+          state: 'NY',
+          organization: 'Take Action NYC',
+          image: 'https://images.complex.com/complex/images/c_limit,w_680/fl_lossy,pg_1,q_auto/s2r4zk4qtjrsxe1oryhp/justice-for-sandra-bland',
+          summary: 'Join People’s Power Assembly NYC and Equality for Flatbush to honor Sandra Bland and all Black women and girls brutalized and killed by state violence. We will uplift Black women and girls. We call on everyone to "Say Her Name!"',
+          callToAction: 'Join PPA every Wednesday as we demand justice for all! 7 to 9 p.m. at 147 West 24th Street, 2nd Floor.',
+          url: 'http://takeactionnyc.com/nyc-protest-event-calendar/#event|justice-for-sandra-bland-and-all-black-women|5333'
+        }
       }
     },
     methods: {

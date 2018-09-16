@@ -66,8 +66,11 @@ export default {
       AMZ.Lambda.callPublic('register', payload).then(resp => {
         if (resp && resp.success) {
           setTimeout(() => {
-            self.$router.push({ name: 'login' })
             EventBus.$emit('USER_REGISTER', resp)
+            EventBus.$emit('USER_LOGIN', resp)
+
+            this.$store.dispatch('userLogin', resp)
+            window.location.href = '/'
           }, 3000)
         }
       }, error => {

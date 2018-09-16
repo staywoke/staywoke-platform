@@ -12,11 +12,11 @@
       <span class="title" v-html="getLastAction"></span>
       <span class="date">{{ impact.lastDate | moment('MMMM Do') }}</span>
     </div>
-    <div class="view-more">
+    <!-- <div class="view-more">
       <el-button class="more-button" size="medium" @click="moreClicked">
         More
       </el-button>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -63,7 +63,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .impact {
   .totals {
     font-weight: 600;

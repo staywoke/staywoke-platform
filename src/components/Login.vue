@@ -47,7 +47,7 @@ export default {
         EventBus.$emit('USER_LOGIN', auth)
 
         this.$store.dispatch('userLogin', auth)
-        this.$router.push({ name: 'index' })
+        window.location.href = '/'
       }, error => {
         self.errorMessage = error.message
       })

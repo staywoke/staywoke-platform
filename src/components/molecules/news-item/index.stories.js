@@ -7,8 +7,6 @@ import { withMarkdownNotes } from '@storybook/addon-notes'
 import Comp from '.'
 import README from './README.md'
 
-import { mockNews } from '../../../mocks'
-
 const stories = storiesOf('Molecules | News Item', module)
 
 stories.addDecorator(VueInfoAddon)
@@ -23,7 +21,17 @@ stories.add('Component', () => ({
   />`,
   data () {
     return {
-      article: mockNews[0]
+      article: {
+        image: 'https://media1.s-nbcnews.com/j/newscms/2017_49/2250146/171205-doug-jones-se-222p_e55db1a47ae3d878ce063a92009786c5.focal-760x380.jpg',
+        title: 'African-Americans Propel Jones To Alabama Win',
+        slug: 'african-americans-propel-jones-to-win',
+        source: 'npm.org',
+        summary: 'When Sen.-elect Doug Jones, D-Ala., addressed his cheering supporters Tuesday night in Birmingham, Ala., one of his first shout-outs went to his African-American supporters. As well it should have.',
+        author: 'Brian Naylor',
+        url: 'https://www.npr.org/2017/12/13/570531505/black-votes-matter-african-americans-propel-jones-to-alabama-win',
+        date: new Date('2017/12/13 12:00:00'),
+        read: false
+      }
     }
   }
 }))

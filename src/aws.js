@@ -62,10 +62,14 @@ export const AMZ = {
           }
 
           const payload = JSON.parse(response.Payload)
+          const hasError = (typeof payload !== 'undefined' && typeof payload.errorMessage !== 'undefined')
+          const errorMessage = (typeof payload !== 'undefined' && typeof payload.errorMessage !== 'undefined')
+            ? payload.errorMessage
+            : 'An Unknown Error has Occured'
 
-          return (payload && !payload.errorMessage)
+          return (payload && !hasError)
             ? resolve(payload)
-            : reject(new Error(payload.errorMessage))
+            : reject(new Error(errorMessage))
         })
       })
 
@@ -117,10 +121,14 @@ export const AMZ = {
             }
 
             const payload = JSON.parse(response.Payload)
+            const hasError = (typeof payload !== 'undefined' && typeof payload.errorMessage !== 'undefined')
+            const errorMessage = (typeof payload !== 'undefined' && typeof payload.errorMessage !== 'undefined')
+              ? payload.errorMessage
+              : 'An Unknown Error has Occured'
 
-            return (payload && !payload.errorMessage)
+            return (payload && !hasError)
               ? resolve(payload)
-              : reject(new Error(payload.errorMessage))
+              : reject(new Error(errorMessage))
           })
         })
       })

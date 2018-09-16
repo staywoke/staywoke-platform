@@ -3,7 +3,7 @@
     <transition name="fade" enter-active-class="fadeInUp" leave-active-class="fadeOutDown">
       <div class="drawer-content" v-if="opened">
         <transition name="fade" enter-active-class="fadeIn" leave-active-class="fadeOut">
-          <sw-my-impact :impact-list="impactList" v-if="impactList.length > 0 && !showDetail" @showDetails="showDetails" />
+          <sw-my-impact v-if="!showDetail" @showDetails="showDetails" />
         </transition>
         <transition name="fade" enter-active-class="fadeIn" leave-active-class="fadeOut">
           <sw-my-impact-details :type="type" :total="total" :impact-details="impactDetails" v-if="showDetail" @hideDetails="hideDetails" />
@@ -20,6 +20,8 @@
 <script>
 import MyImpact from '@/components/organisms/my-impact'
 import MyImpactDetails from '@/components/organisms/my-impact-details'
+
+import { EventBus } from '../../../../event-bus'
 
 export default {
   name: 'Drawer',
@@ -48,6 +50,11 @@ export default {
       type: null,
       total: 0
     }
+  },
+  mounted () {
+    EventBus.$on('CLOSE_DRAWER', () => {
+      this.closeDrawer()
+    })
   },
   watch: {
     opened (opening) {

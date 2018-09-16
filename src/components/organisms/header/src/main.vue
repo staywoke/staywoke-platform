@@ -10,7 +10,8 @@
 
         <div class="mobile-only account" v-if="loggedIn">
           <div class="user-avatar" @click="accountClicked">
-            <img class="avatar" :src="'https://www.gravatar.com/avatar/' + emailHash + '?s=44'" />
+            <img class="avatar" :src="'https://www.gravatar.com/avatar/' + emailHash + '?s=44'" v-if="emailHash" />
+            <span class="avatar" v-if="!emailHash">{{ initials }}</span>
           </div>
           <div class="user-details" @click="accountClicked">
             <strong>{{ username }}</strong>
@@ -21,7 +22,8 @@
       <el-col :span="4">
         <div class="desktop-only account" v-if="loggedIn">
           <div class="user-avatar" @click="accountClicked">
-            <img class="avatar" :src="'https://www.gravatar.com/avatar/' + emailHash + '?s=44'" />
+            <img class="avatar" :src="'https://www.gravatar.com/avatar/' + emailHash + '?s=44'" v-if="emailHash" />
+            <span class="avatar" v-if="!emailHash">{{ initials }}</span>
           </div>
           <div class="user-details" @click="accountClicked">
             <strong>{{ username }}</strong>
@@ -29,16 +31,14 @@
           </div>
         </div>
 
-        <div class="mobile-only logo" @click="logoClicked"><sw-logo :size="50" /></div>
+        <div class="mobile-only logo" @click="logoClicked">
+          <router-link :to="{ name: 'index' }">
+            <sw-logo :size="50" />
+          </router-link>
+        </div>
       </el-col>
       <el-col :span="10" class="menu">
         <div class="desktop-only">
-          <router-link class="action-center" :to="{ name: 'action-center' }" v-if="loggedIn">
-            <span>
-              Action Center
-            </span>
-          </router-link>
-
           <a @click="myImpactClicked" v-if="loggedIn">
             <span>
               My Impact
@@ -115,7 +115,8 @@ export default {
   },
   data () {
     return {
-      loggedIn: this.$store.getters.isLoggedIn
+      loggedIn: this.$store.getters.isLoggedIn,
+      initials: this.$store.getters.getUserInitials
     }
   },
   computed: {
@@ -217,6 +218,16 @@ export default {
 
       .avatar {
         border-radius: 50%;
+        width: 44px;
+        height: 44px;
+      }
+
+      span.avatar {
+        display: inline-block;
+        background: #111;
+        color: #FFF;
+        text-align: center;
+        line-height: 44px;
       }
     }
 
@@ -227,7 +238,7 @@ export default {
       text-transform: uppercase;
       margin-left: 6px;
       position: relative;
-      top: -8px;
+      top: 7px;
       color: #666;
 
       strong {

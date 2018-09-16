@@ -62,7 +62,7 @@ export default {
       drawerOpen: false,
       emailHash: this.$store.getters.getUserEmailHash,
       firstName: this.$store.getters.getFirstName,
-      actionCount: 0 // @TODO: Fetch this from AWS
+      actionCount: this.$store.getters.getImpactCount
     }
   },
   created () {
@@ -71,6 +71,7 @@ export default {
     EventBus.$on('USER_LOGIN', () => {
       self.emailHash = this.$store.getters.getUserEmailHash
       self.firstName = this.$store.getters.getFirstName
+      self.actionCount = this.$store.getters.getImpactCount
     })
   },
   methods: {
