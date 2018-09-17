@@ -47,7 +47,7 @@
       </div>
     </div>
 
-    <a class="read-more" target="_blank" rel="noopener noreferrer" :href="getUrl" @click="readMoreClicked">Read More</a>
+    <a class="read-more" target="_blank" rel="noopener noreferrer" :href="getUrl" @click="readMoreClicked" ng-if="articleUrl">Read More</a>
   </article>
 </template>
 
@@ -68,7 +68,7 @@ export default {
       return `url('${this.article.imageUrl}')`
     },
     getUrl () {
-      return (this.article.url) ? this.article.url : '#'
+      return (this.article.articleUrl) ? this.article.articleUrl : null
     },
     getShareUrl () {
       return `${window.location.protocol}//${window.location.host}/news/${this.article.slug}`

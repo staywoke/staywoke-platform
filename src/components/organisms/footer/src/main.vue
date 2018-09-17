@@ -1,7 +1,7 @@
 <template>
   <el-footer class="footer">
     <el-row>
-      <el-col :span="8">
+      <el-col :span="getColumns">
         <router-link :to="{ name: 'index' }">
           <el-button type="text" class="footer-button" @click="feedClicked">
             <font-awesome-icon size="2x" :icon="['fal', 'list-alt']" class="button-icon"></font-awesome-icon>
@@ -10,12 +10,13 @@
           </el-button>
         </router-link>
       </el-col>
-      <el-col :span="8">
-        <el-button class="action-center" @click="myImpactClicked">
-          My Impact
+      <el-col :span="getColumns" v-if="loggedIn">
+        <el-button type="text" class="footer-button" @click="myImpactClicked" v-if="loggedIn">
+          <font-awesome-icon size="2x" :icon="['fal', 'chart-bar']" class="button-icon"></font-awesome-icon>
+          <span class="button-label">My Impact</span>
         </el-button>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="getColumns">
         <router-link :to="{ name: 'logout' }" v-if="loggedIn">
           <el-button type="text" class="footer-button">
             <font-awesome-icon size="2x" :icon="['fal', 'sign-out']" class="button-icon"></font-awesome-icon>
@@ -48,6 +49,11 @@ export default {
   data () {
     return {
       loggedIn: this.$store.getters.isLoggedIn
+    }
+  },
+  computed: {
+    getColumns () {
+      return (this.loggedIn) ? 8 : 12
     }
   },
   methods: {
