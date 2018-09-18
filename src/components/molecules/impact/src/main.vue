@@ -32,7 +32,7 @@ export default {
       default: () => ({
         type: null,
         total: 0,
-        lastTitle: null,
+        name: null,
         lastDate: null
       }),
       validator: function (impact) {
@@ -48,7 +48,7 @@ export default {
       return actionSummary(this.impact.type)
     },
     getLastAction () {
-      return `Latest:&nbsp; ${this.impact.lastTitle}`
+      return `<b>Latest:</b>&nbsp; ${this.impact.name}`
     }
   },
   methods: {
@@ -96,6 +96,13 @@ export default {
     padding: 6px 0;
     font-size: 10px;
     color: #666;
+    display: inline-block;
+    width: 100%;
+
+    .title {
+      max-width: calc(100% - 100px);
+      float: left;
+    }
 
     .date {
       float: right;

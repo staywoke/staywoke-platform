@@ -10,6 +10,7 @@
 
 <script>
 import { AMZ } from './aws'
+import { EventBus } from './event-bus'
 
 import PageTemplate from '@/components/templates/page'
 
@@ -31,6 +32,7 @@ export default {
         AMZ.Lambda.fetch('getUserImpact').then(impact => {
           this.impactList = (typeof impact !== 'undefined' && impact.impactList) ? impact.impactList : []
           this.$store.dispatch('saveImpact', this.impactList)
+          EventBus.$emit('IMPACT_UPDATED')
         }, error => {
           console.error('getUserImpact', error)
         })

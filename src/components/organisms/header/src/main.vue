@@ -107,16 +107,13 @@ export default {
     username: {
       type: String,
       default: 'Guest'
-    },
-    actionCount: {
-      type: Number,
-      default: 0
     }
   },
   data () {
     return {
       loggedIn: this.$store.getters.isLoggedIn,
-      initials: this.$store.getters.getUserInitials
+      initials: this.$store.getters.getUserInitials,
+      actionCount: this.$store.getters.getImpactCount
     }
   },
   computed: {
@@ -141,6 +138,10 @@ export default {
 
     EventBus.$on('USER_LOGOUT', () => {
       self.loggedIn = false
+    })
+
+    EventBus.$on('IMPACT_UPDATED', () => {
+      self.actionCount = this.$store.getters.getImpactCount
     })
   },
   methods: {
