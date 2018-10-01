@@ -17,7 +17,52 @@ const mutations = {
  */
 const getters = {
   getImpact: state => {
-    return state.impact
+    let data = {}
+    let impact = []
+
+    state.impact.sort((a, b) => {
+      return new Date(b.date) - new Date(a.date)
+    })
+
+    for (let i = 0; i < state.impact.length; i++) {
+      const impact = state.impact[i]
+
+      if (!data.hasOwnProperty(impact.type)) {
+        data[impact.type] = {
+          type: impact.type,
+          total: 0,
+          lastTitle: impact.name,
+          lastDate: impact.date
+        }
+      }
+
+      data[impact.type].total += 1
+    }
+
+    const keys = Object.keys(data)
+
+    for (let i = 0; i < keys.length; i++) {
+      impact.push(data[keys])
+    }
+
+    return impact
+  },
+  getImpactList: (state) => (type) => {
+    let impactList = []
+
+    state.impact.sort((a, b) => {
+      return new Date(b.date) - new Date(a.date)
+    })
+
+    for (let i = 0; i < state.impact.length; i++) {
+      const impact = state.impact[i]
+
+      if (impact.type === type) {
+        impactList.push(impact)
+      }
+    }
+
+    return impactList
   },
   getImpactCount: state => {
     let count = 0

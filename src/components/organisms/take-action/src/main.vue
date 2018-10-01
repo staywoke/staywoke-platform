@@ -36,13 +36,23 @@
       <div class="summary" v-if="action.why">
         {{ action.why }}
       </div>
+
+      <el-alert
+        class="error"
+        type="error"
+        title="Calling Currently Unavailable"
+        description="Phone banking hours are between 11am-9pm EST every day. Please come back tomorrow to contact more voters!"
+        :closable="false"
+        show-icon
+        v-if="!isActive"
+      />
     </div>
 
     <div class="action-buttons">
-      <a class="read-more" :class="{ 'full-width': !this.action.phoneNumber }" target="_blank" rel="noopener noreferrer" :href="action.resourceUrl" @click="readMoreClicked" v-if="this.action.resourceUrl">
+      <a class="read-more" :class="{ 'full-width': !this.action.phoneNumber || !isActive }" target="_blank" rel="noopener noreferrer" :href="action.resourceUrl" @click="readMoreClicked" v-if="this.action.resourceUrl">
         Read More
       </a>
-      <a class="read-more" :class="{ 'full-width': !this.action.resourceUrl }" :href="'tel:' + action.phoneNumber" @click="actionClicked" v-if="this.action.phoneNumber" >
+      <a class="read-more" :class="{ 'full-width': !this.action.resourceUrl }" :href="'tel:' + action.phoneNumber" @click="actionClicked" v-if="this.action.phoneNumber && isActive">
         {{ getButton }}
       </a>
     </div>
@@ -50,7 +60,7 @@
 </template>
 
 <script>
-import { Button, FontAwesomeIcon } from 'ui-toolkit'
+import { Alert, Button, FontAwesomeIcon } from 'ui-toolkit'
 
 import { AMZ } from '../../../../aws'
 import { actionIcon, actionLabel, actionButton } from '../../../../util'
@@ -92,6 +102,33 @@ export default {
       } else {
         return 'Unknown'
       }
+    },
+    isActive () {
+      if (this.action.type === 'call') {
+        // eslint-disable-next-line
+        Date.prototype.stdTimezoneOffset = function () {
+          var jan = new Date(this.getFullYear(), 0, 1)
+          var jul = new Date(this.getFullYear(), 6, 1)
+          return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset())
+        }
+
+        // eslint-disable-next-line
+        Date.prototype.isDstObserved = function () {
+          return this.getTimezoneOffset() < this.stdTimezoneOffset()
+        }
+
+        const now = new Date()
+        const utc = now.getTime() + (now.getTimezoneOffset() * 60000)
+        const offset = (now.isDstObserved()) ? -4 : -5
+        const easternTime = new Date(utc + (3600000 * offset))
+
+        // Call Center is only active between the hours of 10AM - 9PM ET
+        if (easternTime.getHours() < 10 || easternTime.getHours() > 20) {
+          return false
+        }
+      }
+
+      return true
     }
   },
   methods: {
@@ -113,6 +150,7 @@ export default {
     }
   },
   components: {
+    Alert,
     Button,
     FontAwesomeIcon
   }
@@ -240,6 +278,10 @@ export default {
         margin-left: 5px;
       }
     }
+  }
+
+  .el-alert {
+    margin-top: 20px;
   }
 
   .read-more {

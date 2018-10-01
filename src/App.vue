@@ -18,28 +18,23 @@ export default {
   name: 'App',
   data () {
     return {
-      impactList: [],
-      impactDetails: []
+      impactList: this.$store.getters.getImpact,
+      impactDetails: this.$store.getters.getImpactList
     }
   },
   created () {
     this.getImpactList()
-    // this.getImpactDetails()
   },
   methods: {
     getImpactList () {
       if (this.$store.getters.isLoggedIn) {
         AMZ.Lambda.fetch('getUserImpact').then(impact => {
-          this.impactList = (typeof impact !== 'undefined' && impact.impactList) ? impact.impactList : []
-          this.$store.dispatch('saveImpact', this.impactList)
+          this.$store.dispatch('saveImpact', impact)
           EventBus.$emit('IMPACT_UPDATED')
         }, error => {
           console.error('getUserImpact', error)
         })
       }
-    },
-    getImpactDetails () {
-      // @TODO: Update this one Lambda Function Exists
     }
   },
   watch: {

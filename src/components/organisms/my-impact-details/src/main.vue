@@ -10,8 +10,10 @@
     <div class="divider"></div>
     <div class="activity-details">
       <ul>
-        <li v-for="(activity, index) in impactDetails" :key="index">
-          {{ activity.title }}
+        <li v-for="(activity, index) in impactList" :key="index">
+          <span class="name">
+            {{ activity.name }}
+          </span>
 
           <span class="date">
             {{ activity.date | moment('MMM D') }}
@@ -34,10 +36,6 @@ import { actionIcon, actionSummary } from '../../../../util'
 export default {
   name: 'MyImpactDetails',
   props: {
-    impactDetails: {
-      type: Array,
-      default: () => ([])
-    },
     type: {
       type: String,
       default: null
@@ -45,6 +43,11 @@ export default {
     total: {
       type: Number,
       default: 0
+    }
+  },
+  data () {
+    return {
+      impactList: this.$store.getters.getImpactList(this.type)
     }
   },
   computed: {
@@ -114,8 +117,17 @@ export default {
         line-height: 26px;
         display: block;
 
+        .name {
+          max-width: calc(100% - 60px);
+          float: left;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+        }
+
         .date {
           float: right;
+          width: 50px;
         }
       }
     }

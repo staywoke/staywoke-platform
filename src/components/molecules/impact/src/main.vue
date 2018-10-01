@@ -12,11 +12,11 @@
       <span class="title" v-html="getLastAction"></span>
       <span class="date">{{ impact.lastDate | moment('MMMM Do') }}</span>
     </div>
-    <!-- <div class="view-more">
+    <div class="view-more">
       <el-button class="more-button" size="medium" @click="moreClicked">
         More
       </el-button>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -32,7 +32,7 @@ export default {
       default: () => ({
         type: null,
         total: 0,
-        name: null,
+        lastTitle: null,
         lastDate: null
       }),
       validator: function (impact) {
@@ -48,7 +48,7 @@ export default {
       return actionSummary(this.impact.type)
     },
     getLastAction () {
-      return `<b>Latest:</b>&nbsp; ${this.impact.name}`
+      return `<b>Latest:</b>&nbsp; ${this.impact.lastTitle}`
     }
   },
   methods: {
