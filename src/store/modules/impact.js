@@ -65,13 +65,7 @@ const getters = {
     return impactList
   },
   getImpactCount: state => {
-    let count = 0
-
-    for (let i = 0; i < state.impact.length; i++) {
-      count += state.impact[i].total
-    }
-
-    return count
+    return state.impact.length
   }
 }
 
