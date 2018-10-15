@@ -90,4 +90,13 @@ export default {
     color: #999;
   }
 }
+
+// CSS for Widget
+@media only screen and (max-width: 319px) {
+  .latest-actions {
+    h2 {
+      margin-top: 10px;
+    }
+  }
+}
 </style>

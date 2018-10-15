@@ -1,5 +1,5 @@
 <template>
-  <div class="page">
+  <div class="page" :class="appMode">
     <sw-header
       :email-hash="emailHash"
       :username="firstName"
@@ -9,6 +9,7 @@
       @menuClicked="menuClicked"
       @menuItemClicked="menuItemClicked"
       @myImpactClicked="myImpactClicked"
+      v-if="appMode !== 'widget'"
     />
 
     <div class="main-content" v-scroll="onScroll">
@@ -22,6 +23,7 @@
       @closeDrawer="closeDrawer"
       @showDetails="showDetails"
       @hideDetails="hideDetails"
+      v-if="appMode !== 'widget'"
     />
 
     <sw-footer
@@ -29,6 +31,7 @@
       @feedClicked="feedClicked"
       @actionCenterClicked="actionCenterClicked"
       @myImpactClicked="myImpactClicked"
+      v-if="appMode !== 'widget'"
     />
   </div>
 </template>
@@ -62,7 +65,8 @@ export default {
       drawerOpen: false,
       emailHash: this.$store.getters.getUserEmailHash,
       firstName: this.$store.getters.getFirstName,
-      actionCount: this.$store.getters.getImpactCount
+      actionCount: this.$store.getters.getImpactCount,
+      appMode: this.appMode
     }
   },
   created () {
@@ -174,6 +178,17 @@ export default {
     position: absolute;
     bottom: 0;
     left: 0;
+  }
+
+  &.widget {
+    .header, .drawer, .footer {
+      display: none;
+    }
+
+    .main-content {
+      top: 0;
+      height: 100%;
+    }
   }
 }
 @media (min-width: 1024px) {

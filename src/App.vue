@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <sw-page-template class="page-wrapper" :impact-list="impactList" :impact-details="impactDetails">
+    <sw-page-template class="page-wrapper" :appMode="appMode" :impact-list="impactList" :impact-details="impactDetails">
       <template slot="content">
         <router-view />
       </template>
@@ -19,7 +19,8 @@ export default {
   data () {
     return {
       impactList: this.$store.getters.getImpact,
-      impactDetails: this.$store.getters.getImpactList
+      impactDetails: this.$store.getters.getImpactList,
+      appMode: this.appMode
     }
   },
   created () {

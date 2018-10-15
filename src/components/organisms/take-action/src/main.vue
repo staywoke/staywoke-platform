@@ -308,4 +308,13 @@ export default {
     }
   }
 }
+
+// CSS for Widget
+@media only screen and (max-width: 319px) {
+  .take-action {
+    .head span {
+      display: none !important;
+    }
+  }
+}
 </style>

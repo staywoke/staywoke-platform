@@ -25,6 +25,9 @@ Vue.config.productionTip = false
 // Setup HTTP
 Vue.http = Vue.prototype.$http = axios
 
+// Setup APP MODE
+Vue.appMode = Vue.prototype.appMode = process.env.APP_MODE
+
 // Use Moment with Timezone Support
 Vue.use(VueMoment, {
   moment

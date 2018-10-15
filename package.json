@@ -1,6 +1,6 @@
 {
   "name": "staywoke-platform",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "StayWoke Platform",
   "author": "Peter Schmalfeldt <me@peterschmalfeldt.com>",
   "license": "MIT",
@@ -10,11 +10,14 @@
     "test": "npm run -s test:lint",
     "test:lint": "eslint --ext .js,.vue src test/unit --fix && echo '\n【ツ】CODE FORMATTING PERFECTION !!!\n'",
     "test:unit": "jest --verbose --silent --config test/unit/jest.conf.js --coverage",
-    "build": "NODE_ENV=production node build/build.js && echo '\n【ツ】BUILD COMPLETE !!!\n'",
+    "build": "npm run -s build:website && npm run -s build:widget",
+    "build:website": "APP_MODE=website NODE_ENV=production node build/build.js && echo '\n【ツ】WEBSITE BUILD COMPLETE !!!\n'",
+    "build:widget": "APP_MODE=widget NODE_ENV=production node build/build.js && echo '\n【ツ】WIDGET BUILD COMPLETE !!!\n'",
     "storybook": "start-storybook -s ./.storybook/static -p 9001 -c .storybook",
     "storybook:build": "build-storybook -s ./.storybook/static -c .storybook -o docs",
     "storybook:web": "http-server ./.storybook-build -o -s -p8082 -c-1 --cors",
-    "web": "http-server ./dist -o -s -p8082 -c-1 --cors"
+    "preview:website": "http-server ./dist -o -s -p8083 -c-1 --cors",
+    "preview:widget": "http-server ./widget -o -s -p8084 -c-1 --cors"
   },
   "dependencies": {
     "@fortawesome/fontawesome": "^1.1.8",

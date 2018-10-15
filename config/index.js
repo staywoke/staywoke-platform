@@ -29,5 +29,16 @@ module.exports = {
     productionGzip: false,
     productionGzipExtensions: ['js', 'css'],
     bundleAnalyzerReport: process.env.npm_config_report
+  },
+  widget: {
+    index: path.resolve(__dirname, '../widget/index.html'),
+    assetsRoot: path.resolve(__dirname, '../widget'),
+    assetsSubDirectory: 'static',
+    assetsPublicPath: '/',
+    productionSourceMap: true,
+    devtool: '#source-map',
+    productionGzip: false,
+    productionGzipExtensions: ['js', 'css'],
+    bundleAnalyzerReport: process.env.npm_config_report
   }
 }

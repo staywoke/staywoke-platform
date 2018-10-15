@@ -23,16 +23,24 @@ const createLintingRule = () => ({
   }
 })
 
+const prodAssetsDir = (process.env.APP_MODE === 'website')
+  ? config.build.assetsSubDirectory
+  : config.widget.assetsSubDirectory
+
+const prodAssetsPublicPath = (process.env.APP_MODE === 'website')
+  ? config.build.assetsPublicPath
+  : config.widget.assetsPublicPath
+
 module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
     app: './src/main.js'
   },
   output: {
-    path: config.build.assetsRoot,
+    path: prodAssetsDir,
     filename: '[name].js',
     publicPath: process.env.NODE_ENV === 'production'
-      ? config.build.assetsPublicPath
+      ? prodAssetsPublicPath
       : config.dev.assetsPublicPath
   },
   plugins: [

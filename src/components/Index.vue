@@ -2,8 +2,8 @@
   <transition name="fade" enter-active-class="fadeInLeft" leave-active-class="hide">
     <div class="router-view feed">
       <sw-latest-actions :error-message="actionsError" :actions="actions" v-if="actions || actionsError" />
-      <sw-featured-content :id="tweet" :error-message="tweetError" v-if="tweet || tweetError"/>
-      <sw-news :articles="news" :error-message="newsError" v-if="news || newsError" />
+      <sw-featured-content :id="tweet" :error-message="tweetError" v-if="appMode !== 'widget' && (tweet || tweetError)" />
+      <sw-news :articles="news" :error-message="newsError" v-if="appMode !== 'widget' && (news || newsError)" />
     </div>
   </transition>
 </template>
@@ -28,7 +28,8 @@ export default {
       tweetError: null,
       actions: null,
       actionsError: null,
-      user: null
+      user: null,
+      appMode: this.appMode
     }
   },
   created () {

@@ -1,5 +1,5 @@
 <template>
-  <div class='action'>
+  <div class='action' :class="appMode">
     <router-link :to="{ name: 'action', params: { type: action.type, slug: action.slug } }">
       <el-button type="text" @click="handleClick" class="item-link">
         <div class='location'>
@@ -35,7 +35,8 @@ export default {
         type: null,
         title: null,
         national: false,
-        state: null
+        state: null,
+        appMode: this.appMode
       })
     }
   },
@@ -178,6 +179,22 @@ export default {
   .action {
     .summary .title {
       font-size: 12px;
+    }
+  }
+}
+
+// CSS for Widget
+@media only screen and (max-width: 319px) {
+  .location {
+    display: none !important;
+  }
+  .summary {
+    width: 100% !important;
+
+    .title {
+      font-weight: normal !important;
+      font-size: 12px !important;
+      line-height: 14px !important;
     }
   }
 }
