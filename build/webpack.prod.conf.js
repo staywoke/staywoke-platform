@@ -15,22 +15,22 @@ const env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
   : require(`../config/prod-${process.env.APP_MODE}.env`)
 
-const build = (process.env.APP_MODE === 'website')
-  ? config.build
-  : config.widget
+const appConfig = (process.env.APP_MODE === 'widget')
+  ? config.widget
+  : config.build
 
 const webpackConfig = merge(baseWebpackConfig, {
   mode: 'production',
   module: {
     rules: utils.styleLoaders({
-      sourceMap: build.productionSourceMap,
+      sourceMap: appConfig.productionSourceMap,
       extract: true,
       usePostCSS: true
     })
   },
-  devtool: build.productionSourceMap ? build.devtool : false,
+  devtool: appConfig.productionSourceMap ? appConfig.devtool : false,
   output: {
-    path: build.assetsRoot,
+    path: appConfig.assetsRoot,
     filename: utils.assetsPath('js/[name].[chunkhash].js'),
     chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
   },
@@ -44,7 +44,7 @@ const webpackConfig = merge(baseWebpackConfig, {
           warnings: false
         }
       },
-      sourceMap: build.productionSourceMap,
+      sourceMap: appConfig.productionSourceMap,
       parallel: true
     }),
     new ExtractTextPlugin({
@@ -52,14 +52,14 @@ const webpackConfig = merge(baseWebpackConfig, {
       allChunks: true,
     }),
     new OptimizeCSSPlugin({
-      cssProcessorOptions: build.productionSourceMap
+      cssProcessorOptions: appConfig.productionSourceMap
         ? { safe: true, map: { inline: false } }
         : { safe: true }
     }),
     new HtmlWebpackPlugin({
       filename: process.env.NODE_ENV === 'testing'
         ? 'index.html'
-        : build.index,
+        : appConfig.index,
       template: 'index.html',
       inject: true,
       minify: {
@@ -74,23 +74,23 @@ const webpackConfig = merge(baseWebpackConfig, {
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, '../static'),
-        to: build.assetsSubDirectory,
+        to: appConfig.assetsSubDirectory,
         ignore: ['.*']
       }
     ])
   ]
 })
 
-if (build.productionGzip) {
-  const CompressionWebpackPlugin = require('compression-webpack-plugin')
+if (appConfig.productionGzip) {
+  const CompressionPlugin = require('compression-webpack-plugin')
 
   webpackConfig.plugins.push(
-    new CompressionWebpackPlugin({
-      asset: '[path].gz[query]',
+    new CompressionPlugin({
+      filename: '[path].gz[query]',
       algorithm: 'gzip',
       test: new RegExp(
         '\\.(' +
-        build.productionGzipExtensions.join('|') +
+        appConfig.productionGzipExtensions.join('|') +
         ')$'
       ),
       threshold: 10240,
@@ -99,7 +99,7 @@ if (build.productionGzip) {
   )
 }
 
-if (build.bundleAnalyzerReport) {
+if (appConfig.bundleAnalyzerReport) {
   const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
   webpackConfig.plugins.push(new BundleAnalyzerPlugin())
 }

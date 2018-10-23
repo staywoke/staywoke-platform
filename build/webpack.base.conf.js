@@ -3,6 +3,7 @@ const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const Dotenv = require('dotenv-webpack')
 
@@ -23,13 +24,9 @@ const createLintingRule = () => ({
   }
 })
 
-const prodAssetsDir = (process.env.APP_MODE === 'website')
-  ? config.build.assetsSubDirectory
-  : config.widget.assetsSubDirectory
-
-const prodAssetsPublicPath = (process.env.APP_MODE === 'website')
-  ? config.build.assetsPublicPath
-  : config.widget.assetsPublicPath
+const appConfig = (process.env.APP_MODE === 'widget')
+  ? config.widget
+  : config.build
 
 module.exports = {
   context: path.resolve(__dirname, '../'),
@@ -37,13 +34,18 @@ module.exports = {
     app: './src/main.js'
   },
   output: {
-    path: prodAssetsDir,
+    path: appConfig.assetsRoot,
     filename: '[name].js',
     publicPath: process.env.NODE_ENV === 'production'
-      ? prodAssetsPublicPath
+      ? appConfig.assetsPublicPath
       : config.dev.assetsPublicPath
   },
   plugins: [
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+      reportFilename: `../reports/report-${process.env.APP_MODE}.html`,
+      openAnalyzer: false
+    }),
     new Dotenv({
       path: path.join(__dirname, '../.env'),
       safe: path.join(__dirname, '../.env.example')

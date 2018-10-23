@@ -19,7 +19,7 @@ export default {
   data () {
     return {
       impactList: this.$store.getters.getImpact,
-      impactDetails: this.$store.getters.getImpactList,
+      impactDetails: this.$store.getters.getImpactList('call'),
       appMode: this.appMode
     }
   },
@@ -192,5 +192,23 @@ body {
 // @TODO remove this once Forgot Password is working
 .el-button.forgot-password, .el-button.forgot-password + span {
   display: none !important;
+}
+
+// Widget Override's
+.page.widget {
+  .latest-actions {
+    h2 {
+      display: none;
+    }
+  }
+  .take-action {
+    .image {
+      display: none;
+    }
+    .content {
+      border-radius: 4px;
+      border-top: 1px solid #cfcfcf;
+    }
+  }
 }
 </style>

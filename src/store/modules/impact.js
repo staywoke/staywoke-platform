@@ -19,13 +19,14 @@ const getters = {
   getImpact: state => {
     let data = {}
     let impact = []
+    const clone = JSON.parse(JSON.stringify(state.impact))
 
-    state.impact.sort((a, b) => {
+    clone.sort((a, b) => {
       return new Date(b.date) - new Date(a.date)
     })
 
-    for (let i = 0; i < state.impact.length; i++) {
-      const impact = state.impact[i]
+    for (let i = 0; i < clone.length; i++) {
+      const impact = clone[i]
 
       if (!data.hasOwnProperty(impact.type)) {
         data[impact.type] = {
@@ -49,13 +50,14 @@ const getters = {
   },
   getImpactList: (state) => (type) => {
     let impactList = []
+    const clone = JSON.parse(JSON.stringify(state.impact))
 
-    state.impact.sort((a, b) => {
+    clone.sort((a, b) => {
       return new Date(b.date) - new Date(a.date)
     })
 
-    for (let i = 0; i < state.impact.length; i++) {
-      const impact = state.impact[i]
+    for (let i = 0; i < clone.length; i++) {
+      const impact = clone[i]
 
       if (impact.type === type) {
         impactList.push(impact)

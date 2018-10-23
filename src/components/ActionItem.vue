@@ -101,10 +101,6 @@ export default {
         } else if (!scroll && !this.scrollPercent && enoughtTime) {
           this.actionRead = true
         }
-
-        if (this.actionRead) {
-          console.log('ACTION_READ')
-        }
       }
     }
   },

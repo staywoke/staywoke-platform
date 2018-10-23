@@ -1,5 +1,5 @@
 <template>
-  <div class="take-action">
+  <div class="take-action" :class="appMode">
     <div class="head">
       <span>{{ getHeader }}</span>
 
@@ -43,16 +43,19 @@
         title="Calling Currently Unavailable"
         description="Phone banking hours are between 11am-9pm EST every day. Please come back tomorrow to contact more voters!"
         :closable="false"
-        show-icon
+        :show-icon="appMode !== 'widget'"
         v-if="!isActive"
       />
     </div>
 
     <div class="action-buttons">
-      <a class="read-more" :class="{ 'full-width': !this.action.phoneNumber || !isActive }" target="_blank" rel="noopener noreferrer" :href="action.resourceUrl" @click="readMoreClicked" v-if="this.action.resourceUrl">
+      <a class="read-more" :class="{ 'full-width': (appMode !== 'widget' && (!action.phoneNumber || !isActive)) }" target="_blank" rel="noopener noreferrer" :href="action.resourceUrl" @click="readMoreClicked" v-if="action.resourceUrl">
         Read More
       </a>
-      <a class="read-more" :class="{ 'full-width': !this.action.resourceUrl }" :href="'tel:' + action.phoneNumber" @click="actionClicked" v-if="this.action.phoneNumber && isActive">
+      <a href="sms:?body=Will%20you%20vote%20Yes%20on%20Amendment%204%20for%20me%3F%20Right%20now%20in%20Florida%2C%20people%20with%20a%20past%20felony%20conviction%20are%20barred%20for%20life%20from%20voting.%20I%27m%20personally%20impacted%20by%20this%20law%20along%20with%201.4%20million%20other%20Floridians%20and%20their%20families%20who%20live%20with%20a%20past%20conviction%2C%20and%20this%20November%2C%20we%20have%20the%20power%20to%20change%20that.%20You%20can%20be%20my%20voice%21%20Sign%20up%20here%20to%20pledge%20to%20vote%20Yes%20on%204%20-%20I%27m%20counting%20on%20you%21%20https%3A//action.ourstates.org/your-vote-is-my-voice%3Frc_name%3D[rc_name]%26rc_id%3D" class="read-more" :class="{ 'full-width': (!action.phoneNumber || !isActive) && !action.resourceUrl }" v-if="appMode === 'widget'">
+        Contact Friends
+      </a>
+      <a class="read-more" :class="{ 'full-width': (appMode !== 'widget' && !action.resourceUrl) }" :href="'tel:' + action.phoneNumber" @click="actionClicked" v-if="action.phoneNumber && isActive">
         {{ getButton }}
       </a>
     </div>
@@ -67,11 +70,23 @@ import { actionIcon, actionLabel, actionButton } from '../../../../util'
 
 export default {
   name: 'TakeAction',
+  data () {
+    return {
+      appMode: this.appMode
+    }
+  },
   props: {
     action: {
       type: Object,
       default: () => ({})
     }
+  },
+  mounted () {
+    // Update SMS links
+    setTimeout(() => {
+      let link = window.SMSLink.link()
+      link.replaceAll()
+    }, 100)
   },
   computed: {
     backgroundImage () {
@@ -297,7 +312,47 @@ export default {
     padding: 6px 0;
     border-radius: 4px;
   }
+
+  &.widget {
+    .content {
+      margin-bottom: 60px;
+    }
+    .action-buttons {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      height: 60px;
+      left: 0;
+      background: #FFF;
+      border-top: 1px solid #cfcfcf;
+      padding: 10px 5px;
+      display: flex;
+
+      .read-more {
+        font-size: 11px;
+        margin: 0 5px;
+        width: 100%;
+        padding: 0;
+        line-height: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+      }
+    }
+    .el-alert {
+      padding: 10px 8px;
+
+      .el-icon-error.is-big {
+        display: none !important;
+      }
+      .el-alert__title.is-bold, .el-alert__description {
+        font-size: 11px;
+      }
+    }
+  }
 }
+
 @media (min-width: 1024px) {
   .take-action {
     max-width: 800px;
