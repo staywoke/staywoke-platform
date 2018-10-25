@@ -1,7 +1,7 @@
 <template>
   <div class="take-action" :class="appMode">
     <div class="head">
-      <span>{{ getHeader }}</span>
+      <span v-show="appMode !== 'widget'">{{ getHeader }}</span>
 
       <router-link :to="{ name: 'index', params: { back: true } }">
         <el-button class="back-button" size="mini" @click="backClicked">&lsaquo; Back</el-button>
@@ -52,9 +52,6 @@
       <a class="read-more" :class="{ 'full-width': (appMode !== 'widget' && (!action.phoneNumber || !isActive)) }" target="_blank" rel="noopener noreferrer" :href="action.resourceUrl" @click="readMoreClicked" v-if="action.resourceUrl">
         Read More
       </a>
-      <a href="sms:?body=Will%20you%20vote%20Yes%20on%20Amendment%204%20for%20me%3F%20Right%20now%20in%20Florida%2C%20people%20with%20a%20past%20felony%20conviction%20are%20barred%20for%20life%20from%20voting.%20I%27m%20personally%20impacted%20by%20this%20law%20along%20with%201.4%20million%20other%20Floridians%20and%20their%20families%20who%20live%20with%20a%20past%20conviction%2C%20and%20this%20November%2C%20we%20have%20the%20power%20to%20change%20that.%20You%20can%20be%20my%20voice%21%20Sign%20up%20here%20to%20pledge%20to%20vote%20Yes%20on%204%20-%20I%27m%20counting%20on%20you%21%20https%3A//action.ourstates.org/your-vote-is-my-voice%3Frc_name%3D[rc_name]%26rc_id%3D" class="read-more" :class="{ 'full-width': (!action.phoneNumber || !isActive) && !action.resourceUrl }" v-if="appMode === 'widget'">
-        Contact Friends
-      </a>
       <a class="read-more" :class="{ 'full-width': (appMode !== 'widget' && !action.resourceUrl) }" :href="'tel:' + action.phoneNumber" @click="actionClicked" v-if="action.phoneNumber && isActive">
         {{ getButton }}
       </a>
@@ -80,13 +77,6 @@ export default {
       type: Object,
       default: () => ({})
     }
-  },
-  mounted () {
-    // Update SMS links
-    setTimeout(() => {
-      let link = window.SMSLink.link()
-      link.replaceAll()
-    }, 100)
   },
   computed: {
     backgroundImage () {
@@ -327,6 +317,7 @@ export default {
       border-top: 1px solid #cfcfcf;
       padding: 10px 5px;
       display: flex;
+      z-index: 1000;
 
       .read-more {
         font-size: 11px;
@@ -338,6 +329,7 @@ export default {
         align-items: center;
         justify-content: center;
         height: 40px;
+        z-index: 1001;
       }
     }
     .el-alert {
