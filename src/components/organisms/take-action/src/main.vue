@@ -21,7 +21,7 @@
         {{ action.name }}
       </div>
 
-      <div class="author">
+      <div class="author" v-show="appMode !== 'widget'">
         By {{ getOrganization }}
       </div>
 
@@ -52,7 +52,7 @@
       <a class="read-more" :class="{ 'full-width': (appMode !== 'widget' && (!action.phoneNumber || !isActive)) }" target="_blank" rel="noopener noreferrer" :href="action.resourceUrl" @click="readMoreClicked" v-if="action.resourceUrl">
         Read More
       </a>
-      <a class="read-more" :class="{ 'full-width': (appMode !== 'widget' && !action.resourceUrl) }" :href="'tel:' + action.phoneNumber" @click="actionClicked" v-if="action.phoneNumber && isActive">
+      <a class="read-more" :class="{ 'full-width': (appMode !== 'widget' && !action.resourceUrl) }" :href="'tel:' + action.phoneNumber.replace(/\D/g, '')" @click="actionClicked" v-if="action.phoneNumber && isActive">
         {{ getButton }}
       </a>
     </div>

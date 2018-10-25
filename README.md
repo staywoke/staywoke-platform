@@ -11,18 +11,19 @@ Embed Option
 #### Widget App:
 
 ```html
+<iframe src="https://widget.staywoke.org/" width="320" height="375" frameborder="0" seamless></iframe>
+```
+
+![screenshot](https://peter.build/staywoke/embed/widget.png "screenshot")
+
+#### Full App:
+
+```html
 <iframe src="https://app.staywoke.org/" width="1200" height="800" frameborder="0" seamless></iframe>
 ```
 
 ![screenshot](https://peter.build/staywoke/embed/app.png "screenshot")
 
-#### Full App:
-
-```html
-<iframe src="https://widget.staywoke.org/" width="320" height="375" frameborder="0" seamless></iframe>
-```
-
-![screenshot](https://peter.build/staywoke/embed/widget.png "screenshot")
 
 Developer Scripts
 ---
