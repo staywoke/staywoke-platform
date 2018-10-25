@@ -49,10 +49,10 @@
     </div>
 
     <div class="action-buttons">
-      <a class="read-more" :class="{ 'full-width': (appMode !== 'widget' && (!action.phoneNumber || !isActive)) }" target="_blank" rel="noopener noreferrer" :href="action.resourceUrl" @click="readMoreClicked" v-if="action.resourceUrl">
+      <a class="read-more" :class="{ 'full-width': (appMode !== 'widget' && (!action.phoneNumber || !isActive)) }" :href="action.resourceUrl" @click="readMoreClicked" v-if="action.resourceUrl" target="_blank" rel="noopener noreferrer">
         Read More
       </a>
-      <a class="read-more" :class="{ 'full-width': (appMode !== 'widget' && !action.resourceUrl) }" :href="'tel:' + action.phoneNumber.replace(/\D/g, '')" @click="actionClicked" v-if="action.phoneNumber && isActive">
+      <a class="read-more" :class="{ 'full-width': (appMode !== 'widget' && !action.resourceUrl) }" :href="'tel:' + action.phoneNumber.replace(/\D/g, '')" @click="actionClicked" v-if="action.phoneNumber && isActive" target="_parent">
         {{ getButton }}
       </a>
     </div>
