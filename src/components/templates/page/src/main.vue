@@ -187,7 +187,9 @@ export default {
 
     .main-content {
       top: 0;
-      height: 100%;
+      height: 100% !important;
+      min-height: 100%;
+      max-height: 100%;
     }
   }
 }

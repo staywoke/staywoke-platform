@@ -1,5 +1,5 @@
 <template>
-  <div class="take-action" :class="appMode">
+  <div class="take-action" :class="appMode" id="take-action">
     <div class="head">
       <span v-show="appMode !== 'widget'">{{ getHeader }}</span>
 
@@ -76,6 +76,11 @@ export default {
       type: Object,
       default: () => ({})
     }
+  },
+  mounted () {
+    setTimeout(() => {
+      document.getElementById('take-action').style.height = 'auto'
+    }, 1000)
   },
   computed: {
     backgroundImage () {
@@ -302,7 +307,11 @@ export default {
   }
 
   &.widget {
+    height: 100%;
+    min-height: 100%;
+
     .content {
+      min-height: 100%;
       margin-bottom: 60px;
     }
     .action-buttons {
