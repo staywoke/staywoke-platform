@@ -64,7 +64,7 @@ export default {
       text-align: left;
       padding: 10px;
       height: 85px;
-      border-bottom: 1px solid #f2f2f2;
+      border-bottom: 1px solid #f0f0f0;
 
       &:last-child {
         border-bottom: none;

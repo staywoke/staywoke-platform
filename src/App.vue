@@ -119,13 +119,13 @@ body, html, #app {
   width: 100%;
 }
 body {
-  background-color: #f2f2f2;
+  background-color: #f0f0f0;
 }
 .page-wrapper {
   height: 100%;
 
   .main-content {
-    background-color: #f2f2f2;
+    background-color: #f0f0f0;
 
     .news {
       margin-top: 6px;

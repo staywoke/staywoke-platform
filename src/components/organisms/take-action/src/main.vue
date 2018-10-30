@@ -33,9 +33,7 @@
         <b>TAKE ACTION:</b>&nbsp; {{ action.assignment }}
       </div>
 
-      <div class="summary" v-if="action.why">
-        {{ action.why }}
-      </div>
+      <div class="summary" v-if="action.why" v-html="action.why"></div>
 
       <el-alert
         class="error"

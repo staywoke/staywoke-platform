@@ -107,7 +107,7 @@ export default {
 <style lang="scss">
 @media (min-width: 1024px) {
   body {
-    background-color: #f2f2f2;
+    background-color: #f0f0f0;
   }
 
   .feed {

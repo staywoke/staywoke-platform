@@ -39,7 +39,7 @@ export default {
 <style lang="scss">
 .page-home {
   .main-content {
-    background-color: #f2f2f2;
+    background-color: #f0f0f0;
 
     .news {
       margin-top: 6px;
