@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { Button } from 'ui-toolkit'
+import Button from 'ui-toolkit/src/components/atoms/button'
 import { AMZ } from '../../../../aws'
 
 export default {

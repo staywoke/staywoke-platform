@@ -22,7 +22,8 @@
 </template>
 
 <script>
-import { Alert, RegisterForm } from 'ui-toolkit'
+import Alert from 'ui-toolkit/src/components/atoms/alert'
+import RegisterForm from 'ui-toolkit/src/components/templates/register-form'
 
 import { AMZ } from '../aws'
 import { EventBus } from '../event-bus'

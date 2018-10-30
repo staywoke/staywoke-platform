@@ -7,7 +7,7 @@
 <script>
 import readingTime from 'reading-time'
 import keywordExtractor from 'keyword-extractor'
-import { Button } from 'ui-toolkit'
+import Button from 'ui-toolkit/src/components/atoms/button'
 
 import { AMZ } from '../aws'
 import { EventBus } from '../event-bus'

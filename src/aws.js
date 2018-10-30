@@ -1,4 +1,6 @@
-import AWS from 'aws-sdk'
+import AWS from 'aws-sdk/global'
+import Lambda from 'aws-sdk/clients/lambda'
+import STS from 'aws-sdk/clients/sts'
 
 import store from './store'
 
@@ -50,7 +52,7 @@ export const AMZ = {
       AWS.config.credentials.params.IdentityId = null
       AWS.config.credentials.params.Logins = null
 
-      const lambda = new AWS.Lambda(lambdaConfig)
+      const lambda = new Lambda(lambdaConfig)
 
       const promise = new Promise((resolve, reject) => {
         lambda.invoke({
@@ -61,9 +63,10 @@ export const AMZ = {
             return reject(new Error(err || 'unknown error executing lambda function'))
           }
 
-          const payload = JSON.parse(response.Payload)
-          const hasError = (typeof payload !== 'undefined' && typeof payload.errorMessage !== 'undefined')
-          const errorMessage = (typeof payload !== 'undefined' && typeof payload.errorMessage !== 'undefined')
+          // ¯\_(ツ)_/¯ Looks like the payload for this changed and sometimes `null` is returned if there is nothing to respond with
+          const payload = (response.Payload !== 'null') ? JSON.parse(response.Payload) : { status: 'OK' }
+          const hasError = (payload && typeof payload !== 'undefined' && typeof payload.errorMessage !== 'undefined')
+          const errorMessage = (payload && typeof payload !== 'undefined' && typeof payload.errorMessage !== 'undefined')
             ? payload.errorMessage
             : 'An Unknown Error has Occured'
 
@@ -110,7 +113,7 @@ export const AMZ = {
             return reject(new Error(err || 'unknown error executing lambda function'))
           }
 
-          const lambda = new AWS.Lambda(lambdaConfig)
+          const lambda = new Lambda(lambdaConfig)
 
           lambda.invoke({
             FunctionName: fn,
@@ -120,9 +123,10 @@ export const AMZ = {
               return callback(err || 'unknown error executing lambda function')
             }
 
-            const payload = JSON.parse(response.Payload)
-            const hasError = (typeof payload !== 'undefined' && typeof payload.errorMessage !== 'undefined')
-            const errorMessage = (typeof payload !== 'undefined' && typeof payload.errorMessage !== 'undefined')
+            // ¯\_(ツ)_/¯ Looks like the payload for this changed and sometimes `null` is returned if there is nothing to respond with
+            const payload = (response.Payload !== 'null') ? JSON.parse(response.Payload) : { status: 'OK' }
+            const hasError = (payload && typeof payload !== 'undefined' && typeof payload.errorMessage !== 'undefined')
+            const errorMessage = (payload && typeof payload !== 'undefined' && typeof payload.errorMessage !== 'undefined')
               ? payload.errorMessage
               : 'An Unknown Error has Occured'
 
@@ -179,7 +183,7 @@ export const AMZ = {
         IdentityPoolId: process.env.STAYWOKE_AWS_UNAUTH_IDENTITY_POOL_ID
       })
 
-      const sts = new AWS.STS()
+      const sts = new STS()
       AWS.config.credentials = sts.credentialsFrom(user.rawCredentials)
       const payload = { userId: user.id }
 
@@ -188,7 +192,7 @@ export const AMZ = {
           return callback(err)
         }
 
-        const stsRefresh = new AWS.STS()
+        const stsRefresh = new STS()
         AWS.config.credentials = stsRefresh.credentialsFrom(user.rawCredentials)
         store.dispatch('userLogin', user)
 
@@ -201,7 +205,7 @@ export const AMZ = {
         IdentityPoolId: process.env.STAYWOKE_AWS_UNAUTH_IDENTITY_POOL_ID
       })
 
-      const sts = new AWS.STS()
+      const sts = new STS()
       AWS.config.credentials = sts.credentialsFrom(user.rawCredentials)
 
       return callback(null)

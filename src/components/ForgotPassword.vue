@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { ForgotPasswordForm } from 'ui-toolkit'
+import ForgotPasswordForm from 'ui-toolkit/src/components/templates/forgot-password-form'
 import { metaInfo } from '../util'
 
 export default {

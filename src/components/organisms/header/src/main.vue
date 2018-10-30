@@ -94,7 +94,16 @@
 </template>
 
 <script>
-import { Button, Col, Dropdown, DropdownMenu, DropdownItem, Icon, Logo, Header, Row } from 'ui-toolkit'
+import Button from 'ui-toolkit/src/components/atoms/button'
+import DropdownItem from 'ui-toolkit/src/components/atoms/dropdown-item'
+import Logo from 'ui-toolkit/src/components/atoms/logo'
+
+import Col from 'ui-toolkit/src/components/molecules/col'
+import Dropdown from 'ui-toolkit/src/components/molecules/dropdown'
+import DropdownMenu from 'ui-toolkit/src/components/molecules/dropdown-menu'
+import Row from 'ui-toolkit/src/components/molecules/row'
+
+import Header from 'ui-toolkit/src/components/organisms/header'
 
 import { EventBus } from '../../../../event-bus'
 
@@ -168,7 +177,6 @@ export default {
     Dropdown,
     DropdownMenu,
     DropdownItem,
-    Icon,
     Logo,
     Header,
     Row

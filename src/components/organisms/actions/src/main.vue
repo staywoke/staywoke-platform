@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { Button } from 'ui-toolkit'
+import Button from 'ui-toolkit/src/components/atoms/button'
 
 export default {
   name: 'Actions',

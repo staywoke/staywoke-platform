@@ -11,12 +11,22 @@ import Meta from 'vue-meta'
 
 import fontawesome from '@fortawesome/fontawesome'
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
-import solid from '@fortawesome/fontawesome-pro-solid'
-import regular from '@fortawesome/fontawesome-pro-regular'
-import light from '@fortawesome/fontawesome-pro-light'
-import brands from '@fortawesome/fontawesome-free-brands'
 
-fontawesome.library.add(solid, regular, light, brands)
+// Custom import just the icons we need, rather than the entire library
+import faPhone from '@fortawesome/fontawesome-pro-solid/faPhone'
+import faDollarSign from '@fortawesome/fontawesome-pro-solid/faDollarSign'
+import faClock from '@fortawesome/fontawesome-pro-solid/faClock'
+import faHandRock from '@fortawesome/fontawesome-pro-solid/faHandRock'
+import faPencil from '@fortawesome/fontawesome-pro-solid/faPencil'
+import faEnvelopeOpen from '@fortawesome/fontawesome-pro-solid/faEnvelopeOpen'
+import faChevronRight from '@fortawesome/fontawesome-pro-solid/faChevronRight'
+
+import faListAlt from '@fortawesome/fontawesome-pro-light/faListAlt'
+import faChartBar from '@fortawesome/fontawesome-pro-light/faChartBar'
+import faSignOut from '@fortawesome/fontawesome-pro-light/faSignOut'
+import faSignIn from '@fortawesome/fontawesome-pro-light/faSignIn'
+
+fontawesome.library.add(faPhone, faDollarSign, faClock, faHandRock, faPencil, faEnvelopeOpen, faChevronRight, faListAlt, faChartBar, faSignOut, faSignIn)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

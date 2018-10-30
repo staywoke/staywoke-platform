@@ -58,7 +58,8 @@
 </template>
 
 <script>
-import { Alert, Button, FontAwesomeIcon } from 'ui-toolkit'
+import Alert from 'ui-toolkit/src/components/atoms/alert'
+import Button from 'ui-toolkit/src/components/atoms/button'
 
 import { AMZ } from '../../../../aws'
 import { actionIcon, actionLabel, actionButton } from '../../../../util'
@@ -154,8 +155,7 @@ export default {
   },
   components: {
     Alert,
-    Button,
-    FontAwesomeIcon
+    Button
   }
 }
 </script>

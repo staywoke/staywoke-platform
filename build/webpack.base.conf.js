@@ -3,7 +3,8 @@ const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const webpack = require('webpack')
 
 const Dotenv = require('dotenv-webpack')
 
@@ -41,6 +42,7 @@ module.exports = {
       : config.dev.assetsPublicPath
   },
   plugins: [
+    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
     new BundleAnalyzerPlugin({
       analyzerMode: 'static',
       reportFilename: `../reports/report-${process.env.APP_MODE}.html`,

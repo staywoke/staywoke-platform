@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { LoginForm } from 'ui-toolkit'
+import LoginForm from 'ui-toolkit/src/components/templates/login-form'
 
 import { AMZ } from '../aws'
 import { EventBus } from '../event-bus'

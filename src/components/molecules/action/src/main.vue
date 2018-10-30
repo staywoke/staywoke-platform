@@ -22,7 +22,6 @@
 </template>
 
 <script>
-import { FontAwesomeIcon } from 'ui-toolkit'
 import { actionIcon, stateList } from '../../../../util'
 
 export default {
@@ -74,9 +73,6 @@ export default {
     handleClick () {
       this.$emit('latestActionClicked', this.action)
     }
-  },
-  components: {
-    FontAwesomeIcon
   }
 }
 </script>

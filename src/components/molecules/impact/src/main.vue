@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { Button, FontAwesomeIcon } from 'ui-toolkit'
+import Button from 'ui-toolkit/src/components/atoms/button'
 import { actionTypes, actionIcon, actionSummary } from '../../../../util'
 
 export default {
@@ -57,8 +57,7 @@ export default {
     }
   },
   components: {
-    Button,
-    FontAwesomeIcon
+    Button
   }
 }
 </script>

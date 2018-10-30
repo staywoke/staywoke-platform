@@ -36,7 +36,10 @@
 </template>
 
 <script>
-import { Button, Col, Footer, Icon, Row } from 'ui-toolkit'
+import Button from 'ui-toolkit/src/components/atoms/button'
+import Col from 'ui-toolkit/src/components/molecules/col'
+import Row from 'ui-toolkit/src/components/molecules/row'
+import Footer from 'ui-toolkit/src/components/organisms/footer'
 
 export default {
   name: 'Header',
@@ -72,7 +75,6 @@ export default {
     Button,
     Col,
     Footer,
-    Icon,
     Row
   }
 }
