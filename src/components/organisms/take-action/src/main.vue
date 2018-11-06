@@ -131,8 +131,8 @@ export default {
         const offset = (now.isDstObserved()) ? -4 : -5
         const easternTime = new Date(utc + (3600000 * offset))
 
-        // Call Center is only active between the hours of 10AM - 9PM ET
-        if (easternTime.getHours() < 10 || easternTime.getHours() > 20) {
+        // Call Center is only active between the hours of 9AM - 7PM ET
+        if (easternTime.getHours() < 9 || easternTime.getHours() > 18) {
           return false
         }
       }
