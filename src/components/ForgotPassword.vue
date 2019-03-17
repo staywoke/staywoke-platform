@@ -26,7 +26,9 @@ export default {
     return {}
   },
   created () {
-    // @TODO: Check Login Status
+    if (this.$store.getters.isLoggedIn) {
+      this.$router.push({ name: 'index' })
+    }
   },
   methods: {
     login () {

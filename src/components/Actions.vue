@@ -16,7 +16,11 @@ export default {
   data () {
     return {}
   },
-  created () {},
+  created () {
+    if (!this.$store.getters.isLoggedIn) {
+      this.$router.push({ name: 'login' })
+    }
+  },
   methods: {},
   components: {}
 }

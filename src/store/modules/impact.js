@@ -21,6 +21,10 @@ const getters = {
     let impact = []
     const clone = JSON.parse(JSON.stringify(state.impact))
 
+    if (!clone || !Array.isArray(clone)) {
+      return impact
+    }
+
     clone.sort((a, b) => {
       return new Date(b.date) - new Date(a.date)
     })
@@ -51,6 +55,10 @@ const getters = {
   getImpactList: (state) => (type) => {
     let impactList = []
     const clone = JSON.parse(JSON.stringify(state.impact))
+
+    if (!clone || !Array.isArray(clone)) {
+      return impactList
+    }
 
     clone.sort((a, b) => {
       return new Date(b.date) - new Date(a.date)

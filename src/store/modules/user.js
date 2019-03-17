@@ -10,6 +10,9 @@ const mutations = {
   },
   LOGOUT (state, data) {
     state.account = {}
+  },
+  VALIDATE (state, data) {
+    state.account.isMobileVerified = data
   }
 }
 
@@ -63,6 +66,9 @@ const getters = {
   },
   isSuperUser: state => {
     return (typeof state.account !== 'undefined' && typeof state.account.role !== 'undefined' && state.account.role === 'superuser')
+  },
+  isVerified: state => {
+    return (typeof state.account !== 'undefined' && typeof state.account.token !== 'undefined' && typeof state.account !== 'undefined' && state.account.isMobileVerified === true)
   }
 }
 
@@ -80,6 +86,11 @@ const actions = {
     commit
   }, data) {
     commit('LOGIN', data)
+  },
+  userValid ({
+    commit
+  }, data) {
+    commit('VALIDATE', data)
   }
 }
 

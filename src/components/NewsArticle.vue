@@ -32,19 +32,23 @@ export default {
     }
   },
   created () {
-    const slug = this.$route.params.slug
-    const article = this.$store.getters.getNewsArticle(slug)
-
-    if (article) {
-      this.setData(article)
+    if (!this.$store.getters.isLoggedIn) {
+      this.$router.push({ name: 'login' })
     } else {
-      AMZ.Lambda.fetch('getArticle', { slug: slug }).then(article => {
-        this.$store.dispatch('saveArticle', article)
+      const slug = this.$route.params.slug
+      const article = this.$store.getters.getNewsArticle(slug)
+
+      if (article) {
         this.setData(article)
-      }, error => {
-        console.error(error)
-        this.$router.push({ name: 'index' })
-      })
+      } else {
+        AMZ.Lambda.fetch('getArticle', { slug: slug }).then(article => {
+          this.$store.dispatch('saveArticle', article)
+          this.setData(article)
+        }, error => {
+          console.error(error)
+          this.$router.push({ name: 'index' })
+        })
+      }
     }
   },
   mounted () {

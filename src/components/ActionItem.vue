@@ -31,19 +31,23 @@ export default {
     }
   },
   created () {
-    const slug = this.$route.params.slug
-    const action = this.$store.getters.getLatestAction(slug)
-
-    if (action) {
-      this.setData(action)
+    if (!this.$store.getters.isLoggedIn) {
+      this.$router.push({ name: 'login' })
     } else {
-      AMZ.Lambda.fetch('getAction', { slug: slug }).then(action => {
-        this.$store.dispatch('saveLatestAction', action)
+      const slug = this.$route.params.slug
+      const action = this.$store.getters.getLatestAction(slug)
+
+      if (action) {
         this.setData(action)
-      }, error => {
-        console.error('Private getActions', error)
-        this.actionsError = '403 Error: Permission Denied'
-      })
+      } else {
+        AMZ.Lambda.fetch('getAction', { slug: slug }).then(action => {
+          this.$store.dispatch('saveLatestAction', action)
+          this.setData(action)
+        }, error => {
+          console.error('Private getActions', error)
+          this.actionsError = '403 Error: Permission Denied'
+        })
+      }
     }
   },
   mounted () {

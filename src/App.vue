@@ -5,6 +5,7 @@
         <router-view />
       </template>
     </sw-page-template>
+    <sw-dialog />
   </div>
 </template>
 
@@ -13,6 +14,7 @@ import { AMZ } from './aws'
 import { EventBus } from './event-bus'
 
 import PageTemplate from '@/components/templates/page'
+import Dialog from '@/components/organisms/dialog'
 
 export default {
   name: 'App',
@@ -53,7 +55,8 @@ export default {
     }
   },
   components: {
-    PageTemplate
+    PageTemplate,
+    Dialog
   }
 }
 </script>
@@ -209,6 +212,24 @@ body {
       border-radius: 4px;
       border-top: 1px solid #cfcfcf;
     }
+  }
+}
+
+.v-modal {
+  opacity: 0.98;
+  background: #FFF;
+  pointer-events: none;
+  user-select: none;
+}
+.el-dialog__body {
+  padding: 20px 20px;
+
+  form {
+    margin-top: 20px;
+  }
+
+  .el-form--label-top .el-form-item__label {
+    padding: 0 !important;
   }
 }
 </style>

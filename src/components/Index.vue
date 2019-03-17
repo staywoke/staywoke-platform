@@ -33,13 +33,17 @@ export default {
     }
   },
   created () {
-    this.getArticles()
-    this.getFeaturedContent()
-    this.getActions()
+    if (!this.$store.getters.isLoggedIn) {
+      this.$router.push({ name: 'login' })
+    } else {
+      this.getArticles()
+      this.getFeaturedContent()
+      this.getActions()
 
-    EventBus.$on('SESSION_EXPIRED', () => {
-      this.$router.push({ name: 'logout' })
-    })
+      EventBus.$on('SESSION_EXPIRED', () => {
+        this.$router.push({ name: 'logout' })
+      })
+    }
   },
   methods: {
     getArticles () {
