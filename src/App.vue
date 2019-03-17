@@ -221,6 +221,9 @@ body {
   pointer-events: none;
   user-select: none;
 }
+.el-dialog {
+  margin-top: 2% !important;
+}
 .el-dialog__body {
   padding: 20px 20px;
 
@@ -230,6 +233,7 @@ body {
 
   .el-form--label-top .el-form-item__label {
     padding: 0 !important;
+    line-height: 22px !important;
   }
 }
 </style>
