@@ -1,5 +1,5 @@
 <template>
-  <el-dialog class="dialog" :title="enterVerification ? 'Verification Code' : 'Info Request'" :visible.sync="dialogVisible" width="30%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
+  <el-dialog class="dialog" :title="enterVerification ? 'Verification Code' : 'Info Request'" :visible.sync="dialogVisible" width="300px" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
     <el-alert type="error" :title="errorMessage" :closable="false" show-icon v-if="errorMessage" />
 
     <div v-if="needContactInfo">
