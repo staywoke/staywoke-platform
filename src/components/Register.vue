@@ -11,7 +11,7 @@
         v-if="registerSuccess"
       />
       <sw-register-form class="register"
-        invite-only
+        :invite-only="false"
         :error-message="errorMessage"
         @login="login"
         @registerValid="registerValid"
@@ -57,7 +57,6 @@ export default {
       const payload = {
         email: form.email,
         firstName: form.firstname,
-        inviteCode: form.inviteCode,
         lastName: form.lastname,
         password: form.password,
         mobile: form.phone,

@@ -3,7 +3,7 @@
     <el-alert type="error" :title="errorMessage" :closable="false" show-icon v-if="errorMessage" />
 
     <div v-if="needContactInfo">
-      <span>To start calling your represenatives, we need just two pieces of info:</span>
+      <span>To start calling your representatives, we need just two pieces of info:</span>
 
       <el-form :model="setupForm" :rules="rules" ref="setupForm" label-width="120px" style="max-width: 480px; text-align: left;" label-position="top">
         <el-form-item label="Home Address" prop="address">
